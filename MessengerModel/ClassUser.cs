@@ -9,6 +9,7 @@ namespace MessengerModel
 {
     class User
     {
+        public int Id { get; set; }
         public string Nick {  get; set; }
         public string Password { get; set; }
         public string Phone {  get; set; }      
@@ -20,6 +21,7 @@ namespace MessengerModel
             Phone = phone;
             Avatar = avatar;
         }
+        public ICollection<Message> Messages { get; set; }
         //public string Mail {  get; set; }// обсудить возможность подтверждения аккаунта по почте
     }
 }
