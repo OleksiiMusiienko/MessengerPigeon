@@ -5,8 +5,66 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerPigeon"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="550" MinWidth="550" MinHeight="450">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*" ></RowDefinition>
+            <RowDefinition Height ="2*"></RowDefinition>
+            <RowDefinition Height ="0.5*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.8*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="0.8*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0"  Margin="5">
+            <DockPanel Name="DockPanel_1">
+                <Image Name="Avatar" Width="100" MinWidth="100"/>
+                <Button Name="Redact" DockPanel.Dock="Bottom"  Background="White" Height="22" HorizontalAlignment="Left" >Redact</Button>
+                <TextBlock Name="NikName" DockPanel.Dock="Top" >NikName</TextBlock>
+            </DockPanel>
+        </Border>
+        <WrapPanel Name="WrapPanel_1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <Button Name="Registration" Margin="5" >Registration</Button>
+            <Button Name="Authorization" Margin="5" >Authorization</Button>
+        </WrapPanel>
+        <DockPanel Name="DockPanel_2" Grid.RowSpan="2" LastChildFill="True">
+            <Border BorderBrush="SteelBlue" BorderThickness="1">
+                <ListBox Name="ListBoxUsers" HorizontalAlignment="Stretch"></ListBox>
+            </Border>
+        </DockPanel>
+        <DockPanel Name="DockPanel_3" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="1">
+            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1">
+                <TextBlock Name="User" Margin="4" >Person</TextBlock>
+            </Border>
+            <Border BorderBrush="SteelBlue" BorderThickness="1">
+                <ListBox Name="ChatingHistory" >
+                </ListBox>
+            </Border>
+        </DockPanel >
+        <DockPanel Name="DockPanel_4" Grid.Row="2" >
+            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Background="AliceBlue">
+                <TextBlock HorizontalAlignment="Center">Add a friend</TextBlock>
+            </Border>
+            <StackPanel DockPanel.Dock="Bottom">
+                <Button Name="Scan">Scan</Button>
+                <Button Name="Delete">Delete</Button>
+            </StackPanel>
+            <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top"></TextBox>
 
+        </DockPanel>
+        <DockPanel Name="DockPanel_5" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="2">
+            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1">
+                <DockPanel  Background="AliceBlue">
+                    <Button Name="File" DockPanel.Dock ="Right" Margin="3">File</Button>
+                    <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" >Voice</Button>
+                    <TextBlock DockPanel.Dock="Left"  Margin="4" >Message</TextBlock>
+                </DockPanel>
+            </Border>
+            <DockPanel Background="White">
+                <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5">Send</Button>
+                <TextBox Name="TextBox_Message" DockPanel.Dock="Left" Margin="3"></TextBox>
+            </DockPanel>
+        </DockPanel>
     </Grid>
 </Window>
