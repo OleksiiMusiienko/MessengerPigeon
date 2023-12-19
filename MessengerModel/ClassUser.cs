@@ -21,7 +21,7 @@ namespace MessengerModel
             Phone = phone;
             Avatar = avatar;
         }
-        public ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
         //public string Mail {  get; set; }// обсудить возможность подтверждения аккаунта по почте
     }
 }
