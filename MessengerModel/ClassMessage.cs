@@ -20,6 +20,6 @@ namespace MessengerModel
             Mes = mes;
             Date_Time = DateTime.Now;
         }
-        public ICollection<User> Users { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }
