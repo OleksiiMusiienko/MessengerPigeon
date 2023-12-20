@@ -12,16 +12,20 @@ namespace MessengerModel
         public int Id { get; set; }
         public string Nick {  get; set; }
         public string Password { get; set; }
-        public string Phone {  get; set; }      
+        public string IPadress {  get; set; }      
         public byte[]? Avatar { get; set; }
-        public User(string nick, string password, string phone, byte[] avatar)
+        public User(string nick, string password, string ipadress, byte[] avatar)
         {
             Nick = nick;
             Password = password;
-            Phone = phone;
+            IPadress = ipadress;
             Avatar = avatar;
         }
         public virtual ICollection<Message> Messages { get; set; }
-        //public string Mail {  get; set; }// обсудить возможность подтверждения аккаунта по почте
+        
+        public override string ToString()
+        {
+            return Nick;
+        }
     }
-}
+}//public string Mail {  get; set; }// обсудить возможность подтверждения аккаунта по почте
