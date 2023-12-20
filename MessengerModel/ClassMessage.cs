@@ -20,6 +20,10 @@ namespace MessengerModel
             Mes = mes;
             Date_Time = DateTime.Now;
         }
+        public override string ToString()
+        {
+            return Date_Time + ": " + Mes;
+        }
         public virtual ICollection<User> Users { get; set; }
     }
 }
