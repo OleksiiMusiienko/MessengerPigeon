@@ -4,15 +4,29 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Sockets;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Xml.Serialization;
 
 namespace MessengerPigeon
 {
+    [DataContract]
     class MessengerViewModel : INotifyPropertyChanged
     {
+        public MessengerViewModel()
+        {
+            User = new User();
+        }
         private User User;
         private Message Message;
 
@@ -31,17 +45,35 @@ namespace MessengerPigeon
             get { return User.Password; }
             set
             {
-                User.Password  = value;
+                User.Password = value;
                 OnPropertyChanged(nameof(Password));
             }
         }
-        
+        public string PasswordTwo
+        {
+            get { return User.Password; }
+            set
+            {
+                if (Password == value)
+                {
+                    User.Password = value;
+                    OnPropertyChanged(nameof(PasswordTwo));
+                }
+                else
+                {
+                    MessageBox.Show("Пароли не совпадают");
+                    User.Password = "";
+                    Password = "";
+                }
+            }
+        }
+
         public byte[]? Avatar
         {
             get { return User.Avatar; }
             set
             {
-                User.Avatar   = value;
+                User.Avatar = value;
                 OnPropertyChanged(nameof(Avatar));
             }
         }
@@ -60,7 +92,7 @@ namespace MessengerPigeon
             get { return Message.Mes; }
             set
             {
-                Message.Mes  = value;
+                Message.Mes = value;
                 OnPropertyChanged(nameof(Mes));
             }
         }
@@ -125,6 +157,8 @@ namespace MessengerPigeon
         //реализация команды отправки конец
 
         //21.12.23 реализация команды регистрации пользователя начало
+
+
         private CommandRegistration CommandReg;
         public ICommand ButtonReg
         {
@@ -134,18 +168,42 @@ namespace MessengerPigeon
                 {
                     CommandReg = new CommandRegistration(Reg, CanReg);
                 }
-                return CommandSend;
+                return CommandReg;
             }
         }
-        private void Reg(object o)
+        private async void Reg(object o)
         {
-            //логика регистрации(сделать метод асинхронным) или вызов отдельного async метода
+            await Task.Run(async () =>
+            {
+                // соединяемся с удаленным устройством
+                try
+                {
+                    string IP = "26.238.242.38";
+                    // Конструктор TcpClient инициализирует новый экземпляр класса и подключает его к указанному порту заданного узла.
+                    TcpClient tcpClient = new TcpClient(IP /* IP-адрес хоста */, 49152 /* порт */);
+                    // Получим объект NetworkStream, используемый для приема и передачи данных.
+                    NetworkStream netstream = tcpClient.GetStream();
+                    MemoryStream stream = new MemoryStream();
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(User));
+                    jsonFormatter.WriteObject(stream, User);
+                    byte[] msg = stream.ToArray();
+                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    MessageBox.Show("Клиент " + Nick + " успешно зарегистрирован !!!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
         }
         private bool CanReg(object o)
         {
-            //логика проверки доступности регистрации пользователя (или доступна всегда)
+            if (User.Nick == null && User.Password != PasswordTwo)
+                return false;
             return true;
         }
         //реализация команды регистрации конец
+        
+        
     }
 }
