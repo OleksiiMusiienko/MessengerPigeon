@@ -54,7 +54,7 @@
                         </DockPanel>
                         <DockPanel Margin="3">
                             <Label Padding="4">Password :</Label>
-                            <TextBox Padding="4" MinWidth="100" ></TextBox>
+                            <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordTwo}"></TextBox>
                         </DockPanel>
                         <Button Padding="4" Command="{Binding ButtonReg}">Registration</Button>
                     </StackPanel>
