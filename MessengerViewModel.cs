@@ -1,4 +1,5 @@
 ﻿using MessengerModel;
+using MessengerPigeon.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MessengerPigeon
 {
@@ -96,5 +98,54 @@ namespace MessengerPigeon
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        //21.12.23 реализация команды отправки сообщения начало
+        private CommandSendMessage CommandSend;
+        public ICommand ButtonSend
+        {
+            get
+            {
+                if (CommandSend == null)
+                {
+                    CommandSend = new CommandSendMessage(Send, CanSend);
+                }
+                return CommandSend;
+            }
+        }
+        private void Send(object o)
+        {
+            //логика отправки сообщения(сделать метод асинхронным) или вызов отдельного async метода отправки сообщения
+        }
+        private bool CanSend(object o)
+        {
+            if (Mes == "")
+                return false;
+            return true;
+        }
+        //реализация команды отправки конец
+
+        //21.12.23 реализация команды регистрации пользователя начало
+        private CommandRegistration CommandReg;
+        public ICommand ButtonReg
+        {
+            get
+            {
+                if (CommandReg == null)
+                {
+                    CommandReg = new CommandRegistration(Reg, CanReg);
+                }
+                return CommandSend;
+            }
+        }
+        private void Reg(object o)
+        {
+            //логика регистрации(сделать метод асинхронным) или вызов отдельного async метода
+        }
+        private bool CanReg(object o)
+        {
+            //логика проверки доступности регистрации пользователя (или доступна всегда)
+            return true;
+        }
+        //реализация команды регистрации конец
     }
 }
