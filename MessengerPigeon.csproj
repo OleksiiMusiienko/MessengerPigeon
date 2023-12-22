@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommandLIB\CommandLIB.csproj" />
+    <ProjectReference Include="..\ModelLIB\ModelLIB.csproj" />
   </ItemGroup>
 
   <ItemGroup>
