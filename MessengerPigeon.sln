@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessengerPigeon", "MessengerPigeon.csproj", "{0CF72C78-C32C-40BA-90D8-2F074FCC7F5B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLIB", "..\CommandLIB\CommandLIB.csproj", "{A6ADC6BA-5C83-4E98-8A59-C63F7A961F67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0CF72C78-C32C-40BA-90D8-2F074FCC7F5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CF72C78-C32C-40BA-90D8-2F074FCC7F5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CF72C78-C32C-40BA-90D8-2F074FCC7F5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6ADC6BA-5C83-4E98-8A59-C63F7A961F67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6ADC6BA-5C83-4E98-8A59-C63F7A961F67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6ADC6BA-5C83-4E98-8A59-C63F7A961F67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6ADC6BA-5C83-4E98-8A59-C63F7A961F67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
