@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessengerPigeon", "Messenge
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLIB", "..\CommandLIB\CommandLIB.csproj", "{A6ADC6BA-5C83-4E98-8A59-C63F7A961F67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelLIB", "..\ModelLIB\ModelLIB.csproj", "{2B945EBF-2C41-4796-A23E-C237BB31E8CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelLIB", "..\ModelLIB\ModelLIB.csproj", "{2B945EBF-2C41-4796-A23E-C237BB31E8CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerApp", "..\ServerApp\ServerApp.csproj", "{B520A7CB-0AE3-40F0-AF6F-F06917AA7D38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{2B945EBF-2C41-4796-A23E-C237BB31E8CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B945EBF-2C41-4796-A23E-C237BB31E8CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B945EBF-2C41-4796-A23E-C237BB31E8CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B520A7CB-0AE3-40F0-AF6F-F06917AA7D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B520A7CB-0AE3-40F0-AF6F-F06917AA7D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B520A7CB-0AE3-40F0-AF6F-F06917AA7D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B520A7CB-0AE3-40F0-AF6F-F06917AA7D38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
