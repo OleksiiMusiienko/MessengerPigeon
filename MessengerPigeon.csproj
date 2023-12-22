@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CommandLIB\CommandLIB.csproj" />
-    <ProjectReference Include="..\ModelLIB\ModelLIB.csproj" />
+    <ProjectReference Include="..\CommandDLL\CommandDLL.csproj" />
+    <ProjectReference Include="..\ModelDLL\ModelDLL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
