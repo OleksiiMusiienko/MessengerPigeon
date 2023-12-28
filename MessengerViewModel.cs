@@ -30,11 +30,9 @@ namespace MessengerPigeon
         public NetworkStream netstream;
         public MessengerViewModel()
         {
-            UserReg = new User();
             User = new User();
         }
         private User User;
-        private User UserReg;
         private Message Message;
 
         public string Nick
@@ -52,44 +50,48 @@ namespace MessengerPigeon
             get { return User.Password; }
             set
             {
+
                 User.Password = value;
                 OnPropertyChanged(nameof(Password));
             }
         }
         // Свойства для привязки обьекта User к блокам регистрации и авторизации .(NickReg, PasswordReg, PasswordTwo)
+        private string _nickReg = string.Empty;
         public string NickReg
         {
-            get { return UserReg.Nick; }
+            get { return _nickReg; }
             set
             {
-                UserReg.Nick = value;
+                _nickReg = value;
                 OnPropertyChanged(nameof(NickReg));
             }
         }
+        private string _passwordReg = string.Empty;
         public string PasswordReg
         {
-            get { return UserReg.Password; }
+            get { return _passwordReg; }
             set
             {
-                UserReg.Password = value;
+                _passwordReg = value;
                 OnPropertyChanged(nameof(PasswordReg));
             }
         }
+        private string _passwordTwo = string.Empty;
         public string PasswordTwo
         {
-            get { return UserReg.Password; }
+            get { return _passwordTwo; }
             set
             {
-                if (Password == value)
+                if (PasswordReg == value)
                 {
-                    UserReg.Password = value;
+                    _passwordTwo = value;
                     OnPropertyChanged(nameof(PasswordTwo));
                 }
                 else
                 {
                     MessageBox.Show("Пароли не совпадают");
-                    UserReg.Password = "";
-                    Password = "";
+                    PasswordReg = "";
+                    PasswordTwo = "";
                 }
             }
         }
@@ -203,14 +205,14 @@ namespace MessengerPigeon
             {
                 try
                 {
-
                     string IP = "26.27.154.150";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Registratioin;
-                    wrapper.user = UserReg;
+                    User us = new User(NickReg, PasswordReg,null,null);
+                    wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
@@ -226,7 +228,7 @@ namespace MessengerPigeon
 
         private bool CanReg(object o)
         {
-            if (User.Nick == null && User.Password != PasswordTwo)
+            if (NickReg == null && PasswordReg != PasswordTwo)
                 return false;
             return true;
         }
@@ -259,7 +261,8 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Authorization;
-                    wrapper.user = UserReg;
+                    User us = new User(NickReg, PasswordReg, null, null);
+                    wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
@@ -275,7 +278,7 @@ namespace MessengerPigeon
 
         private bool CanAut(object o)
         {
-            if (User.Nick == null && User.Password != PasswordTwo)
+            if (NickReg == null && PasswordReg != PasswordTwo)
                 return false;
             return true;
         }
@@ -309,12 +312,13 @@ namespace MessengerPigeon
                         if (res.list.Count != 0 )
                         {
                             Users = new ObservableCollection<User>(res.list);
+                            Nick = NickReg;
+                            return;
                         }
                         else
                         {
                             MessageBox.Show(res.command);
-                            User = UserReg;
-                            break;
+                            NickReg = "";
                         }
                         stream.Close();
                     }
@@ -327,8 +331,8 @@ namespace MessengerPigeon
                 }  
                 finally
                 {
-                    UserReg.Nick = "";
-                    UserReg.Password = "";
+                    NickReg = "";
+                    PasswordReg = "";
                     netstream?.Close();
                     tcpClient?.Close();
                 }
