@@ -33,24 +33,24 @@
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                         <DockPanel Margin="5">
                             <Label Padding="5" >NikName :</Label>
-                            <TextBox Name="NikName_Authorization" Padding="5" MinWidth="100" Text="{Binding Nick1}" ></TextBox>
+                            <TextBox Name="NikName_Authorization" Padding="5" MinWidth="100" Text="{Binding NickReg}" ></TextBox>
                         </DockPanel>
                         <DockPanel Margin="5">
                             <Label Padding="5">Password :</Label>
-                            <TextBox Name="Password_Authorization" Padding="5" MinWidth="100" Text="{Binding Password1}" ></TextBox>
+                            <TextBox Name="Password_Authorization" Padding="5" MinWidth="100" Text="{Binding PasswordReg}" ></TextBox>
                         </DockPanel>
-                        <Button Name="Enter" Padding="5">Enter</Button>
+                        <Button Name="Enter" Padding="5" Command="{Binding  ButtonAut}" >Enter</Button>
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Registration">
                     <StackPanel >
                         <DockPanel Margin="3">
                             <Label Padding="4">NikName :</Label>
-                            <TextBox Padding="4" MinWidth="100" Text="{Binding Nick1}"></TextBox>
+                            <TextBox Padding="4" MinWidth="100" Text="{Binding NickReg}"></TextBox>
                         </DockPanel>
                         <DockPanel Margin="3">
                             <Label Padding="4">Password :</Label>
-                            <TextBox Padding="4" MinWidth="100" Text="{Binding Password1}"></TextBox>
+                            <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordReg}"></TextBox>
                         </DockPanel>
                         <DockPanel Margin="3">
                             <Label Padding="4">Password :</Label>
