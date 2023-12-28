@@ -31,6 +31,7 @@ namespace MessengerPigeon
         public MessengerViewModel()
         {
             UserReg = new User();
+            User = new User();
         }
         private User User;
         private User UserReg;
@@ -202,12 +203,13 @@ namespace MessengerPigeon
             {
                 try
                 {
+
                     string IP = "26.27.154.150";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
-                    wrapper.commands = 0;
+                    wrapper.commands = Wrapper.Commands.Registratioin;
                     wrapper.user = UserReg;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
@@ -229,6 +231,57 @@ namespace MessengerPigeon
             return true;
         }
         //реализация команды регистрации конец
+
+        //28.12.24 реализация команды авторизации пользователя начало
+
+
+        private CommandAuthorization CommandAut;
+        public ICommand ButtonAut
+        {
+            get
+            {
+                if (CommandAut == null)
+                {
+                    CommandAut = new CommandAuthorization(Aut, CanAut);
+                }
+                return CommandAut;
+            }
+        }
+        private async void Aut(object o)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    string IP = "26.27.154.150";
+                    tcpClient = new TcpClient(IP, 49152);
+                    netstream = tcpClient.GetStream();
+                    MemoryStream stream = new MemoryStream();
+                    Wrapper wrapper = new Wrapper();
+                    wrapper.commands = Wrapper.Commands.Authorization;
+                    wrapper.user = UserReg;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
+                    jsonFormatter.WriteObject(stream, wrapper);
+                    byte[] msg = stream.ToArray();
+                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    Receive(tcpClient);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+        }
+
+        private bool CanAut(object o)
+        {
+            if (User.Nick == null && User.Password != PasswordTwo)
+                return false;
+            return true;
+        }
+        //реализация команды регистрации конец
+
+        // метод прослушки ответов запросов на регистрацию от сервера 
         private async void Receive(TcpClient tcpClient)
         {
             await Task.Run(async () =>
@@ -251,18 +304,18 @@ namespace MessengerPigeon
                         byte[] copy = new byte[len];
                         Array.Copy(arr, 0, copy, 0, len);
                         MemoryStream stream = new MemoryStream(copy);
-                        var jsonFormatter = new DataContractJsonSerializer(typeof(List<User>));
-                        var list = (List<User>)jsonFormatter.ReadObject(stream);
-                        if (list.Count != 0)
+                        var jsonFormatter = new DataContractJsonSerializer(typeof(ServerResponse));
+                        ServerResponse res = jsonFormatter.ReadObject(stream) as ServerResponse;
+                        if (res.list.Count != 0 )
                         {
-                            Users = new ObservableCollection<User>(list);
+                            Users = new ObservableCollection<User>(res.list);
                         }
                         else
                         {
-                            MessageBox.Show("Такой пользователь уже зарегистрирован!!");
+                            MessageBox.Show(res.command);
+                            User = UserReg;
                             break;
                         }
-                        
                         stream.Close();
                     }
                 }
@@ -271,15 +324,13 @@ namespace MessengerPigeon
                     MessageBox.Show("Клиент: " + ex.Message);
                     netstream?.Close();
                     tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
-                }
+                }  
                 finally
                 {
-                    netstream?.Close();
-                    tcpClient?.Close();
-                    User = new User();
-                    User = UserReg;
                     UserReg.Nick = "";
                     UserReg.Password = "";
+                    netstream?.Close();
+                    tcpClient?.Close();
                 }
             });
         }
