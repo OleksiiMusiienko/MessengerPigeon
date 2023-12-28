@@ -1,4 +1,5 @@
-﻿using MessengerModel;
+﻿using CommandDLL;
+using MessengerModel;
 using MessengerPigeon.Command;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
+using System.Runtime.Intrinsics.X86;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -17,17 +19,21 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MessengerPigeon
 {
     [DataContract]
     class MessengerViewModel : INotifyPropertyChanged
     {
+        public TcpClient tcpClient;
+        public NetworkStream netstream;
         public MessengerViewModel()
         {
-            User = new User();
+            UserReg = new User();
         }
         private User User;
+        private User UserReg;
         private Message Message;
 
         public string Nick
@@ -49,20 +55,39 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Password));
             }
         }
+        // Свойства для привязки обьекта User к блокам регистрации и авторизации .(NickReg, PasswordReg, PasswordTwo)
+        public string NickReg
+        {
+            get { return UserReg.Nick; }
+            set
+            {
+                UserReg.Nick = value;
+                OnPropertyChanged(nameof(NickReg));
+            }
+        }
+        public string PasswordReg
+        {
+            get { return UserReg.Password; }
+            set
+            {
+                UserReg.Password = value;
+                OnPropertyChanged(nameof(PasswordReg));
+            }
+        }
         public string PasswordTwo
         {
-            get { return User.Password; }
+            get { return UserReg.Password; }
             set
             {
                 if (Password == value)
                 {
-                    User.Password = value;
+                    UserReg.Password = value;
                     OnPropertyChanged(nameof(PasswordTwo));
                 }
                 else
                 {
                     MessageBox.Show("Пароли не совпадают");
-                    User.Password = "";
+                    UserReg.Password = "";
                     Password = "";
                 }
             }
@@ -175,20 +200,20 @@ namespace MessengerPigeon
         {
             await Task.Run(async () =>
             {
-                // соединяемся с удаленным устройством
                 try
                 {
-                    string IP = "26.238.242.38";
-                    // Конструктор TcpClient инициализирует новый экземпляр класса и подключает его к указанному порту заданного узла.
-                    TcpClient tcpClient = new TcpClient(IP /* IP-адрес хоста */, 49152 /* порт */);
-                    // Получим объект NetworkStream, используемый для приема и передачи данных.
-                    NetworkStream netstream = tcpClient.GetStream();
+                    string IP = "26.27.154.150";
+                    tcpClient = new TcpClient(IP, 49152);
+                    netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
-                    var jsonFormatter = new DataContractJsonSerializer(typeof(User));
-                    jsonFormatter.WriteObject(stream, User);
+                    Wrapper wrapper = new Wrapper();
+                    wrapper.commands = 0;
+                    wrapper.user = UserReg;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
+                    jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
                     await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
-                    MessageBox.Show("Клиент " + Nick + " успешно зарегистрирован !!!");
+                    Receive(tcpClient);
                 }
                 catch (Exception ex)
                 {
@@ -196,6 +221,7 @@ namespace MessengerPigeon
                 }
             });
         }
+
         private bool CanReg(object o)
         {
             if (User.Nick == null && User.Password != PasswordTwo)
@@ -203,7 +229,59 @@ namespace MessengerPigeon
             return true;
         }
         //реализация команды регистрации конец
-        
-        
+        private async void Receive(TcpClient tcpClient)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    // Получим объект NetworkStream, используемый для приема и передачи данных.
+                    netstream = tcpClient.GetStream();
+                    byte[] arr = new byte[tcpClient.ReceiveBufferSize];
+                    while (true)
+                    {
+                        int len = await netstream.ReadAsync(arr, 0, tcpClient.ReceiveBufferSize);
+                        if (len == 0)
+                        {
+                            netstream.Close();
+                            tcpClient.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
+                            return;
+                        }
+                        // Создадим поток, резервным хранилищем которого является память.
+                        byte[] copy = new byte[len];
+                        Array.Copy(arr, 0, copy, 0, len);
+                        MemoryStream stream = new MemoryStream(copy);
+                        var jsonFormatter = new DataContractJsonSerializer(typeof(List<User>));
+                        var list = (List<User>)jsonFormatter.ReadObject(stream);
+                        if (list.Count != 0)
+                        {
+                            Users = new ObservableCollection<User>(list);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Такой пользователь уже зарегистрирован!!");
+                            break;
+                        }
+                        
+                        stream.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                    netstream?.Close();
+                    tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
+                }
+                finally
+                {
+                    netstream?.Close();
+                    tcpClient?.Close();
+                    User = new User();
+                    User = UserReg;
+                    UserReg.Nick = "";
+                    UserReg.Password = "";
+                }
+            });
+        }
     }
 }
