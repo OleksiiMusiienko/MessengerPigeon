@@ -319,6 +319,8 @@ namespace MessengerPigeon
                         {
                             MessageBox.Show(res.command);
                             NickReg = "";
+                            PasswordReg = "";
+                            PasswordTwo = "";
                         }
                         stream.Close();
                     }
