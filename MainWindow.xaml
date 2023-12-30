@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerPigeon"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="650" MinWidth="550" MinHeight="650">
+        Title="MainWindow" Height="720" Width="1000" MinWidth="750" MinHeight="720">
     <Window.Resources>
         <local:MessengerViewModel x:Key="ViewModel"/>
     </Window.Resources>
@@ -22,44 +22,61 @@
         </Grid.ColumnDefinitions>
         <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0"  Margin="5">
             <DockPanel Name="DockPanel_1">
-                <Image Name="Avatar" Width="100" MinWidth="100"/>
-                <Button Name="Redact" DockPanel.Dock="Bottom"  Background="White" Height="22" HorizontalAlignment="Left" >Redact</Button>
-                <TextBlock Name="TextBlockNik"  DockPanel.Dock="Top" Text="{Binding Nick}"></TextBlock>
-            </DockPanel>
-        </Border>
-        <DockPanel Name="WrapPanel_1" Grid.Column="2" Margin="5">
-            <TabControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
-                <TabItem Header="Authorization">
+                <Image Name="Avatar" Width="150" MinWidth="150"/>
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Nick}"></TextBlock>
+                <Expander HorizontalAlignment="Left"  Header="Redact" ExpandDirection="Down">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <DockPanel Margin="5">
+                            <Label Padding="5">Photo :</Label>
+                            <Button Margin="20 0 0 0" Padding="5" MinWidth="100" >Download</Button>
+                        </DockPanel>
                         <DockPanel Margin="5">
                             <Label Padding="5" >NikName :</Label>
                             <TextBox Name="NikName_Authorization" Padding="5" MinWidth="100" Text="{Binding NickReg}" ></TextBox>
                         </DockPanel>
                         <DockPanel Margin="5">
                             <Label Padding="5">Password :</Label>
-                            <TextBox Name="Password_Authorization" Padding="5" MinWidth="100" Text="{Binding PasswordReg}" ></TextBox>
+                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordReg}" ></TextBox>
                         </DockPanel>
-                        <Button Name="Enter" Padding="5" Command="{Binding  ButtonAut}" >Enter</Button>
+                        <DockPanel Margin="5">
+                            <Label Padding="5">Password :</Label>
+                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordReg}" ></TextBox>
+                        </DockPanel>
                     </StackPanel>
-                </TabItem>
-                <TabItem Header="Registration">
-                    <StackPanel >
-                        <DockPanel Margin="3">
-                            <Label Padding="4">NikName :</Label>
-                            <TextBox Padding="4" MinWidth="100" Text="{Binding NickReg}"></TextBox>
-                        </DockPanel>
-                        <DockPanel Margin="3">
-                            <Label Padding="4">Password :</Label>
-                            <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordReg}"></TextBox>
-                        </DockPanel>
-                        <DockPanel Margin="3">
-                            <Label Padding="4">Password :</Label>
-                            <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordTwo}"></TextBox>
-                        </DockPanel>
-                        <Button Padding="4" Command="{Binding ButtonReg}">Registration</Button>
-                    </StackPanel>
-                </TabItem>
-            </TabControl>
+                </Expander>
+            </DockPanel>
+        </Border>
+        <DockPanel Name="WrapPanel_1" Grid.Column="2" Margin="5">
+            <Expander HorizontalAlignment="Center"  Header="Authorization" ExpandDirection="Down" IsExpanded="True">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <DockPanel Margin="5">
+                        <Label Padding="5" >NikName :</Label>
+                        <TextBox Padding="5" MinWidth="100" Text="{Binding NickReg}" ></TextBox>
+                    </DockPanel>
+                    <DockPanel Margin="5">
+                        <Label Padding="5">Password :</Label>
+                        <TextBox Padding="5" MinWidth="100" Text="{Binding PasswordReg}" ></TextBox>
+                    </DockPanel>
+                    <Button Name="Enter" Padding="5" Command="{Binding  ButtonAut}" >Enter</Button>
+                </StackPanel>
+            </Expander>
+            <Expander HorizontalAlignment="Center"  Header="Registration" ExpandDirection="Down" >
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <DockPanel Margin="3">
+                        <Label Padding="4">NikName :</Label>
+                        <TextBox Padding="4" MinWidth="100" Text="{Binding NickReg}"></TextBox>
+                    </DockPanel>
+                    <DockPanel Margin="3">
+                        <Label Padding="4">Password :</Label>
+                        <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordReg}"></TextBox>
+                    </DockPanel>
+                    <DockPanel Margin="3">
+                        <Label Padding="4">Password :</Label>
+                        <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordTwo}"></TextBox>
+                    </DockPanel>
+                    <Button Padding="4" Command="{Binding ButtonReg}">Registration</Button>
+                </StackPanel>
+            </Expander>
         </DockPanel>
         <DockPanel Name="DockPanel_2" Grid.RowSpan="2" LastChildFill="True">
             <Border BorderBrush="SteelBlue" BorderThickness="1">
