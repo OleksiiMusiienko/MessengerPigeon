@@ -235,8 +235,6 @@ namespace MessengerPigeon
         //реализация команды регистрации конец
 
         //28.12.24 реализация команды авторизации пользователя начало
-
-
         private CommandAuthorization CommandAut;
         public ICommand ButtonAut
         {
@@ -279,6 +277,59 @@ namespace MessengerPigeon
         private bool CanAut(object o)
         {
             if (NickReg == null && PasswordReg != PasswordTwo)
+                return false;
+            return true;
+        }
+        //реализация команды регистрации конец
+        //31.12.23 реализация команды редактирования пользователя начало
+
+
+        private CommandRegistration CommandRedact;
+        public ICommand ButtonRedact
+        {
+            get
+            {
+                if (CommandReg == null)
+                {
+                    CommandReg = new CommandRegistration(Redact, CanRedact);
+                }
+                return CommandReg;
+            }
+        }
+        private async void Redact(object o)
+        {
+          if(PasswordReg!=User.Password || PasswordTwo=="")
+            {
+                MessageBox.Show("Не верный пароль пользователя!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    string IP = "26.27.154.150";
+                    tcpClient = new TcpClient(IP, 49152);
+                    netstream = tcpClient.GetStream();
+                    MemoryStream stream = new MemoryStream();
+                    Wrapper wrapper = new Wrapper();
+                    wrapper.commands = Wrapper.Commands.Redact;
+                    User us = new User(Nick, PasswordTwo, User.IPadress, null);
+                    wrapper.user = us;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
+                    jsonFormatter.WriteObject(stream, wrapper);
+                    byte[] msg = stream.ToArray();
+                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    Receive(tcpClient);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+        }
+
+        private bool CanRedact(object o)
+        {
+            if (User.Id==0)
                 return false;
             return true;
         }
@@ -340,5 +391,7 @@ namespace MessengerPigeon
                 }
             });
         }
+
+       
     }
 }
