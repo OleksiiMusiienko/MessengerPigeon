@@ -82,17 +82,10 @@ namespace MessengerPigeon
             get { return _passwordTwo; }
             set
             {
-                if (PasswordReg == value)
-                {
+               
                     _passwordTwo = value;
                     OnPropertyChanged(nameof(PasswordTwo));
-                }
-                else
-                {
-                    MessageBox.Show("Пароли не совпадают");
-                    PasswordReg = "";
-                    PasswordTwo = "";
-                }
+               
             }
         }
 
@@ -312,7 +305,8 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Redact;
-                    User us = new User(Nick, PasswordTwo, User.IPadress, null);
+                    User us = new User(Nick, Password,null, null);
+                    wrapper.NewPassword = PasswordTwo; 
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
@@ -329,7 +323,7 @@ namespace MessengerPigeon
 
         private bool CanRedact(object o)
         {
-            if (User.Id==0)
+            if (User.IPadress == "")
                 return false;
             return true;
         }
@@ -360,10 +354,11 @@ namespace MessengerPigeon
                         MemoryStream stream = new MemoryStream(copy);
                         var jsonFormatter = new DataContractJsonSerializer(typeof(ServerResponse));
                         ServerResponse res = jsonFormatter.ReadObject(stream) as ServerResponse;
-                        if (res.list.Count != 0 )
+                        if (res.list != null )
                         {
                             Users = new ObservableCollection<User>(res.list);
                             Nick = NickReg;
+                            Password = PasswordReg;
                             return;
                         }
                         else

@@ -32,7 +32,7 @@
                         </DockPanel>
                         <DockPanel Margin="3">
                             <Label Padding="5" >NikName :</Label>
-                            <TextBox Name="NikName_Authorization" Padding="5" MinWidth="100" Text="{Binding Nick}" IsReadOnly="True"></TextBox>
+                            <TextBox Name="NikName_Authorization" Padding="5" MinWidth="100" Text="{Binding Nick}"></TextBox>
                         </DockPanel>
                         <DockPanel Margin="3">
                             <Label Padding="5">Password :</Label>
