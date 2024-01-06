@@ -82,10 +82,8 @@ namespace MessengerPigeon
             get { return _passwordTwo; }
             set
             {
-               
-                    _passwordTwo = value;
-                    OnPropertyChanged(nameof(PasswordTwo));
-               
+                _passwordTwo = value;
+                OnPropertyChanged(nameof(PasswordTwo));
             }
         }
 
@@ -282,11 +280,11 @@ namespace MessengerPigeon
         {
             get
             {
-                if (CommandReg == null)
+                if (CommandRedact == null)
                 {
-                    CommandReg = new CommandRegistration(Redact, CanRedact);
+                    CommandRedact = new CommandRegistration(Redact, CanRedact);
                 }
-                return CommandReg;
+                return CommandRedact;
             }
         }
         private async void Redact(object o)
@@ -366,7 +364,7 @@ namespace MessengerPigeon
         }
         private bool CanRemove(object o)
         {
-            if (User.Nick == null)
+            if (User.Nick == "")
                 return false;
             return true;
         }
@@ -421,7 +419,7 @@ namespace MessengerPigeon
                         {
                             MessageBox.Show(res.command);
                             Users = null;
-                            User.Nick = null;
+                            Nick = "";
                             return;
                         }
                         else
