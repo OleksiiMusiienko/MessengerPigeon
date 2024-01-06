@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerPigeon"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1000" MinWidth="750" MinHeight="720">
+        Title="MainWindow" Height="800" Width="1000" MinWidth="750" MinHeight="720">
     <Window.Resources>
         <local:MessengerViewModel x:Key="ViewModel"/>
     </Window.Resources>
@@ -25,23 +25,24 @@
                 <Image Name="Avatar" Width="150" MinWidth="150"/>
                 <TextBlock DockPanel.Dock="Top" Text="{Binding Nick}"></TextBlock>
                 <Expander HorizontalAlignment="Left"  Header="Redact" ExpandDirection="Down">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <DockPanel Margin="5">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="165">
+                        <DockPanel Margin="3">
                             <Label Padding="5">Photo :</Label>
                             <Button Margin="20 0 0 0" Padding="5" MinWidth="100" >Download</Button>
                         </DockPanel>
-                        <DockPanel Margin="5">
+                        <DockPanel Margin="3">
                             <Label Padding="5" >NikName :</Label>
-                            <TextBox Name="NikName_Authorization" Padding="5" MinWidth="100" Text="{Binding NickReg}" ></TextBox>
+                            <TextBox Name="NikName_Authorization" Padding="5" MinWidth="100" Text="{Binding Nick}"></TextBox>
                         </DockPanel>
-                        <DockPanel Margin="5">
+                        <DockPanel Margin="3">
                             <Label Padding="5">Password :</Label>
-                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordReg}" ></TextBox>
+                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordReg}" ToolTip="Введите действующий пароль" ></TextBox>
                         </DockPanel>
-                        <DockPanel Margin="5">
-                            <Label Padding="5">Password :</Label>
-                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordReg}" ></TextBox>
+                        <DockPanel Margin="3">
+                            <Label Padding="5">NewPas... :</Label>
+                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordTwo}" ToolTip="Введите новый пароль"></TextBox>
                         </DockPanel>
+                        <Button Margin="3" Name="Redact" Height="20" Width="100" MinWidth="70" Command="{Binding ButtonRedact}">Redact</Button>
                     </StackPanel>
                 </Expander>
             </DockPanel>
