@@ -284,6 +284,49 @@ namespace MessengerPigeon
         }
         //реализация команды регистрации конец
 
+        //04.01.2024 реализация команды удаление пользователя начало
+        private CommandRemove CommandRemov;
+        public ICommand ButtonRemove
+        {
+            get
+            {
+                if (CommandRemov == null)
+                {
+                    CommandRemov = new CommandRemove(Remove, CanRemove);
+                }
+                return CommandRemov;
+            }
+        }
+        private async void Remove(object o)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    MemoryStream stream = new MemoryStream();
+                    Wrapper wrapper = new Wrapper();
+                    wrapper.commands = Wrapper.Commands.Remove;
+                    wrapper.user = User;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
+                    jsonFormatter.WriteObject(stream, wrapper);
+                    byte[] msg = stream.ToArray();
+                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+        }
+        private bool CanRemove(object o)
+        {
+            if (User.Nick == null)
+                return false;
+            return true;
+        }
+        //реализация команды отправки конец
+
         // метод прослушки ответов запросов на регистрацию от сервера 
         private async void Receive(TcpClient tcpClient)
         {
@@ -309,10 +352,31 @@ namespace MessengerPigeon
                         MemoryStream stream = new MemoryStream(copy);
                         var jsonFormatter = new DataContractJsonSerializer(typeof(ServerResponse));
                         ServerResponse res = jsonFormatter.ReadObject(stream) as ServerResponse;
-                        if (res.list.Count != 0 )
+                        if (res.list != null)
                         {
-                            Users = new ObservableCollection<User>(res.list);
+                            List<User> list = new List<User>();
+                            list = res.list;
+                            IPAddress address = Dns.GetHostAddresses(Dns.GetHostName()).First<IPAddress>(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+                            foreach (var user in list)
+                            {
+                                if (user.IPadress == address.ToString())
+                                {
+                                    list.Remove(user);
+                                    break;
+                                }
+                            }
+                            Users = new ObservableCollection<User>(list);
                             Nick = NickReg;
+                            Password = PasswordReg;
+                            NickReg = "";
+                            PasswordReg = "";
+                            PasswordTwo = "";
+                        }
+                        else if (res.command == "Пользователь успешно удален!")
+                        {
+                            MessageBox.Show(res.command);
+                            Users = null;
+                            User.Nick = null;
                             return;
                         }
                         else
@@ -330,11 +394,9 @@ namespace MessengerPigeon
                     MessageBox.Show("Клиент: " + ex.Message);
                     netstream?.Close();
                     tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
-                }  
+                }
                 finally
                 {
-                    NickReg = "";
-                    PasswordReg = "";
                     netstream?.Close();
                     tcpClient?.Close();
                 }
