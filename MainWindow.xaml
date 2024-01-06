@@ -24,6 +24,7 @@
             <DockPanel Name="DockPanel_1">
                 <Image Name="Avatar" Width="150" MinWidth="150"/>
                 <TextBlock DockPanel.Dock="Top" Text="{Binding Nick}"></TextBlock>
+                <Button DockPanel.Dock="Bottom" Command="{Binding ButtonRemove}" >Remove</Button>
                 <Expander HorizontalAlignment="Left"  Header="Redact" ExpandDirection="Down">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="165">
                         <DockPanel Margin="3">
@@ -42,7 +43,7 @@
                             <Label Padding="5">NewPas... :</Label>
                             <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordTwo}" ToolTip="Введите новый пароль"></TextBox>
                         </DockPanel>
-                        <Button Margin="3" Name="Redact" Height="20" Width="100" MinWidth="70" Command="{Binding ButtonRedact}">Redact</Button>
+                        <Button Margin="3" Name="Redact" Height="20" Width="100" MinWidth="70" Command="{Binding ButtonRedact}" >Redact</Button>
                     </StackPanel>
                 </Expander>
             </DockPanel>
