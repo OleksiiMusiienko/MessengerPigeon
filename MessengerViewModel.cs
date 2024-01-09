@@ -297,9 +297,6 @@ namespace MessengerPigeon
             {
                 try
                 {
-                    string IP = "26.27.154.150";
-                    tcpClient = new TcpClient(IP, 49152);
-                    netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Redact;
