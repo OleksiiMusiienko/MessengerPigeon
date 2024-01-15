@@ -29,6 +29,8 @@ namespace MessengerPigeon
     {
         public TcpClient tcpClient;
         public NetworkStream netstream;
+        public TcpClient tcpClientMessage;
+        public NetworkStream netstreamMessage;
         public MessengerViewModel()
         {
             User = new User();
@@ -176,15 +178,29 @@ namespace MessengerPigeon
                 return CommandSend;
             }
         }
-        private async void Send(object o)
+
+        private async void ConnectionForMessage()
+        {
+            await Task.Run(async () =>
+            {
+            try
+            {
+                 string IP = "26.27.154.150";
+                 tcpClientMessage = new TcpClient(IP, 49153);
+                 netstreamMessage = tcpClient.GetStream();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Клиент: " + ex.Message);
+            }
+            });
+        }
+    private async void Send(object o)
         {
             await Task.Run(async () =>
             {
                 try
                 {
-                    string IP = "26.27.154.150";
-                    tcpClient = new TcpClient(IP, 49153);
-                    netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
                    
                     Date_Time = DateTime.Now;
@@ -202,7 +218,7 @@ namespace MessengerPigeon
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter.WriteObject(stream, mes);
                     byte[] msg = stream.ToArray();
-                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
                     Mes = "";
                     //ReceiveMessage(tcpClient);
                 }
@@ -235,6 +251,7 @@ namespace MessengerPigeon
                 return CommandReg;
             }
         }
+
         private async void Reg(object o)
         {
             await Task.Run(async () =>
@@ -254,6 +271,7 @@ namespace MessengerPigeon
                     byte[] msg = stream.ToArray();
                     await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
                     Receive(tcpClient);
+                    ConnectionForMessage();// отдельное подключение для сообщений
                 }
                 catch (Exception ex)
                 {
@@ -302,6 +320,7 @@ namespace MessengerPigeon
                     byte[] msg = stream.ToArray();
                     await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
                     Receive(tcpClient);
+                    ConnectionForMessage();// отдельное подключение для сообщений
                 }
                 catch (Exception ex)
                 {
@@ -490,7 +509,48 @@ namespace MessengerPigeon
                 }
             });
         }
+        //private async void ReceiveMessage(TcpClient tcpClient)
+        //{
+        //    await Task.Run(async () =>
+        //    {
+        //        try
+        //        {
+        //            // Получим объект NetworkStream, используемый для приема и передачи данных.
+        //            netstream = tcpClient.GetStream();
+        //            byte[] arr = new byte[tcpClient.ReceiveBufferSize];
+        //            while (true)
+        //            {
+        //                int len = await netstream.ReadAsync(arr, 0, tcpClient.ReceiveBufferSize);
+        //                if (len == 0)
+        //                {
+        //                    netstream.Close();
+        //                    tcpClient.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
+        //                    return;
+        //                }
+        //                // Создадим поток, резервным хранилищем которого является память.
+        //                byte[] copy = new byte[len];
+        //                Array.Copy(arr, 0, copy, 0, len);
+        //                MemoryStream stream = new MemoryStream(copy);
+        //                var jsonFormatter = new DataContractJsonSerializer(typeof(List<Message>));
+        //                List<Message> res = jsonFormatter.ReadObject(stream) as List<Message>;
 
-       
+        //                Messages = new ObservableCollection<Message>(res);
+
+        //                stream.Close();
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show("Клиент: " + ex.Message);
+        //            netstream?.Close();
+        //            tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
+        //        }
+        //        finally
+        //        {
+        //            netstream?.Close();
+        //            tcpClient?.Close();
+        //        }
+        //    });
+        //}
     }
 }
