@@ -1,6 +1,7 @@
 ﻿using CommandDLL;
 using MessengerModel;
 using MessengerPigeon.Command;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,6 +38,7 @@ namespace MessengerPigeon
             Message = new Message();
         }
         private User User;
+        private User myUser;
         private Message Message;
 
         public string Nick
@@ -270,6 +272,7 @@ namespace MessengerPigeon
                     jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
                     await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    myUser = new User();
                     Receive(tcpClient);
                     ConnectionForMessage();// отдельное подключение для сообщений
                 }
@@ -282,8 +285,22 @@ namespace MessengerPigeon
 
         private bool CanReg(object o)
         {
-            if (NickReg == null && PasswordReg != PasswordTwo)
-                return false;
+            //string PASSWORD_PATTERN ="((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})";
+            //if (NickReg == null)
+            //{
+            //    MessageBox.Show("Вы не ввели имя для регистрации! ");
+            //    return false;
+            //}
+            //else if (PasswordReg!=PASSWORD_PATTERN && PasswordReg == null)
+            //{
+            //    MessageBox.Show("Пароль не соответствует требованиям! ");
+            //    return false;
+            //}
+            //else if(PasswordReg != PasswordTwo)
+            //{
+            //    MessageBox.Show("Пароли не совпадают! ");
+            //    return false;
+            //}
             return true;
         }
         //реализация команды регистрации конец
@@ -307,6 +324,7 @@ namespace MessengerPigeon
             {
                 try
                 {
+                    User = new User();
                     string IP = "26.27.154.150";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
@@ -319,6 +337,8 @@ namespace MessengerPigeon
                     jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
                     await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    myUser = new User();
+
                     Receive(tcpClient);
                     ConnectionForMessage();// отдельное подключение для сообщений
                 }
@@ -361,9 +381,6 @@ namespace MessengerPigeon
             {
                 try
                 {
-                    string IP = "26.27.154.150";
-                    tcpClient = new TcpClient(IP, 49152);
-                    netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Redact;
@@ -468,6 +485,7 @@ namespace MessengerPigeon
                             {
                                 if (user.IPadress == address.ToString())
                                 {
+                                    myUser = user;
                                     list.Remove(user);
                                     break;
                                 }
