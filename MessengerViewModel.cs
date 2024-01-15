@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using static System.Net.Mime.MediaTypeNames;
@@ -31,6 +32,7 @@ namespace MessengerPigeon
         public MessengerViewModel()
         {
             User = new User();
+            Message = new Message();
         }
         private User User;
         private Message Message;
@@ -44,7 +46,7 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Nick));
             }
         }
-
+        
         public string Password
         {
             get { return User.Password; }
@@ -106,6 +108,7 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Date_Time));
             }
         }
+        
         public string Mes
         {
             get { return Message.Mes; }
@@ -113,6 +116,16 @@ namespace MessengerPigeon
             {
                 Message.Mes = value;
                 OnPropertyChanged(nameof(Mes));
+            }
+        }
+        private User _userRecepient;
+        public User UserRecepient
+        {
+            get { return _userRecepient; }
+            set
+            {
+                _userRecepient= value;
+                OnPropertyChanged(nameof(UserRecepient));
             }
         }
 
@@ -163,9 +176,41 @@ namespace MessengerPigeon
                 return CommandSend;
             }
         }
-        private void Send(object o)
+        private async void Send(object o)
         {
-            //логика отправки сообщения(сделать метод асинхронным) или вызов отдельного async метода отправки сообщения
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    string IP = "26.27.154.150";
+                    tcpClient = new TcpClient(IP, 49153);
+                    netstream = tcpClient.GetStream();
+                    MemoryStream stream = new MemoryStream();
+                   
+                    Date_Time = DateTime.Now;
+                    Message mes = new Message(Mes, Date_Time);
+                    IPAddress address = Dns.GetHostAddresses(Dns.GetHostName()).First<IPAddress>(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+
+                    foreach (var user in Users)
+                    {
+                        if (user.IPadress == address.ToString())
+                        {
+                            mes.UserSenderId = user.Id;
+                        }
+                    }
+                    mes.UserRecepientId = UserRecepient.Id;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
+                    jsonFormatter.WriteObject(stream, mes);
+                    byte[] msg = stream.ToArray();
+                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    Mes = "";
+                    //ReceiveMessage(tcpClient);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
         }
         private bool CanSend(object o)
         {
@@ -408,9 +453,9 @@ namespace MessengerPigeon
                                     break;
                                 }
                             }
-                            Users = new ObservableCollection<User>(list);
+                            Users = new ObservableCollection<User>(list);                            
                             Nick = NickReg;
-                            Password = PasswordReg;
+                            Password = PasswordReg;                          
                             NickReg = "";
                             PasswordReg = "";
                             PasswordTwo = "";
