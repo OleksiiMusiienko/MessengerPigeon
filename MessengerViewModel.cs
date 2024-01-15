@@ -207,15 +207,7 @@ namespace MessengerPigeon
                    
                     Date_Time = DateTime.Now;
                     Message mes = new Message(Mes, Date_Time);
-                    IPAddress address = Dns.GetHostAddresses(Dns.GetHostName()).First<IPAddress>(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
-
-                    foreach (var user in Users)
-                    {
-                        if (user.IPadress == address.ToString())
-                        {
-                            mes.UserSenderId = user.Id;
-                        }
-                    }
+                    mes.UserSenderId = myUser.Id;
                     mes.UserRecepientId = UserRecepient.Id;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter.WriteObject(stream, mes);
