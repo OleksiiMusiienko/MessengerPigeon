@@ -187,7 +187,7 @@ namespace MessengerPigeon
             {
                  string IP = "26.27.154.150";
                  tcpClientMessage = new TcpClient(IP, 49153);
-                 netstreamMessage = tcpClient.GetStream();
+                 netstreamMessage = tcpClientMessage.GetStream();
             }
             catch (Exception ex)
             {
@@ -220,7 +220,7 @@ namespace MessengerPigeon
                     byte[] msg = stream.ToArray();
                     await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
                     Mes = "";
-                    //ReceiveMessage(tcpClient);
+                    ReceiveMessage(tcpClientMessage);
                 }
                 catch (Exception ex)
                 {
@@ -509,48 +509,48 @@ namespace MessengerPigeon
                 }
             });
         }
-        //private async void ReceiveMessage(TcpClient tcpClient)
-        //{
-        //    await Task.Run(async () =>
-        //    {
-        //        try
-        //        {
-        //            // Получим объект NetworkStream, используемый для приема и передачи данных.
-        //            netstream = tcpClient.GetStream();
-        //            byte[] arr = new byte[tcpClient.ReceiveBufferSize];
-        //            while (true)
-        //            {
-        //                int len = await netstream.ReadAsync(arr, 0, tcpClient.ReceiveBufferSize);
-        //                if (len == 0)
-        //                {
-        //                    netstream.Close();
-        //                    tcpClient.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
-        //                    return;
-        //                }
-        //                // Создадим поток, резервным хранилищем которого является память.
-        //                byte[] copy = new byte[len];
-        //                Array.Copy(arr, 0, copy, 0, len);
-        //                MemoryStream stream = new MemoryStream(copy);
-        //                var jsonFormatter = new DataContractJsonSerializer(typeof(List<Message>));
-        //                List<Message> res = jsonFormatter.ReadObject(stream) as List<Message>;
+        private async void ReceiveMessage(TcpClient tcpClientMessage)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    // Получим объект NetworkStream, используемый для приема и передачи данных.
+                    netstreamMessage = tcpClientMessage.GetStream();
+                    byte[] arr = new byte[tcpClientMessage.ReceiveBufferSize];
+                    while (true)
+                    {
+                        int len = await netstreamMessage.ReadAsync(arr, 0, tcpClient.ReceiveBufferSize);
+                        if (len == 0)
+                        {
+                            netstreamMessage.Close();
+                            tcpClientMessage.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
+                            return;
+                        }
+                        // Создадим поток, резервным хранилищем которого является память.
+                        byte[] copy = new byte[len];
+                        Array.Copy(arr, 0, copy, 0, len);
+                        MemoryStream stream = new MemoryStream(copy);
+                        var jsonFormatter = new DataContractJsonSerializer(typeof(List<Message>));
+                        List<Message> res = jsonFormatter.ReadObject(stream) as List<Message>;
 
-        //                Messages = new ObservableCollection<Message>(res);
+                        Messages = new ObservableCollection<Message>(res);
 
-        //                stream.Close();
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            MessageBox.Show("Клиент: " + ex.Message);
-        //            netstream?.Close();
-        //            tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
-        //        }
-        //        finally
-        //        {
-        //            netstream?.Close();
-        //            tcpClient?.Close();
-        //        }
-        //    });
-        //}
+                        stream.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                    netstreamMessage?.Close();
+                    tcpClientMessage?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
+                }
+                finally
+                {
+                    netstreamMessage?.Close();
+                    tcpClientMessage?.Close();
+                }
+            });
+        }
     }
 }
