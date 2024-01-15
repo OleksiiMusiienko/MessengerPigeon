@@ -82,15 +82,16 @@
         </DockPanel>
         <DockPanel Name="DockPanel_2" Grid.RowSpan="2" LastChildFill="True">
             <Border BorderBrush="SteelBlue" BorderThickness="1">
-                <ListBox Name="ListBoxUsers" HorizontalAlignment="Stretch" ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" ></ListBox>
+                <ListBox Name="ListBoxUsers" HorizontalAlignment="Stretch" ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" 
+                         SelectedItem="{Binding UserRecepient}"></ListBox>
             </Border>
         </DockPanel>
         <DockPanel Name="DockPanel_3" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="1">
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1">
-                <TextBlock Name="User" Margin="4" >Person</TextBlock>
+                <TextBlock Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
             </Border>
             <Border BorderBrush="SteelBlue" BorderThickness="1">
-                <ListBox Name="ChatingHistory" >
+                <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" IsSynchronizedWithCurrentItem = "true" >
                 </ListBox>
             </Border>
         </DockPanel >
@@ -114,8 +115,8 @@
                 </DockPanel>
             </Border>
             <DockPanel Background="White">
-                <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5">Send</Button>
-                <TextBox Name="TextBox_Message" DockPanel.Dock="Left" Margin="3"></TextBox>
+                <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" >Send</Button>
+                <TextBox Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" ></TextBox>
             </DockPanel>
         </DockPanel>
     </Grid>
