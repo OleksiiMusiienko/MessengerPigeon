@@ -42,6 +42,15 @@ namespace MessengerPigeon
         private User myUser;
         private Message Message;
 
+        public User MyUser
+        {
+            get { return myUser; }
+            set
+            {
+                myUser = value;
+                OnPropertyChanged(nameof(myUser));
+            }
+        }
         public string Nick
         {
             get { return User.Nick; }
@@ -479,7 +488,7 @@ namespace MessengerPigeon
                             {
                                 if (user.IPadress == address.ToString())
                                 {
-                                    myUser = user;
+                                    MyUser = user;
                                     list.Remove(user);
                                     break;
                                 }

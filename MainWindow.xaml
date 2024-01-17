@@ -23,7 +23,7 @@
         <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0"  Margin="5">
             <DockPanel Name="DockPanel_1">
                 <Image Name="Avatar" Width="150" MinWidth="150"/>
-                <TextBlock DockPanel.Dock="Top" Text="{Binding Nick}"></TextBlock>
+                <TextBlock DockPanel.Dock="Top" Text="{Binding MyUser.Nick}"></TextBlock>
                 <Button DockPanel.Dock="Bottom" Command="{Binding ButtonRemove}" >Remove</Button>
                 <Expander HorizontalAlignment="Left"  Header="Redact" ExpandDirection="Down">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="165">
