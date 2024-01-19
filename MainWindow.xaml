@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1000" MinWidth="750" MinHeight="720">
     <Window.Resources>
-        <local:MessengerViewModel x:Key="ViewModel"/>
+        <local:MessengerViewModel x:Key="ViewModel"/>        
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
         <Grid.RowDefinitions>
@@ -81,31 +81,43 @@
             </Expander>
         </DockPanel>
         <DockPanel Name="DockPanel_2" Grid.RowSpan="2" LastChildFill="True">
-            <Border BorderBrush="SteelBlue" BorderThickness="1">
-                <ListBox Name="ListBoxUsers" SelectedItem="{Binding UserRecepient}" HorizontalAlignment="Stretch" ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Ellipse Width="40" Height="40" Fill="LightGreen" Margin="3">
-                                    <!--<Ellipse.Fill>
+            <ListBox Name="ListBoxUsers" SelectedItem="{Binding UserRecepient}" HorizontalAlignment="Stretch" BorderBrush="SteelBlue" 
+                       Margin="5"  ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" Background="LightCyan">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="40" Height="40" Fill="LightGreen" Margin="3">
+                                <!--<Ellipse.Fill>
                                             <ImageBrush></ImageBrush>
                                     </Ellipse.Fill>-->
-                                </Ellipse>
-                                <TextBlock Text="{Binding Nick}" VerticalAlignment="Center" FontWeight="Bold" Margin="10"></TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Border>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Nick}" VerticalAlignment="Center" FontWeight="Bold" Margin="10"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
         </DockPanel>
         <DockPanel Name="DockPanel_3" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="1">
-            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1">
+            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="2">
                 <TextBlock Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
             </Border>
-            <Border BorderBrush="SteelBlue" BorderThickness="1">
-                <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" IsSynchronizedWithCurrentItem = "true" >
-                </ListBox>
-            </Border>
+
+            <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" IsSynchronizedWithCurrentItem = "true" BorderBrush="SteelBlue"
+                     Margin="5" HorizontalContentAlignment="Stretch" Background="LightGoldenrodYellow">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Date_Time}" VerticalAlignment="Center" FontWeight="Bold" Margin="5" Foreground="Crimson"></TextBlock>
+                            <!--<TextBlock Text="{Binding}" VerticalAlignment="Center" FontWeight="Bold" Margin="5"></TextBlock>-->
+                            <TextBlock Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Heavy" FontStyle="Italic" Margin="5" Foreground="LightSeaGreen"></TextBlock>
+                            <Line Stroke="SteelBlue" StrokeThickness="2" X1="1" X2="700" HorizontalAlignment="Center" Opacity="0.5"></Line>
+                        </StackPanel>
+                    </DataTemplate>
+
+                </ListBox.ItemTemplate>
+
+            </ListBox>
         </DockPanel >
         <DockPanel Name="DockPanel_4" Grid.Row="2" >
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Background="AliceBlue">
@@ -115,20 +127,28 @@
                 <Button Name="Scan">Scan</Button>
                 <Button Name="Delete">Delete</Button>
             </StackPanel>
-            <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top"></TextBox>
+            <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top" Background="LightCyan"></TextBox>
 
         </DockPanel>
         <DockPanel Name="DockPanel_5" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="2">
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1">
                 <DockPanel  Background="AliceBlue">
-                    <Button Name="File" DockPanel.Dock ="Right" Margin="3">File</Button>
-                    <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" >Voice</Button>
+                    <Button Name="File" DockPanel.Dock ="Right" Margin="3" Background="AliceBlue" BorderBrush="AliceBlue">
+                        <Image Source="images/filesend.png" Width="25"></Image>
+                    </Button>
+                    <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" Background="AliceBlue" BorderBrush="AliceBlue">
+                        <Image Source="images/Studio-mic-icon_30398.png" Width="25"></Image>
+                    </Button>
                     <TextBlock DockPanel.Dock="Left"  Margin="4" >Message</TextBlock>
+                    
                 </DockPanel>
             </Border>
             <DockPanel Background="White">
-                <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" >Send</Button>
-                <TextBox Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" ></TextBox>
+                <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" Background="LightGoldenrodYellow" BorderBrush="LightGreen" BorderThickness="5"  >
+                    <Image Source="images/send.png" Width="30"></Image>
+                </Button>
+                <TextBox Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"
+                         ></TextBox>
             </DockPanel>
         </DockPanel>
     </Grid>

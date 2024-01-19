@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="filesend.png" />
+    <None Remove="send.png" />
+    <None Remove="Studio-mic-icon_30398.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
@@ -22,6 +28,12 @@
   <ItemGroup>
     <ProjectReference Include="..\CommandDLL\CommandDLL.csproj" />
     <ProjectReference Include="..\ModelDLL\ModelDLL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\filesend.png" />
+    <Resource Include="images\send.png" />
+    <Resource Include="images\Studio-mic-icon_30398.png" />
   </ItemGroup>
 
   <ItemGroup>
