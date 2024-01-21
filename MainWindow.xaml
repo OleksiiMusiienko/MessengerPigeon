@@ -22,14 +22,14 @@
         </Grid.ColumnDefinitions>
         <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0"  Margin="5">
             <DockPanel Name="DockPanel_1">
-                <Image Name="Avatar" Width="150" MinWidth="150"/>
+                <Image  Name="Avatar" Source="{Binding Avatar}" Width="150" MinWidth="150" />
                 <TextBlock DockPanel.Dock="Top" Text="{Binding MyUser.Nick}"></TextBlock>
                 <Button DockPanel.Dock="Bottom" Command="{Binding ButtonRemove}" >Remove</Button>
                 <Expander HorizontalAlignment="Left"  Header="Redact" ExpandDirection="Down">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="165">
                         <DockPanel Margin="3">
                             <Label Padding="5">Photo :</Label>
-                            <Button Margin="20 0 0 0" Padding="5" MinWidth="100" >Download</Button>
+                            <Button Margin="20 0 0 0" Padding="5" MinWidth="100" Click="Button_Click" >Download</Button>
                         </DockPanel>
                         <DockPanel Margin="3">
                             <Label Padding="5" >NikName :</Label>
@@ -86,10 +86,10 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Ellipse Width="40" Height="40" Fill="LightGreen" Margin="3">
-                                <!--<Ellipse.Fill>
-                                            <ImageBrush></ImageBrush>
-                                    </Ellipse.Fill>-->
+                            <Ellipse Width="40" Height="40" Margin="3" Stroke="Blue"  >
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{Binding Avatar}"></ImageBrush>
+                                </Ellipse.Fill>
                             </Ellipse>
                             <TextBlock Text="{Binding Nick}" VerticalAlignment="Center" FontWeight="Bold" Margin="10"></TextBlock>
                         </StackPanel>
