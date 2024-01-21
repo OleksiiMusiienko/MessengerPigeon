@@ -71,6 +71,16 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Password));
             }
         }
+        public string Phone
+        {
+            get { return User.Phone; }
+            set
+            {
+
+                User.Phone = value;
+                OnPropertyChanged(nameof(Phone));
+            }
+        }
         // Свойства для привязки обьекта User к блокам регистрации и авторизации .(NickReg, PasswordReg, PasswordTwo)
         private string _nickReg = string.Empty;
         public string NickReg
@@ -268,7 +278,7 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Registratioin;
-                    User us = new User(NickReg, PasswordReg,null,null);
+                    User us = new User(NickReg, PasswordReg,null,null, Phone);
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
@@ -333,7 +343,7 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Authorization;
-                    User us = new User(NickReg, PasswordReg, null, null);
+                    User us = new User(NickReg, PasswordReg, null, null, null);
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
@@ -386,7 +396,7 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Redact;
-                    User us = new User(Nick, Password,null, Avatar);
+                    User us = new User(Nick, Password,null, Avatar, Phone);
                     wrapper.NewPassword = PasswordTwo; 
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
