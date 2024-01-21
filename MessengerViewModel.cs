@@ -112,7 +112,6 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Avatar));
             }
         }
-
         public DateTime Date_Time
         {
             get { return Message.Date_Time; }
@@ -387,7 +386,7 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Redact;
-                    User us = new User(Nick, Password,null, null);
+                    User us = new User(Nick, Password,null, Avatar);
                     wrapper.NewPassword = PasswordTwo; 
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
@@ -495,7 +494,8 @@ namespace MessengerPigeon
                             }
                             Users = new ObservableCollection<User>(list);                            
                             Nick = NickReg;
-                            Password = PasswordReg;                          
+                            Password = PasswordReg;
+                            Avatar = myUser.Avatar;
                             NickReg = "";
                             PasswordReg = "";
                             PasswordTwo = "";
