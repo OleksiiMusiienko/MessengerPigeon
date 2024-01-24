@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerPigeon"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000" MinWidth="750" MinHeight="720">
+        Title="MainWindow" Height="750" Width="750" MinWidth="750" MinHeight="750">
     <Window.Resources>
-        <local:MessengerViewModel x:Key="ViewModel"/>        
+        <local:MessengerViewModel x:Key="ViewModel"/>
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" ></RowDefinition>
+            <RowDefinition Height="1.3*" ></RowDefinition>
             <RowDefinition Height ="2*"></RowDefinition>
             <RowDefinition Height ="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
@@ -24,8 +24,10 @@
             <DockPanel Name="DockPanel_1">
                 <Image  Name="Avatar" Source="{Binding Avatar}" Width="150" MinWidth="150" />
                 <TextBlock DockPanel.Dock="Top" Text="{Binding MyUser.Nick}"></TextBlock>
-                <Button DockPanel.Dock="Bottom" Command="{Binding ButtonRemove}" >Remove</Button>
-                <Expander HorizontalAlignment="Left"  Header="Redact" ExpandDirection="Down">
+                <Button DockPanel.Dock="Bottom" Command="{Binding ButtonEx}" >Exit</Button>
+                <Button DockPanel.Dock="Bottom" Command="{Binding ButtonRemove}">Remove</Button>
+                <Expander  Header="Redact" ExpandDirection="Down" IsExpanded="{Binding IsEnabledRedact}" 
+                          IsEnabled="{Binding IsEnable}" Width="100">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="165">
                         <DockPanel Margin="3">
                             <Label Padding="5">Photo :</Label>
@@ -49,7 +51,8 @@
             </DockPanel>
         </Border>
         <DockPanel Name="WrapPanel_1" Grid.Column="2" Margin="5">
-            <Expander HorizontalAlignment="Center"  Header="Authorization" ExpandDirection="Down" IsExpanded="True">
+            <Expander HorizontalAlignment="Center"  Header="Authorization" ExpandDirection="Down" 
+                      IsExpanded="{Binding IsEnabledAuthorization}" IsEnabled="{Binding IsEnableOnline} ">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <DockPanel Margin="5">
                         <Label Padding="5" >NikName :</Label>
@@ -62,8 +65,13 @@
                     <Button Name="Enter" Padding="5" Command="{Binding  ButtonAut}" >Enter</Button>
                 </StackPanel>
             </Expander>
-            <Expander HorizontalAlignment="Center"  Header="Registration" ExpandDirection="Down" >
+            <Expander HorizontalAlignment="Center"  Header="Registration" ExpandDirection="Down" 
+                      IsExpanded="{Binding IsEnabledRegistration}" IsEnabled="{Binding IsEnableOnline} ">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <DockPanel Margin="3">
+                        <Label Padding="4 4 20 4" >Phone :</Label>
+                        <TextBox Padding="4" MinWidth="100" Text="{Binding Phone}" ></TextBox>
+                    </DockPanel>
                     <DockPanel Margin="3">
                         <Label Padding="4">NikName :</Label>
                         <TextBox Padding="4" MinWidth="100" Text="{Binding NickReg}"></TextBox>
@@ -140,7 +148,7 @@
                         <Image Source="images/Studio-mic-icon_30398.png" Width="25"></Image>
                     </Button>
                     <TextBlock DockPanel.Dock="Left"  Margin="4" >Message</TextBlock>
-                    
+
                 </DockPanel>
             </Border>
             <DockPanel Background="White">
