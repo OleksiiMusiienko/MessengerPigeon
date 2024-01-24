@@ -48,7 +48,7 @@ namespace MessengerPigeon
             set
             {
                 myUser = value;
-                OnPropertyChanged(nameof(myUser));
+                OnPropertyChanged(nameof(MyUser));
             }
         }
         public string Nick
@@ -150,6 +150,104 @@ namespace MessengerPigeon
                 _userRecepient= value;
                 OnPropertyChanged(nameof(UserRecepient));
                 HistoryMessages();
+            }
+        }
+        private bool _isButtonEnable;
+
+        public bool IsEnable
+        {
+            get
+            {
+                return _isButtonEnable;
+            }
+            set
+            {
+                if (MyUser == null)
+                    value = false;
+                else
+                    value = true;
+                _isButtonEnable = value;
+                OnPropertyChanged(nameof(IsEnable));
+            }
+        }
+        private bool _isButtonEnableOnline;
+
+        public bool IsEnableOnline
+        {
+            get
+            {
+                return _isButtonEnableOnline;
+            }
+            set
+            {
+                if (MyUser == null)
+                    value = true;
+                else
+                    value = false;
+                _isButtonEnableOnline = value;
+                OnPropertyChanged(nameof(IsEnableOnline));
+            }
+        }
+        private bool _isButtonRedact;
+
+        public bool IsEnabledRedact
+        {
+            get
+            {
+                return _isButtonRedact;
+            }
+            set
+            {
+                if (MyUser == null)
+                    value=false;
+                else
+                    value=true;
+                _isButtonRedact = value;
+                OnPropertyChanged(nameof(IsEnabledRedact));
+            }
+        }
+        private bool _isButtonAuthorization;
+
+        public bool IsEnabledAuthorization
+        {
+            get
+            {
+                return _isButtonAuthorization;
+            }
+            set
+            {
+                if (MyUser == null && value == true)
+                {
+                    value = true;
+                    if(_isButtonRegistration)
+                        IsEnabledRegistration = false;
+                }
+                else
+                    value = false;
+                _isButtonAuthorization = value;
+                OnPropertyChanged(nameof(IsEnabledAuthorization));
+            }
+        }
+        private bool _isButtonRegistration;
+
+        public bool IsEnabledRegistration
+        {
+            get
+            {
+                return _isButtonRegistration;
+            }
+            set
+            {
+                if (MyUser == null && value == true)
+                {
+                    value = true;
+                    if (_isButtonAuthorization)
+                        IsEnabledAuthorization = false;
+                }
+                else
+                    value = false;
+                _isButtonRegistration = value;
+                OnPropertyChanged(nameof(IsEnabledRegistration));
             }
         }
 
@@ -363,7 +461,7 @@ namespace MessengerPigeon
 
         private bool CanAut(object o)
         {
-            if (NickReg == null && PasswordReg != PasswordTwo)
+            if (NickReg == "" && PasswordReg == "")
                 return false;
             return true;
         }
@@ -414,7 +512,7 @@ namespace MessengerPigeon
 
         private bool CanRedact(object o)
         {
-            if (User.IPadress == "")
+            if (MyUser == null)
                 return false;
             return true;
         }
@@ -447,7 +545,6 @@ namespace MessengerPigeon
                     jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
                     await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
-
                 }
                 catch (Exception ex)
                 {
@@ -457,11 +554,60 @@ namespace MessengerPigeon
         }
         private bool CanRemove(object o)
         {
-            if (User.Nick == "")
+            if (MyUser == null)
                 return false;
             return true;
         }
-        //реализация команды отправки конец
+        //реализация команды удаления конец
+
+        //24.01.2024 реализация команды удаление пользователя начало
+        private CommandExit CommandEx;
+        public ICommand ButtonEx
+        {
+            get
+            {
+                if (CommandEx == null)
+                {
+                    CommandEx = new CommandExit(Exit, CanExit);
+                }
+                return CommandEx;
+            }
+        }
+        private async void Exit(object o)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    MemoryStream stream = new MemoryStream();
+                    Wrapper wrapper = new Wrapper();
+                    wrapper.commands = Wrapper.Commands.Exit;
+                    wrapper.user = User;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
+                    jsonFormatter.WriteObject(stream, wrapper);
+                    byte[] msg = stream.ToArray();
+                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    netstream?.Close();
+                    tcpClient?.Close();
+                    netstreamMessage?.Close();
+                    tcpClientMessage?.Close();
+                    Users = null;
+                    myUser = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+        }
+        private bool CanExit(object o)
+        {
+            if (MyUser == null)
+                return false;
+            return true;
+        }
+        //реализация команды удаления конец
 
         // метод прослушки ответов запросов на регистрацию от сервера 
         private async void Receive(TcpClient tcpClient)
@@ -533,11 +679,6 @@ namespace MessengerPigeon
                     netstream?.Close();
                     tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
                 }
-                finally
-                {
-                    netstream?.Close();
-                    tcpClient?.Close();
-                }
             });
         }
         private async void ReceiveMessage(TcpClient tcpClientMessage)
@@ -575,11 +716,6 @@ namespace MessengerPigeon
                     MessageBox.Show("Клиент: " + ex.Message);
                     netstreamMessage?.Close();
                     tcpClientMessage?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
-                }
-                finally
-                {
-                    netstreamMessage?.Close();
-                    tcpClientMessage?.Close();
                 }
             });
         }
