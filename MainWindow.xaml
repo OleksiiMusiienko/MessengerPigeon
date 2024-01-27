@@ -37,11 +37,11 @@
                         </DockPanel>
                         <DockPanel Margin="3">
                             <Label Padding="5">Password :</Label>
-                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordReg}" ToolTip="Введите действующий пароль" ></TextBox>
+                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите действующий пароль" ></TextBox>
                         </DockPanel>
                         <DockPanel Margin="3">
                             <Label Padding="5">NewPas... :</Label>
-                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordTwo}" ToolTip="Введите новый пароль"></TextBox>
+                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите новый пароль"></TextBox>
                         </DockPanel>
                         <Button Margin="3" Name="Redact" Height="20" Width="100" MinWidth="70" Command="{Binding ButtonRedact}" >Redact</Button>
                     </StackPanel>
@@ -57,7 +57,7 @@
                     </DockPanel>
                     <DockPanel Margin="5">
                         <Label Padding="5">Password :</Label>
-                        <TextBox Padding="5" MinWidth="100" Text="{Binding PasswordReg}" ></TextBox>
+                        <TextBox Padding="5" MinWidth="100" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ></TextBox>
                     </DockPanel>
                     <Button Name="Enter" Padding="5" Command="{Binding  ButtonAut}" >Enter</Button>
                 </StackPanel>
@@ -70,11 +70,11 @@
                     </DockPanel>
                     <DockPanel Margin="3">
                         <Label Padding="4">Password :</Label>
-                        <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordReg}"></TextBox>
+                        <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}"  ></TextBox>
                     </DockPanel>
                     <DockPanel Margin="3">
                         <Label Padding="4">Password :</Label>
-                        <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordTwo}"></TextBox>
+                        <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ></TextBox>
                     </DockPanel>
                     <Button Padding="4" Command="{Binding ButtonReg}">Registration</Button>
                 </StackPanel>
