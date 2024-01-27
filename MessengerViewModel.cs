@@ -36,12 +36,15 @@ namespace MessengerPigeon
         public MessengerViewModel()
         {
             User = new User();
+            User.Nick = null;
+            User.Password = null;
+            User.Phone = null;
             Message = new Message();
         }
         private User User;
         private User myUser;
+        private User _userRecepient;
         private Message Message;
-
         public User MyUser
         {
             get { return myUser; }
@@ -49,6 +52,25 @@ namespace MessengerPigeon
             {
                 myUser = value;
                 OnPropertyChanged(nameof(MyUser));
+            }
+        }
+        public User UserRecepient
+        {
+            get { return _userRecepient; }
+            set
+            {
+                _userRecepient = value;
+                OnPropertyChanged(nameof(UserRecepient));
+                HistoryMessages();
+            }
+        }
+        public string Mes
+        {
+            get { return Message.Mes; }
+            set
+            {
+                Message.Mes = value;
+                OnPropertyChanged(nameof(Mes));
             }
         }
         public string Nick
@@ -60,7 +82,6 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Nick));
             }
         }
-        
         public string Password
         {
             get { return User.Password; }
@@ -81,38 +102,6 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Phone));
             }
         }
-        // Свойства для привязки обьекта User к блокам регистрации и авторизации .(NickReg, PasswordReg, PasswordTwo)
-        private string _nickReg = string.Empty;
-        public string NickReg
-        {
-            get { return _nickReg; }
-            set
-            {
-                _nickReg = value;
-                OnPropertyChanged(nameof(NickReg));
-            }
-        }
-        private string _passwordReg = string.Empty;
-        public string PasswordReg
-        {
-            get { return _passwordReg; }
-            set
-            {
-                _passwordReg = value;
-                OnPropertyChanged(nameof(PasswordReg));
-            }
-        }
-        private string _passwordTwo = string.Empty;
-        public string PasswordTwo
-        {
-            get { return _passwordTwo; }
-            set
-            {
-                _passwordTwo = value;
-                OnPropertyChanged(nameof(PasswordTwo));
-            }
-        }
-
         public byte[]? Avatar
         {
             get { return User.Avatar; }
@@ -131,29 +120,59 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Date_Time));
             }
         }
-        
-        public string Mes
-        {
-            get { return Message.Mes; }
-            set
-            {
-                Message.Mes = value;
-                OnPropertyChanged(nameof(Mes));
-            }
-        }
-        private User _userRecepient;
-        public User UserRecepient
-        {
-            get { return _userRecepient; }
-            set
-            {
-                _userRecepient= value;
-                OnPropertyChanged(nameof(UserRecepient));
-                HistoryMessages();
-            }
-        }
-        private bool _isButtonEnable;
 
+
+        // Свойства для привязки обьекта User к блокам регистрации и авторизации .(NickReg, PasswordReg, PasswordTwo)
+        private string _phoneReg = "+380";
+        private string _nickReg = "login";
+        private string _passwordReg="password";
+        private string _passwordTwo;
+        public string PhoneReg
+        {
+            get { return _phoneReg; }
+            set
+            {
+
+                _phoneReg = value;
+                User.Phone = _phoneReg;
+                OnPropertyChanged(nameof(PhoneReg));
+            }
+        }
+        public string NickReg
+        {
+            get { return _nickReg; }
+            set
+            {
+                _nickReg = value;
+                User.Nick = _nickReg;
+                OnPropertyChanged(nameof(NickReg));
+            }
+        }
+        public string PasswordReg
+        {
+            get { return _passwordReg; }
+            set
+            {
+                _passwordReg = value;
+                User.Password = _passwordReg;
+                OnPropertyChanged(nameof(PasswordReg));
+            }
+        }
+        public string PasswordTwo
+        {
+            get { return _passwordTwo; }
+            set
+            {
+                _passwordTwo = value;
+                OnPropertyChanged(nameof(PasswordTwo));
+            }
+        }
+        
+        private bool _isButtonEnable = true;
+        private bool _isButtonEnableOnline;
+        private bool _isButtonRedact;
+        private bool _isButtonAuthorization = true;
+        private bool _isButtonRegistration;
         public bool IsEnable
         {
             get
@@ -162,16 +181,10 @@ namespace MessengerPigeon
             }
             set
             {
-                if (MyUser == null)
-                    value = false;
-                else
-                    value = true;
                 _isButtonEnable = value;
                 OnPropertyChanged(nameof(IsEnable));
             }
         }
-        private bool _isButtonEnableOnline;
-
         public bool IsEnableOnline
         {
             get
@@ -180,7 +193,7 @@ namespace MessengerPigeon
             }
             set
             {
-                if (MyUser == null)
+                if (!_isButtonEnable)
                     value = true;
                 else
                     value = false;
@@ -188,8 +201,6 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(IsEnableOnline));
             }
         }
-        private bool _isButtonRedact;
-
         public bool IsEnabledRedact
         {
             get
@@ -206,8 +217,6 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(IsEnabledRedact));
             }
         }
-        private bool _isButtonAuthorization;
-
         public bool IsEnabledAuthorization
         {
             get
@@ -228,8 +237,6 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(IsEnabledAuthorization));
             }
         }
-        private bool _isButtonRegistration;
-
         public bool IsEnabledRegistration
         {
             get
@@ -250,8 +257,10 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(IsEnabledRegistration));
             }
         }
+      
 
         private ObservableCollection<User> _users = new ObservableCollection<User>();
+        private ObservableCollection<Message> _messages = new ObservableCollection<Message>();
         public ObservableCollection<User> Users
         {
             get
@@ -264,8 +273,6 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Users));
             }
         }
-
-        private ObservableCollection<Message> _messages = new ObservableCollection<Message>();
         public ObservableCollection<Message> Messages
         {
             get
@@ -315,7 +322,7 @@ namespace MessengerPigeon
             }
             });
         }
-    private async void Send(object o)
+        private async void Send(object o)
         {
             await Task.Run(async () =>
             {
@@ -370,14 +377,14 @@ namespace MessengerPigeon
             {
                 try
                 {
+                    MessageBox.Show("Связь1");
                     string IP = "26.27.154.150";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Registratioin;
-                    User us = new User(NickReg, PasswordReg,null,null, Phone);
-                    wrapper.user = us;
+                    wrapper.user = User;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
@@ -395,22 +402,32 @@ namespace MessengerPigeon
 
         private bool CanReg(object o)
         {
-            //string PASSWORD_PATTERN ="((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})";
-            //if (NickReg == null)
-            //{
-            //    MessageBox.Show("Вы не ввели имя для регистрации! ");
-            //    return false;
-            //}
-            //else if (PasswordReg!=PASSWORD_PATTERN && PasswordReg == null)
-            //{
-            //    MessageBox.Show("Пароль не соответствует требованиям! ");
-            //    return false;
-            //}
-            //else if(PasswordReg != PasswordTwo)
-            //{
-            //    MessageBox.Show("Пароли не совпадают! ");
-            //    return false;
-            //}
+            string PASSWORD_PATTERN = "((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})";
+            if (User.Phone != null || User.Nick != null || User.Password != null)
+            {
+                if(User.Phone.Length < 13)
+                {
+                    MessageBox.Show("Вы ввели не корректный телефон для регистрации! ");
+                    return false;
+                }
+                else if (User.Nick== "login") 
+                {
+                    MessageBox.Show("Вы не ввели имя для регистрации! ");
+                    return false;
+                }
+                else if (User.Password != PASSWORD_PATTERN)
+                {
+                    MessageBox.Show("Пароль не соответствует требованиям! ");
+                    return false;
+                }
+                else if (User.Password != PasswordTwo)
+                {
+                    MessageBox.Show("Пароли не совпадают! ");
+                    return false;
+                }
+            }
+
+            MessageBox.Show("Проверка1");
             return true;
         }
         //реализация команды регистрации конец
@@ -434,6 +451,7 @@ namespace MessengerPigeon
             {
                 try
                 {
+                    MessageBox.Show("Связь");
                     User = new User();
                     string IP = "26.27.154.150";
                     tcpClient = new TcpClient(IP, 49152);
@@ -458,32 +476,35 @@ namespace MessengerPigeon
                 }
             });
         }
-
         private bool CanAut(object o)
         {
-            if (NickReg == "" && PasswordReg == "")
-                return false;
+            MessageBox.Show("Проверка");
+            if (User.Nick != null || User.Password !=null)
+            {
+                if (User.Nick == "" && User.Password == "")
+                    return false;
+            }
             return true;
         }
         //реализация команды регистрации конец
         //31.12.23 реализация команды редактирования пользователя начало
 
 
-        private CommandRegistration CommandRedact;
+        private CommandRedact CommandRedact;
         public ICommand ButtonRedact
         {
             get
             {
                 if (CommandRedact == null)
                 {
-                    CommandRedact = new CommandRegistration(Redact, CanRedact);
+                    CommandRedact = new CommandRedact(Redact, CanRedact);
                 }
                 return CommandRedact;
             }
         }
         private async void Redact(object o)
         {
-          if(PasswordReg!=User.Password || PasswordTwo=="")
+          if(PasswordReg!= MyUser.Password || PasswordTwo=="")
             {
                 MessageBox.Show("Не верный пароль пользователя!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
