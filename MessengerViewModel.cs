@@ -385,7 +385,7 @@ namespace MessengerPigeon
         }
         private async void Redact(object o)
         {
-          if(PasswordReg!=User.Password || PasswordTwo=="")
+            if (PasswordReg != MyUser.Password )
             {
                 MessageBox.Show("Не верный пароль пользователя!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -396,7 +396,11 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Redact;
-                    User us = new User(Nick, Password,null, Avatar, Phone);
+                    if(Nick == "")
+                        Nick = MyUser.Nick;
+                    if(PasswordTwo == "")
+                        PasswordTwo = MyUser.Password;
+                    User us = new User(Nick, PasswordReg, null, Avatar, MyUser.Phone);
                     wrapper.NewPassword = PasswordTwo; 
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
@@ -472,10 +476,10 @@ namespace MessengerPigeon
                 {
                     // Получим объект NetworkStream, используемый для приема и передачи данных.
                     netstream = tcpClient.GetStream();
-                    byte[] arr = new byte[tcpClient.ReceiveBufferSize];
+                    byte[] arr = new byte[100000000];
                     while (true)
                     {
-                        int len = await netstream.ReadAsync(arr, 0, tcpClient.ReceiveBufferSize);
+                        int len = await netstream.ReadAsync(arr, 0, arr.Length);
                         if (len == 0)
                         {
                             netstream.Close();
