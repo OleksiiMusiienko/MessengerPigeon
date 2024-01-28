@@ -163,6 +163,79 @@ namespace MessengerPigeon
                 HistoryMessages();
             }
         }
+        private bool _isButtonEnable = true;
+        private bool _isButtonEnableOnline;
+        private bool _isButtonAuthorization = true;
+        private bool _isButtonRegistration;
+        public bool IsEnable
+        {
+            get
+            {
+                return _isButtonEnable;
+            }
+            set
+            {
+                if (MyUser == null)
+                    value = true;
+                else
+                    value = false;
+                _isButtonEnable = value;
+                OnPropertyChanged(nameof(IsEnable));
+            }
+        }
+        public bool IsEnableOnline
+        {
+            get
+            {
+                return _isButtonEnableOnline;
+            }
+            set
+            {
+                _isButtonEnableOnline = value;
+                OnPropertyChanged(nameof(IsEnableOnline));
+            }
+        }
+        
+        public bool IsEnabledAuthorization
+        {
+            get
+            {
+                return _isButtonAuthorization;
+            }
+            set
+            {
+                if (MyUser == null && value == true)
+                {
+                    value = true;
+                    if (_isButtonRegistration)
+                        IsEnabledRegistration = false;
+                }
+                else
+                    value = false;
+                _isButtonAuthorization = value;
+                OnPropertyChanged(nameof(IsEnabledAuthorization));
+            }
+        }
+        public bool IsEnabledRegistration
+        {
+            get
+            {
+                return _isButtonRegistration;
+            }
+            set
+            {
+                if (MyUser == null && value == true)
+                {
+                    value = true;
+                    if (_isButtonAuthorization)
+                        IsEnabledAuthorization = false;
+                }
+                else
+                    value = false;
+                _isButtonRegistration = value;
+                OnPropertyChanged(nameof(IsEnabledRegistration));
+            }
+        }
 
         private ObservableCollection<User> _users = new ObservableCollection<User>();
         public ObservableCollection<User> Users
@@ -290,6 +363,7 @@ namespace MessengerPigeon
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Registratioin;
                     User us = new User(NickReg, PasswordReg,null,null, Phone);
+                    us.Online = true;
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
@@ -354,7 +428,8 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Authorization;
-                    User us = new User(NickReg, PasswordReg, null, null, null);
+                    User us = new User(NickReg, PasswordReg, null, null, PhoneReg);
+                    us.Online = true;
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
@@ -374,8 +449,7 @@ namespace MessengerPigeon
 
         private bool CanAut(object o)
         {
-            if (NickReg == null && PasswordReg != PasswordTwo)
-                return false;
+            
             return true;
         }
         //реализация команды регистрации конец
@@ -412,6 +486,7 @@ namespace MessengerPigeon
                     if(PasswordTwo == "")
                         PasswordTwo = MyUser.Password;
                     User us = new User(Nick, PasswordReg, null, Avatar, MyUser.Phone);
+                    us.Online = true;
                     wrapper.NewPassword = PasswordTwo; 
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
@@ -457,7 +532,7 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Remove;
-                    wrapper.user = User;
+                    wrapper.user = MyUser;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
@@ -472,7 +547,7 @@ namespace MessengerPigeon
         }
         private bool CanRemove(object o)
         {
-            if (User.Nick == "")
+            if (MyUser == null)
                 return false;
             return true;
         }
@@ -500,7 +575,8 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Exit;
-                    wrapper.user = User;
+                    MyUser.Online = false;
+                    wrapper.user = MyUser;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
@@ -562,6 +638,7 @@ namespace MessengerPigeon
                                 if (user.IPadress == address.ToString())
                                 {
                                     MyUser = user;
+                                    IsEnableOnline = true;
                                     list.Remove(user);
                                     break;
                                 }
