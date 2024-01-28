@@ -467,6 +467,55 @@ namespace MessengerPigeon
         }
         //реализация команды отправки конец
 
+        //24.01.2024 реализация команды выхода пользователя начало
+        private CommandExit CommandEx;
+        public ICommand ButtonEx
+        {
+            get
+            {
+                if (CommandEx == null)
+                {
+                    CommandEx = new CommandExit(Exit, CanExit);
+                }
+                return CommandEx;
+            }
+        }
+        private async void Exit(object o)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    MemoryStream stream = new MemoryStream();
+                    Wrapper wrapper = new Wrapper();
+                    wrapper.commands = Wrapper.Commands.Exit;
+                    wrapper.user = User;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
+                    jsonFormatter.WriteObject(stream, wrapper);
+                    byte[] msg = stream.ToArray();
+                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    netstream?.Close();
+                    tcpClient?.Close();
+                    netstreamMessage?.Close();
+                    tcpClientMessage?.Close();
+                    Users = null;
+                    myUser = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+        }
+        private bool CanExit(object o)
+        {
+            if (MyUser == null)
+                return false;
+            return true;
+        }
+        //реализация команды выхода пользователя конец
+
         // метод прослушки ответов запросов на регистрацию от сервера 
         private async void Receive(TcpClient tcpClient)
         {
