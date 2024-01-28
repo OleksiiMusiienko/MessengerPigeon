@@ -4,6 +4,9 @@
              xmlns:local="clr-namespace:MessengerPigeon"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="FoglihtenBPS01">
+            <Setter Property="TextElement.FontFamily" Value="pack:application:,,,/Shrift/#FoglihtenBPS01"/>
+        </Style>
+
     </Application.Resources>
 </Application>

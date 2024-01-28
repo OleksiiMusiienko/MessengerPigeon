@@ -112,6 +112,17 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(PasswordTwo));
             }
         }
+        private string _phoneReg = string.Empty;
+        public string PhoneReg
+        {
+            get { return _phoneReg; }
+            set
+            {
+
+                _phoneReg = value;
+                OnPropertyChanged(nameof(PhoneReg));
+            }
+        }
 
         public byte[]? Avatar
         {
@@ -483,7 +494,7 @@ namespace MessengerPigeon
         }
         private async void Redact(object o)
         {
-          if(PasswordReg!=User.Password || PasswordTwo=="")
+            if (PasswordReg != MyUser.Password )
             {
                 MessageBox.Show("Не верный пароль пользователя!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -494,7 +505,11 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Redact;
-                    User us = new User(Nick, Password,null, Avatar, Phone);
+                    if(Nick == "")
+                        Nick = MyUser.Nick;
+                    if(PasswordTwo == "")
+                        PasswordTwo = MyUser.Password;
+                    User us = new User(Nick, PasswordReg, null, Avatar, MyUser.Phone);
                     wrapper.NewPassword = PasswordTwo; 
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
@@ -609,6 +624,55 @@ namespace MessengerPigeon
         }
         //реализация команды удаления конец
 
+        //24.01.2024 реализация команды выхода пользователя начало
+        private CommandExit CommandEx;
+        public ICommand ButtonEx
+        {
+            get
+            {
+                if (CommandEx == null)
+                {
+                    CommandEx = new CommandExit(Exit, CanExit);
+                }
+                return CommandEx;
+            }
+        }
+        private async void Exit(object o)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    MemoryStream stream = new MemoryStream();
+                    Wrapper wrapper = new Wrapper();
+                    wrapper.commands = Wrapper.Commands.Exit;
+                    wrapper.user = User;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
+                    jsonFormatter.WriteObject(stream, wrapper);
+                    byte[] msg = stream.ToArray();
+                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    netstream?.Close();
+                    tcpClient?.Close();
+                    netstreamMessage?.Close();
+                    tcpClientMessage?.Close();
+                    Users = null;
+                    myUser = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+        }
+        private bool CanExit(object o)
+        {
+            if (MyUser == null)
+                return false;
+            return true;
+        }
+        //реализация команды выхода пользователя конец
+
         // метод прослушки ответов запросов на регистрацию от сервера 
         private async void Receive(TcpClient tcpClient)
         {
@@ -618,10 +682,10 @@ namespace MessengerPigeon
                 {
                     // Получим объект NetworkStream, используемый для приема и передачи данных.
                     netstream = tcpClient.GetStream();
-                    byte[] arr = new byte[tcpClient.ReceiveBufferSize];
+                    byte[] arr = new byte[100000000];
                     while (true)
                     {
-                        int len = await netstream.ReadAsync(arr, 0, tcpClient.ReceiveBufferSize);
+                        int len = await netstream.ReadAsync(arr, 0, arr.Length);
                         if (len == 0)
                         {
                             netstream.Close();
