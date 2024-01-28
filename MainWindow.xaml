@@ -66,6 +66,10 @@
             <Expander HorizontalAlignment="Center"  Header="Registration" ExpandDirection="Down" >
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <DockPanel Margin="3">
+                        <Label Padding="4 4 20 4" >Phone :</Label>
+                        <TextBox Padding="4" MinWidth="100" Text="{Binding PhoneReg}" ></TextBox>
+                    </DockPanel>
+                    <DockPanel Margin="3">
                         <Label Padding="4">NikName :</Label>
                         <TextBox Padding="4" MinWidth="100" Text="{Binding NickReg}"></TextBox>
                     </DockPanel>

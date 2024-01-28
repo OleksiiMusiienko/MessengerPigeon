@@ -112,6 +112,17 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(PasswordTwo));
             }
         }
+        private string _phoneReg = string.Empty;
+        public string PhoneReg
+        {
+            get { return _phoneReg; }
+            set
+            {
+
+                _phoneReg = value;
+                OnPropertyChanged(nameof(PhoneReg));
+            }
+        }
 
         public byte[]? Avatar
         {
