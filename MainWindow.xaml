@@ -24,6 +24,7 @@
             <DockPanel Name="DockPanel_1">
                 <Image  Name="Avatar" Source="{Binding Avatar}" Width="150" MinWidth="150" />
                 <TextBlock DockPanel.Dock="Top" Text="{Binding MyUser.Nick}"></TextBlock>
+                <Button DockPanel.Dock="Bottom" Command="{Binding ButtonEx}">Exit</Button>
                 <Button DockPanel.Dock="Bottom" Command="{Binding ButtonRemove}" >Remove</Button>
                 <Expander HorizontalAlignment="Left"  Header="Redact" ExpandDirection="Down">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="165">
