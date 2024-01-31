@@ -22,7 +22,11 @@
         </Grid.ColumnDefinitions>
         <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0"  Margin="5">
             <DockPanel Name="DockPanel_1">
-                <Image  Name="Avatar" Source="{Binding Avatar}" Width="150" MinWidth="150" />
+                <Ellipse Name="Avatar" DockPanel.Dock="Left"  Width="150" Height="150" Margin="3" Stroke="Blue"  >
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding MyUser.Avatar}" Stretch="UniformToFill"></ImageBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
                 <TextBlock DockPanel.Dock="Top" Text="{Binding MyUser.Nick}"></TextBlock>
                 <Button DockPanel.Dock="Bottom" Command="{Binding ButtonEx}" IsEnabled="{Binding IsEnableOnline}" >Exit</Button>
                 <Button DockPanel.Dock="Bottom" Command="{Binding ButtonRemove}" IsEnabled="{Binding IsEnableOnline}" >Remove</Button>
@@ -93,7 +97,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Width="40" Height="40" Margin="3" Stroke="Blue"  >
                                 <Ellipse.Fill>
-                                    <ImageBrush ImageSource="{Binding Avatar}"></ImageBrush>
+                                    <ImageBrush ImageSource="{Binding Avatar}" Stretch="UniformToFill"></ImageBrush>
                                 </Ellipse.Fill>
                             </Ellipse>
                             <TextBlock Text="{Binding Nick}" VerticalAlignment="Center" FontWeight="Bold" Margin="10"></TextBlock>
@@ -105,7 +109,15 @@
         </DockPanel>
         <DockPanel Name="DockPanel_3" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="1">
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="2">
-                <TextBlock Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse Width="40" Height="40" Margin="3" Stroke="Blue"  >
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="{Binding UserRecepient.Avatar, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"></ImageBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <TextBlock Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
+                    <TextBlock Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
+                </StackPanel>
             </Border>
 
             <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" IsSynchronizedWithCurrentItem = "true" BorderBrush="SteelBlue"
