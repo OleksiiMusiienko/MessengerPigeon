@@ -48,11 +48,11 @@ namespace MessengerPigeon
                     myImage.DecodePixelWidth= 150;
                     myImage.EndInit();
                     /*uiContext.Send(d => */
-                    Avatar.Source = myImage /*, null)*/;
+                    Avatar.DataContext = myImage /*, null)*/;
                     // конвертируем фото в байтовый массив                
                     MemoryStream stream = new MemoryStream();
                     JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create((BitmapImage)Avatar.Source));
+                    encoder.Frames.Add(BitmapFrame.Create((BitmapImage)Avatar.DataContext));
                     encoder.Save(stream);
                     // байтовый массив присваиваем публичному свойству вьюмодели
                     ((MessengerViewModel)Resources["ViewModel"]).Avatar = stream.ToArray();
