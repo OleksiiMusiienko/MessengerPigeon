@@ -160,7 +160,8 @@ namespace MessengerPigeon
             {
                 _userRecepient= value;
                 OnPropertyChanged(nameof(UserRecepient));
-                HistoryMessages();
+                if(UserRecepient != null)
+                    HistoryMessages();
             }
         }
         private bool _isButtonEnable = true;
@@ -175,10 +176,6 @@ namespace MessengerPigeon
             }
             set
             {
-                if (MyUser == null)
-                    value = true;
-                else
-                    value = false;
                 _isButtonEnable = value;
                 OnPropertyChanged(nameof(IsEnable));
             }
@@ -362,7 +359,7 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Registratioin;
-                    User us = new User(NickReg, PasswordReg,null,null, Phone);
+                    User us = new User(NickReg, PasswordReg,null,null, PhoneReg);
                     us.Online = true;
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
@@ -547,8 +544,6 @@ namespace MessengerPigeon
         }
         private bool CanRemove(object o)
         {
-            if (MyUser == null)
-                return false;
             return true;
         }
         //реализация команды отправки конец
@@ -580,14 +575,17 @@ namespace MessengerPigeon
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
                     jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
-                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
-                    await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
-                    netstream?.Close();
-                    tcpClient?.Close();
-                    netstreamMessage?.Close();
-                    tcpClientMessage?.Close();
-                    Users = null;
-                    myUser = null;
+                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream. MemoryStream stream1 = new MemoryStream();
+
+                    MemoryStream stream1 = new MemoryStream();
+                    Message mes1 = new Message();
+                    mes1.Date_Time = DateTime.Now;
+                    var jsonFormatter1 = new DataContractJsonSerializer(typeof(Message));
+                    jsonFormatter1.WriteObject(stream1, mes1);
+                    byte[] msg1 = stream1.ToArray();
+                    await netstreamMessage.WriteAsync(msg1, 0, msg1.Length); // записываем данные в NetworkStream.
+                    
+
                 }
                 catch (Exception ex)
                 {
@@ -597,8 +595,6 @@ namespace MessengerPigeon
         }
         private bool CanExit(object o)
         {
-            if (MyUser == null)
-                return false;
             return true;
         }
         //реализация команды выхода пользователя конец
@@ -632,13 +628,14 @@ namespace MessengerPigeon
                         {
                             List<User> list = new List<User>();
                             list = res.list;
-                            IPAddress address = Dns.GetHostAddresses(Dns.GetHostName()).First<IPAddress>(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+                            // IPAddress address = Dns.GetHostAddresses(Dns.GetHostName()).First<IPAddress>(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
                             foreach (var user in list)
                             {
-                                if (user.IPadress == address.ToString())
+                                if (user.Phone == PhoneReg)
                                 {
                                     MyUser = user;
                                     IsEnableOnline = true;
+                                    IsEnable = false;
                                     list.Remove(user);
                                     break;
                                 }
@@ -650,11 +647,18 @@ namespace MessengerPigeon
                             NickReg = "";
                             PasswordReg = "";
                             PasswordTwo = "";
+                            PhoneReg = "";
+                        }
+                        else if (res.command == "Exit")
+                        {
+                            MyUser = null;
+                            Users = null;
+                            return;
                         }
                         else if (res.command == "Пользователь успешно удален!")
                         {
                             MessageBox.Show(res.command);
-                            Users = null;
+                            MyUser = null;
                             Nick = "";
                             return;
                         }
@@ -705,8 +709,18 @@ namespace MessengerPigeon
                         MemoryStream stream = new MemoryStream(copy);
                         var jsonFormatter = new DataContractJsonSerializer(typeof(List<Message>));
                         List<Message> res = jsonFormatter.ReadObject(stream) as List<Message>;
-
-                        Messages = new ObservableCollection<Message>(res);
+                        if (res != null)
+                        {
+                            Messages = new ObservableCollection<Message>(res);
+                        }
+                        else
+                        {
+                            Messages = null;
+                            UserRecepient = null;
+                            IsEnableOnline = false;
+                            IsEnable = true;
+                            return;
+                        }
 
                         stream.Close();
                     }
