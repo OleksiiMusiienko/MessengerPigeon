@@ -134,7 +134,7 @@
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Background="AliceBlue">
                 <TextBlock HorizontalAlignment="Center" Margin="5">Add a friend</TextBlock>
             </Border>
-            <StackPanel DockPanel.Dock="Bottom">                
+            <StackPanel DockPanel.Dock="Bottom">                   
                 <Button Name="Scan" Content="Найти" Command="{Binding ButtonSearch}"></Button>                
                 <Button Name="Delete">Удалить</Button>
             </StackPanel>
@@ -150,16 +150,14 @@
                     <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" Background="AliceBlue" BorderBrush="AliceBlue">
                         <Image Source="images/Studio-mic-icon_30398.png" Width="25"></Image>
                     </Button>
-                    <TextBlock DockPanel.Dock="Left"  Margin="4" >Message</TextBlock>
-                    
+                    <TextBlock DockPanel.Dock="Left"  Margin="4" >Message</TextBlock>                    
                 </DockPanel>
             </Border>
             <DockPanel Background="White">
                 <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" Background="LightGoldenrodYellow" BorderBrush="LightGreen" BorderThickness="5"  >
                     <Image Source="images/send.png" Width="30"></Image>
                 </Button>
-                <TextBox Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"
-                         ></TextBox>
+                <TextBox Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"></TextBox>
             </DockPanel>
         </DockPanel>
     </Grid>
