@@ -96,8 +96,14 @@
                                     <ImageBrush ImageSource="{Binding Avatar}"></ImageBrush>
                                 </Ellipse.Fill>
                             </Ellipse>
-                            <TextBlock Text="{Binding Nick}" VerticalAlignment="Center" FontWeight="Bold" Margin="10"></TextBlock>
+                            <TextBlock Name="UserNick" Text="{Binding Nick}" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" Margin="10"></TextBlock>
                         </StackPanel>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Online}" Value="true">
+                                <Setter TargetName="UserNick" Property="Foreground" Value="DeepSkyBlue" />
+                                <Setter TargetName="UserNick" Property="FontSize" Value="18" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -129,7 +135,7 @@
                 <TextBlock HorizontalAlignment="Center" Margin="5">Add a friend</TextBlock>
             </Border>
             <StackPanel DockPanel.Dock="Bottom">
-                <Button Name="Scan">Scan</Button>
+                <Button Name="Scan">Найти</Button>
                 <Button Name="Delete">Delete</Button>
             </StackPanel>
             <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top" Background="LightCyan"></TextBox>
