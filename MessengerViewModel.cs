@@ -37,6 +37,10 @@ namespace MessengerPigeon
         {
             User = new User();
             Message = new Message();
+            //_users.Add(new User("Alex", "111", "11111", null, "123456"));
+            //_users[0].Online = true;
+            //_users.Add(new User("Vika", "111", "11111", null, "123456"));
+            //_users[1].Online = false;
         }
         private User User;
         private User myUser;
@@ -250,7 +254,20 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Users));
             }
         }
-
+        //------------
+        private ObservableCollection<User> tempUsers = new ObservableCollection<User>();
+        private string search = string.Empty;
+        private bool searchFlag;
+        //--------------
+        public string _search
+        {
+            get { return search; }
+            set
+            {
+                search = value;
+                OnPropertyChanged(nameof(_search));
+            }
+        }
         private ObservableCollection<Message> _messages = new ObservableCollection<Message>();
         public ObservableCollection<Message> Messages
         {
@@ -602,7 +619,59 @@ namespace MessengerPigeon
             return true;
         }
         //реализация команды выхода пользователя конец
-
+        //-------01.02.2024 реализация команды поиска пользователя
+        private CommandSearch CommandSearch;
+        public ICommand ButtonSearch
+        {
+            get
+            {
+                if (CommandSearch == null)
+                {
+                    CommandSearch = new CommandSearch(Search, CanSearch);
+                }
+                return CommandSearch;
+            }
+        }
+        private void Search(object o)
+        {
+            if(_search !="" && !searchFlag)
+            {
+                foreach (User user in _users)
+                {
+                    if (user.Nick.Contains(_search))
+                    {
+                        SearchUser();
+                        return;
+                    }
+                    MessageBox.Show("Пользователь не найден!", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else if (searchFlag)
+            {
+                _users.Clear();
+                _users = tempUsers;
+                tempUsers.Clear();
+                searchFlag = false;
+            }
+        }
+        private void SearchUser()
+        {
+            searchFlag = true;
+            tempUsers = _users;
+            _users = new ObservableCollection<User>();
+                     
+            foreach (User user in tempUsers)
+            {
+                if (user.Nick.Contains(_search))
+                    _users.Add(user);
+            }
+            _search = "";
+        }
+        private bool CanSearch(object o)
+        {
+            return true;
+        }
+        //---------реализация команды поиска пользователя конец
         // метод прослушки ответов запросов на регистрацию от сервера 
         private async void Receive(TcpClient tcpClient)
         {
