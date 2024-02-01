@@ -659,7 +659,10 @@ namespace MessengerPigeon
                         {
                             MessageBox.Show(res.command);
                             MyUser = null;
-                            Nick = "";
+                            Users = null;
+                            UserRecepient = null;
+                            IsEnableOnline = false;
+                            IsEnable = true;
                             return;
                         }
                         else
