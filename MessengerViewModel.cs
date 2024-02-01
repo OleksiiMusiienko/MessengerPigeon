@@ -502,8 +502,6 @@ namespace MessengerPigeon
 
         private bool CanRedact(object o)
         {
-            if (MyUser == null)
-                return false;
             return true;
         }
         //реализация команды регистрации конец
@@ -544,8 +542,6 @@ namespace MessengerPigeon
         }
         private bool CanRemove(object o)
         {
-            if (MyUser == null)
-                return false;
             return true;
         }
         //реализация команды удаления конец
@@ -630,10 +626,10 @@ namespace MessengerPigeon
                         {
                             List<User> list = new List<User>();
                             list = res.list;
-                            // IPAddress address = Dns.GetHostAddresses(Dns.GetHostName()).First<IPAddress>(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+                            IPAddress address = Dns.GetHostAddresses(Dns.GetHostName()).First<IPAddress>(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
                             foreach (var user in list)
                             {
-                                if (user.Phone == PhoneReg)
+                                if (user.IPadress == address.ToString())
                                 {
                                     MyUser = user;
                                     IsEnableOnline = true;

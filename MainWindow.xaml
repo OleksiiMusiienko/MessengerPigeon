@@ -22,9 +22,9 @@
         </Grid.ColumnDefinitions>
         <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0"  Margin="5">
             <DockPanel Name="DockPanel_1">
-                <Ellipse Name="Avatar" DockPanel.Dock="Left"  Width="150" Height="150" Margin="3" Stroke="Blue"  >
+                <Ellipse  DockPanel.Dock="Left"  Width="150" Height="150" Margin="3" Stroke="Blue"  >
                     <Ellipse.Fill>
-                        <ImageBrush ImageSource="{Binding MyUser.Avatar}" Stretch="UniformToFill"></ImageBrush>
+                        <ImageBrush x:Name="Avatar" ImageSource="{Binding MyUser.Avatar}" Stretch="UniformToFill"></ImageBrush>
                     </Ellipse.Fill>
                 </Ellipse>
                 <TextBlock DockPanel.Dock="Top" Text="{Binding MyUser.Nick}"></TextBlock>
