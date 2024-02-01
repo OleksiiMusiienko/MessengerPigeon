@@ -36,11 +36,7 @@ namespace MessengerPigeon
         public MessengerViewModel()
         {
             User = new User();
-            Message = new Message();
-            //_users.Add(new User("Alex", "111", "11111", null, "123456"));
-            //_users[0].Online = true;
-            //_users.Add(new User("Vika", "111", "11111", null, "123456"));
-            //_users[1].Online = false;
+            Message = new Message();           
         }
         private User User;
         private User myUser;
@@ -255,7 +251,7 @@ namespace MessengerPigeon
             }
         }
         //------------
-        private ObservableCollection<User> tempUsers = new ObservableCollection<User>();
+        private List<User> tempUsers = new List<User>();
         private string search = string.Empty;
         private bool searchFlag;
         //--------------
@@ -642,14 +638,19 @@ namespace MessengerPigeon
                     {
                         SearchUser();
                         return;
-                    }
-                    MessageBox.Show("Пользователь не найден!", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }                    
                 }
+                MessageBox.Show("Пользователь не найден!", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
+                _search = "";
             }
             else if (searchFlag)
             {
+                if(_search!="")
+                {
+                    _search = "";
+                }
                 _users.Clear();
-                _users = tempUsers;
+                Users = new ObservableCollection<User>(tempUsers);
                 tempUsers.Clear();
                 searchFlag = false;
             }
@@ -657,7 +658,7 @@ namespace MessengerPigeon
         private void SearchUser()
         {
             searchFlag = true;
-            tempUsers = _users;
+            tempUsers = _users.ToList();
             _users = new ObservableCollection<User>();
                      
             foreach (User user in tempUsers)
@@ -665,6 +666,7 @@ namespace MessengerPigeon
                 if (user.Nick.Contains(_search))
                     _users.Add(user);
             }
+            Users = _users;
             _search = "";
         }
         private bool CanSearch(object o)
@@ -797,27 +799,27 @@ namespace MessengerPigeon
         // реализация команды запроса истории сообщений 
         private async void HistoryMessages()
         {
-            await Task.Run(async () =>
-            {
-                try
-                {
-                    MemoryStream stream = new MemoryStream();
-                    Date_Time = DateTime.Now;
-                    Message mes = new Message("", Date_Time);
-                    mes.UserSenderId = myUser.Id;
-                    mes.UserRecepientId = UserRecepient.Id;
-                    var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
-                    jsonFormatter.WriteObject(stream, mes);
-                    byte[] msg = stream.ToArray();
-                    await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+            //await Task.Run(async () =>
+            //{
+            //    try
+            //    {
+            //        MemoryStream stream = new MemoryStream();
+            //        Date_Time = DateTime.Now;
+            //        Message mes = new Message("", Date_Time);
+            //        mes.UserSenderId = myUser.Id;
+            //        mes.UserRecepientId = UserRecepient.Id;
+            //        var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
+            //        jsonFormatter.WriteObject(stream, mes);
+            //        byte[] msg = stream.ToArray();
+            //        await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
            
-                    ReceiveMessage(tcpClientMessage);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Клиент: " + ex.Message);
-                }
-            });
+            //        ReceiveMessage(tcpClientMessage);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show("Клиент: " + ex.Message);
+            //    }
+            //});
         }
 
     }
