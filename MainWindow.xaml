@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1000" MinWidth="750" MinHeight="720">
     <Window.Resources>
-        <local:MessengerViewModel x:Key="ViewModel"/>        
+        <local:MessengerViewModel x:Key="ViewModel"/>
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
         <Grid.RowDefinitions>
@@ -134,11 +134,11 @@
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Background="AliceBlue">
                 <TextBlock HorizontalAlignment="Center" Margin="5">Add a friend</TextBlock>
             </Border>
-            <StackPanel DockPanel.Dock="Bottom">
-                <Button Name="Scan">Найти</Button>
-                <Button Name="Delete">Delete</Button>
+            <StackPanel DockPanel.Dock="Bottom">                
+                <Button Name="Scan" Content="Найти" Command="{Binding ButtonSearch}"></Button>                
+                <Button Name="Delete">Удалить</Button>
             </StackPanel>
-            <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top" Background="LightCyan"></TextBox>
+            <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top" Background="LightCyan" Text="{Binding _search}" ></TextBox>
 
         </DockPanel>
         <DockPanel Name="DockPanel_5" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="2">
