@@ -649,6 +649,7 @@ namespace MessengerPigeon
                         }
                         else if (res.command == "Exit")
                         {
+                            MyUser.Avatar = null;
                             MyUser = null;
                             Users = null;
                             return;
@@ -656,6 +657,7 @@ namespace MessengerPigeon
                         else if (res.command == "Пользователь успешно удален!")
                         {
                             MessageBox.Show(res.command);
+                            MyUser.Avatar = null;
                             MyUser = null;
                             Users = null;
                             UserRecepient = null;
