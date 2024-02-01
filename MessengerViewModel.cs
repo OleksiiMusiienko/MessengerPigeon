@@ -48,7 +48,7 @@ namespace MessengerPigeon
             set
             {
                 myUser = value;
-                OnPropertyChanged(nameof(myUser));
+                OnPropertyChanged(nameof(MyUser));
             }
         }
         public string Nick
@@ -446,7 +446,8 @@ namespace MessengerPigeon
 
         private bool CanAut(object o)
         {
-            
+            if (NickReg == null && PasswordReg != PasswordTwo)
+                return false;
             return true;
         }
         //реализация команды регистрации конец
@@ -501,7 +502,7 @@ namespace MessengerPigeon
 
         private bool CanRedact(object o)
         {
-            if (User.IPadress == "")
+            if (MyUser == null)
                 return false;
             return true;
         }
@@ -534,7 +535,6 @@ namespace MessengerPigeon
                     jsonFormatter.WriteObject(stream, wrapper);
                     byte[] msg = stream.ToArray();
                     await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
-
                 }
                 catch (Exception ex)
                 {
@@ -544,9 +544,60 @@ namespace MessengerPigeon
         }
         private bool CanRemove(object o)
         {
+            if (MyUser == null)
+                return false;
             return true;
         }
-        //реализация команды отправки конец
+        //реализация команды удаления конец
+
+        //24.01.2024 реализация команды удаление пользователя начало
+        private CommandExit CommandEx;
+        public ICommand ButtonEx
+        {
+            get
+            {
+                if (CommandEx == null)
+                {
+                    CommandEx = new CommandExit(Exit, CanExit);
+                }
+                return CommandEx;
+            }
+        }
+        private async void Exit(object o)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    MemoryStream stream = new MemoryStream();
+                    Wrapper wrapper = new Wrapper();
+                    wrapper.commands = Wrapper.Commands.Exit;
+                    wrapper.user = User;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
+                    jsonFormatter.WriteObject(stream, wrapper);
+                    byte[] msg = stream.ToArray();
+                    await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    netstream?.Close();
+                    tcpClient?.Close();
+                    netstreamMessage?.Close();
+                    tcpClientMessage?.Close();
+                    Users = null;
+                    myUser = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+        }
+        private bool CanExit(object o)
+        {
+            if (User.Nick == "")
+                return false;
+            return true;
+        }
+        //реализация команды удаления конец
 
         //24.01.2024 реализация команды выхода пользователя начало
         private CommandExit CommandEx;
@@ -681,11 +732,6 @@ namespace MessengerPigeon
                     netstream?.Close();
                     tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
                 }
-                finally
-                {
-                    netstream?.Close();
-                    tcpClient?.Close();
-                }
             });
         }
         private async void ReceiveMessage(TcpClient tcpClientMessage)
@@ -733,11 +779,6 @@ namespace MessengerPigeon
                     MessageBox.Show("Клиент: " + ex.Message);
                     netstreamMessage?.Close();
                     tcpClientMessage?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
-                }
-                finally
-                {
-                    netstreamMessage?.Close();
-                    tcpClientMessage?.Close();
                 }
             });
         }
