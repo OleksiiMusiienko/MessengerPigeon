@@ -36,7 +36,7 @@ namespace MessengerPigeon
         public MessengerViewModel()
         {
             User = new User();
-            Message = new Message();
+            Message = new Message();           
         }
         private User User;
         private User myUser;
@@ -247,7 +247,20 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Users));
             }
         }
-
+        //------------
+        private List<User> tempUsers = new List<User>();
+        private string search = string.Empty;
+        private bool searchFlag;
+        //--------------
+        public string _search
+        {
+            get { return search; }
+            set
+            {
+                search = value;
+                OnPropertyChanged(nameof(_search));
+            }
+        }
         private ObservableCollection<Message> _messages = new ObservableCollection<Message>();
         public ObservableCollection<Message> Messages
         {
@@ -596,7 +609,65 @@ namespace MessengerPigeon
             return true;
         }
         //реализация команды выхода пользователя конец
-
+        //-------01.02.2024 реализация команды поиска пользователя
+        private CommandSearch CommandSearch;
+        public ICommand ButtonSearch
+        {
+            get
+            {
+                if (CommandSearch == null)
+                {
+                    CommandSearch = new CommandSearch(Search, CanSearch);
+                }
+                return CommandSearch;
+            }
+        }
+        private void Search(object o)
+        {
+            if(_search !="" && !searchFlag)
+            {
+                foreach (User user in _users)
+                {
+                    if (user.Nick.Contains(_search))
+                    {
+                        SearchUser();
+                        return;
+                    }                    
+                }
+                MessageBox.Show("Пользователь не найден!", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
+                _search = "";
+            }
+            else if (searchFlag)
+            {
+                if(_search!="")
+                {
+                    _search = "";
+                }
+                _users.Clear();
+                Users = new ObservableCollection<User>(tempUsers);
+                tempUsers.Clear();
+                searchFlag = false;
+            }
+        }
+        private void SearchUser()
+        {
+            searchFlag = true;
+            tempUsers = _users.ToList();
+            _users = new ObservableCollection<User>();
+                     
+            foreach (User user in tempUsers)
+            {
+                if (user.Nick.Contains(_search))
+                    _users.Add(user);
+            }
+            Users = _users;
+            _search = "";
+        }
+        private bool CanSearch(object o)
+        {
+            return true;
+        }
+        //---------реализация команды поиска пользователя конец
         // метод прослушки ответов запросов на регистрацию от сервера 
         private async void Receive(TcpClient tcpClient)
         {
@@ -735,27 +806,27 @@ namespace MessengerPigeon
         // реализация команды запроса истории сообщений 
         private async void HistoryMessages()
         {
-            await Task.Run(async () =>
-            {
-                try
-                {
-                    MemoryStream stream = new MemoryStream();
-                    Date_Time = DateTime.Now;
-                    Message mes = new Message("", Date_Time);
-                    mes.UserSenderId = myUser.Id;
-                    mes.UserRecepientId = UserRecepient.Id;
-                    var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
-                    jsonFormatter.WriteObject(stream, mes);
-                    byte[] msg = stream.ToArray();
-                    await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+            //await Task.Run(async () =>
+            //{
+            //    try
+            //    {
+            //        MemoryStream stream = new MemoryStream();
+            //        Date_Time = DateTime.Now;
+            //        Message mes = new Message("", Date_Time);
+            //        mes.UserSenderId = myUser.Id;
+            //        mes.UserRecepientId = UserRecepient.Id;
+            //        var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
+            //        jsonFormatter.WriteObject(stream, mes);
+            //        byte[] msg = stream.ToArray();
+            //        await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
            
-                    ReceiveMessage(tcpClientMessage);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Клиент: " + ex.Message);
-                }
-            });
+            //        ReceiveMessage(tcpClientMessage);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show("Клиент: " + ex.Message);
+            //    }
+            //});
         }
 
     }

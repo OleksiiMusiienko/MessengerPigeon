@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1000" MinWidth="750" MinHeight="720">
     <Window.Resources>
-        <local:MessengerViewModel x:Key="ViewModel"/>        
+        <local:MessengerViewModel x:Key="ViewModel"/>
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
         <Grid.RowDefinitions>
@@ -100,8 +100,14 @@
                                     <ImageBrush ImageSource="{Binding Avatar}" Stretch="UniformToFill"></ImageBrush>
                                 </Ellipse.Fill>
                             </Ellipse>
-                            <TextBlock Text="{Binding Nick}" VerticalAlignment="Center" FontWeight="Bold" Margin="10"></TextBlock>
+                            <TextBlock Name="UserNick" Text="{Binding Nick}" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" Margin="10"></TextBlock>
                         </StackPanel>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Online}" Value="true">
+                                <Setter TargetName="UserNick" Property="Foreground" Value="DeepSkyBlue" />
+                                <Setter TargetName="UserNick" Property="FontSize" Value="18" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -140,11 +146,11 @@
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Background="AliceBlue">
                 <TextBlock HorizontalAlignment="Center" Margin="5">Add a friend</TextBlock>
             </Border>
-            <StackPanel DockPanel.Dock="Bottom">
-                <Button Name="Scan">Scan</Button>
-                <Button Name="Delete">Delete</Button>
+            <StackPanel DockPanel.Dock="Bottom">                   
+                <Button Name="Scan" Content="Найти" Command="{Binding ButtonSearch}"></Button>                
+                <Button Name="Delete">Удалить</Button>
             </StackPanel>
-            <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top" Background="LightCyan"></TextBox>
+            <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top" Background="LightCyan" Text="{Binding _search}" ></TextBox>
 
         </DockPanel>
         <DockPanel Name="DockPanel_5" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="2">
@@ -156,16 +162,14 @@
                     <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" Background="AliceBlue" BorderBrush="AliceBlue">
                         <Image Source="images/Studio-mic-icon_30398.png" Width="25"></Image>
                     </Button>
-                    <TextBlock DockPanel.Dock="Left"  Margin="4" >Message</TextBlock>
-                    
+                    <TextBlock DockPanel.Dock="Left"  Margin="4" >Message</TextBlock>                    
                 </DockPanel>
             </Border>
             <DockPanel Background="White">
                 <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" Background="LightGoldenrodYellow" BorderBrush="LightGreen" BorderThickness="5"  >
                     <Image Source="images/send.png" Width="30"></Image>
                 </Button>
-                <TextBox Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"
-                         ></TextBox>
+                <TextBox Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"></TextBox>
             </DockPanel>
         </DockPanel>
     </Grid>
