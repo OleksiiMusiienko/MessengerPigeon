@@ -806,27 +806,27 @@ namespace MessengerPigeon
         // реализация команды запроса истории сообщений 
         private async void HistoryMessages()
         {
-            //await Task.Run(async () =>
-            //{
-            //    try
-            //    {
-            //        MemoryStream stream = new MemoryStream();
-            //        Date_Time = DateTime.Now;
-            //        Message mes = new Message("", Date_Time);
-            //        mes.UserSenderId = myUser.Id;
-            //        mes.UserRecepientId = UserRecepient.Id;
-            //        var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
-            //        jsonFormatter.WriteObject(stream, mes);
-            //        byte[] msg = stream.ToArray();
-            //        await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
-           
-            //        ReceiveMessage(tcpClientMessage);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show("Клиент: " + ex.Message);
-            //    }
-            //});
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    MemoryStream stream = new MemoryStream();
+                    Date_Time = DateTime.Now;
+                    Message mes = new Message("", Date_Time);
+                    mes.UserSenderId = myUser.Id;
+                    mes.UserRecepientId = UserRecepient.Id;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
+                    jsonFormatter.WriteObject(stream, mes);
+                    byte[] msg = stream.ToArray();
+                    await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+
+                    ReceiveMessage(tcpClientMessage);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
         }
 
     }
