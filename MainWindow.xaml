@@ -133,7 +133,7 @@
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="{Binding Date_Time}" VerticalAlignment="Center" FontWeight="Bold" Margin="5" Foreground="Crimson"></TextBlock>
                             <!--<TextBlock Text="{Binding}" VerticalAlignment="Center" FontWeight="Bold" Margin="5"></TextBlock>-->
-                            <TextBlock Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Heavy" FontStyle="Italic" Margin="5" Foreground="LightSeaGreen"></TextBlock>
+                            <TextBlock Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Heavy" Margin="5" Foreground="LightSeaGreen"></TextBlock>
                             <Line Stroke="SteelBlue" StrokeThickness="2" X1="1" X2="700" HorizontalAlignment="Center" Opacity="0.5"></Line>
                         </StackPanel>
                     </DataTemplate>
@@ -162,14 +162,34 @@
                     <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" Background="AliceBlue" BorderBrush="AliceBlue">
                         <Image Source="images/Studio-mic-icon_30398.png" Width="25"></Image>
                     </Button>
-                    <TextBlock DockPanel.Dock="Left"  Margin="4" >Message</TextBlock>                    
+                    <Button UseLayoutRounding="True" Name="Smile" DockPanel.Dock="Left"  Margin="3" Background="AliceBlue" BorderBrush="AliceBlue" Click="Smile_Click">
+                        <Image Source="images/happy.png" Width="30" Height="30"></Image>
+                    </Button>
+                    <TextBlock DockPanel.Dock="Left"  Margin="4" >Message</TextBlock>    
                 </DockPanel>
             </Border>
+            
+            <Popup x:Name="MyPopUp" AllowsTransparency="True" PlacementTarget="{Binding ElementName=Smile}" Placement="Bottom" >
+                <Border  Background="Beige" Width="300" Height="150" BorderThickness="1"  BorderBrush="CadetBlue" CornerRadius="40,40,40,1">
+                    <DockPanel Width="260" Height="120">
+                        <Button BorderThickness="0" UseLayoutRounding="True" Background="Beige" Height="35" Width="35" Name="Smile1" DockPanel.Dock="Left" Margin="3">
+                            <Image Source="images/confused.png" Width="35"></Image>
+                        </Button>
+                        <Button BorderThickness="0" Background="Beige" UseLayoutRounding="True" Height="35" Width="35" Name="Smile2" DockPanel.Dock="Left" Margin="3">
+                            <Image Source="images/love.png" Width="35"></Image>
+                        </Button>
+                        <Button BorderThickness="0" Background="Beige" UseLayoutRounding="True" Height="35" Width="35" Name="Smile3" DockPanel.Dock="Left" Margin="3" Click="Smile_Happy_Click">
+                            <Image Source="images/happy.png" Width="35"></Image>
+                        </Button>
+                    </DockPanel>
+                </Border>
+            </Popup>
+            
             <DockPanel Background="White">
                 <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" Background="LightGoldenrodYellow" BorderBrush="LightGreen" BorderThickness="5"  >
                     <Image Source="images/send.png" Width="30"></Image>
                 </Button>
-                <TextBox Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"></TextBox>
+                <TextBox FontFamily ="Segoe UI Symbol" Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"></TextBox>
             </DockPanel>
         </DockPanel>
     </Grid>

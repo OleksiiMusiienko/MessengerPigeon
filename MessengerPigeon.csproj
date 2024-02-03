@@ -10,6 +10,9 @@
 
   <ItemGroup>
     <None Remove="filesend.png" />
+    <None Remove="images\confused.png" />
+    <None Remove="images\happy.png" />
+    <None Remove="images\love.png" />
     <None Remove="send.png" />
     <None Remove="Shrift\PasswordPoints.otf" />
     <None Remove="Studio-mic-icon_30398.png" />
@@ -33,7 +36,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="images\confused.png" />
     <Resource Include="images\filesend.png" />
+    <Resource Include="images\happy.png" />
+    <Resource Include="images\love.png" />
     <Resource Include="images\send.png" />
     <Resource Include="images\Studio-mic-icon_30398.png" />
     <Resource Include="Shrift\PasswordPoints.otf" />

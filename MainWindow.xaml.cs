@@ -65,5 +65,16 @@ namespace MessengerPigeon
                 }
             //});
         }
+
+        private void Smile_Click(object sender, RoutedEventArgs e)
+        {
+            if (!MyPopUp.IsOpen) { MyPopUp.IsOpen = true; }
+            else { MyPopUp.IsOpen = false; }
+        }
+
+        private void Smile_Happy_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F60a";
+        }
     }
 }
