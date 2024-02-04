@@ -76,5 +76,29 @@ namespace MessengerPigeon
         {
             TextBox_Message.Text = TextBox_Message.Text + "\U0001F60a";
         }
+        private void Smile_Cool_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F60e";     
+        }
+        private void Smile_Love_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F60d";
+        }
+        private void Smile_Confused_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F615";
+        }
+        private void Smile_Smiley_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F627";
+        }
+        private void Smile_Smiling_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F600";
+        }
+        private void Smile_Wink_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F609";
+        }
     }
 }
