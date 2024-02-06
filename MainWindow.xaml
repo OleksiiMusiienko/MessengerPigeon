@@ -10,6 +10,15 @@
         <local:MessengerViewModel x:Key="ViewModel"/>
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
+        <Grid.Background>
+            <LinearGradientBrush>
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Offset="0.30"  Color="LightGoldenrodYellow" />
+                    <GradientStop Offset="0.90" Color="MediumSeaGreen" />
+                    <GradientStop Offset="1.00" Color="LightGoldenrodYellow" />
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" ></RowDefinition>
             <RowDefinition Height ="2*"></RowDefinition>
@@ -91,7 +100,7 @@
         </DockPanel>
         <DockPanel Name="DockPanel_2" Grid.RowSpan="2" LastChildFill="True">
             <ListBox Name="ListBoxUsers" SelectedItem="{Binding UserRecepient}" HorizontalAlignment="Stretch" BorderBrush="SteelBlue" 
-                       Margin="5"  ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" Background="LightCyan">
+                       Margin="5"  ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" Background="Transparent">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -127,19 +136,23 @@
             </Border>
 
             <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" IsSynchronizedWithCurrentItem = "true" BorderBrush="SteelBlue"
-                     Margin="5" HorizontalContentAlignment="Stretch" Background="LightGoldenrodYellow">
+                     Margin="5" HorizontalContentAlignment="Left" >
+                <ListBox.Background>
+                    <ImageBrush Opacity="0.8" ImageSource="images/wallpaper.jpg"></ImageBrush>
+                </ListBox.Background>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding Date_Time}" VerticalAlignment="Center" FontWeight="Bold" Margin="5" Foreground="Crimson"></TextBlock>
+                        <StackPanel>
+                        <Border HorizontalAlignment="Stretch" Background="LightGoldenrodYellow"  BorderBrush="SteelBlue" BorderThickness="1" Margin="2" Padding="6" CornerRadius="20,20,20,1" Width="auto" Height="auto" >
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
                             <!--<TextBlock Text="{Binding}" VerticalAlignment="Center" FontWeight="Bold" Margin="5"></TextBlock>-->
-                            <TextBlock Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Heavy" Margin="5" Foreground="LightSeaGreen"></TextBlock>
-                            <Line Stroke="SteelBlue" StrokeThickness="2" X1="1" X2="700" HorizontalAlignment="Center" Opacity="0.5"></Line>
+                                <TextBlock FontFamily ="Segoe UI Emoji" FontSize="14" Name ="MesList" Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Medium"  Margin="3,3,6,3" TextWrapping="Wrap"></TextBlock>
+                            </StackPanel>
+                        </Border>
+                            <TextBlock  Text= "{Binding Date_Time}" Foreground="WhiteSmoke" FontSize="8" VerticalAlignment="Center" Margin="3" HorizontalAlignment="Right"></TextBlock>
                         </StackPanel>
                     </DataTemplate>
-
                 </ListBox.ItemTemplate>
-
             </ListBox>
         </DockPanel >
         <DockPanel Name="DockPanel_4" Grid.Row="2" >
@@ -150,7 +163,7 @@
                 <Button Name="Scan" Content="Найти" Command="{Binding ButtonSearch}"></Button>                
                 <Button Name="Delete">Удалить</Button>
             </StackPanel>
-            <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top" Background="LightCyan" Text="{Binding _search}" ></TextBox>
+            <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top" Background="Transparent" Text="{Binding _search}" ></TextBox>
 
         </DockPanel>
         <DockPanel Name="DockPanel_5" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="2">
@@ -165,7 +178,7 @@
                     <Button UseLayoutRounding="True" Name="Smile" DockPanel.Dock="Left"  Margin="3" Background="AliceBlue" BorderBrush="AliceBlue" Click="Smile_Click">
                         <Image Source="images/happy.png" Width="30" Height="30"></Image>
                     </Button>
-                    <TextBlock DockPanel.Dock="Left"  Margin="4" >Message</TextBlock>    
+                    <TextBlock DockPanel.Dock="Left"  Margin="4" ></TextBlock>    
                 </DockPanel>
             </Border>
             
@@ -201,7 +214,7 @@
                 <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" Background="LightGoldenrodYellow" BorderBrush="LightGreen" BorderThickness="5"  >
                     <Image Source="images/send.png" Width="30"></Image>
                 </Button>
-                <TextBox FontFamily ="Segoe UI Symbol" FontSize="18" Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"></TextBox>
+                <TextBox FontFamily ="Segoe UI Emoji" FontSize="18" Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"></TextBox>
             </DockPanel>
         </DockPanel>
     </Grid>

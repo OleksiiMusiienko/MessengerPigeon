@@ -16,6 +16,7 @@
     <None Remove="images\love.png" />
     <None Remove="images\smiley.png" />
     <None Remove="images\smiling.png" />
+    <None Remove="images\wallpaper.jpg" />
     <None Remove="images\wink.png" />
     <None Remove="send.png" />
     <None Remove="Shrift\PasswordPoints.otf" />
@@ -49,6 +50,7 @@
     <Resource Include="images\smiley.png" />
     <Resource Include="images\smiling.png" />
     <Resource Include="images\Studio-mic-icon_30398.png" />
+    <Resource Include="images\wallpaper.jpg" />
     <Resource Include="images\wink.png" />
     <Resource Include="Shrift\PasswordPoints.otf" />
   </ItemGroup>
