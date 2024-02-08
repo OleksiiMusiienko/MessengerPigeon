@@ -12,10 +12,15 @@
     <None Remove="filesend.png" />
     <None Remove="images\confused.png" />
     <None Remove="images\cool.png" />
+    <None Remove="images\cross-finger.png" />
     <None Remove="images\happy.png" />
     <None Remove="images\love.png" />
+    <None Remove="images\maloik.png" />
+    <None Remove="images\pointing-up.png" />
     <None Remove="images\smiley.png" />
     <None Remove="images\smiling.png" />
+    <None Remove="images\thumb-up.png" />
+    <None Remove="images\thumb.png" />
     <None Remove="images\wallpaper.jpg" />
     <None Remove="images\wink.png" />
     <None Remove="send.png" />
@@ -43,13 +48,18 @@
   <ItemGroup>
     <Resource Include="images\confused.png" />
     <Resource Include="images\cool.png" />
+    <Resource Include="images\cross-finger.png" />
     <Resource Include="images\filesend.png" />
     <Resource Include="images\happy.png" />
     <Resource Include="images\love.png" />
+    <Resource Include="images\maloik.png" />
+    <Resource Include="images\pointing-up.png" />
     <Resource Include="images\send.png" />
     <Resource Include="images\smiley.png" />
     <Resource Include="images\smiling.png" />
     <Resource Include="images\Studio-mic-icon_30398.png" />
+    <Resource Include="images\thumb-up.png" />
+    <Resource Include="images\thumb.png" />
     <Resource Include="images\wallpaper.jpg" />
     <Resource Include="images\wink.png" />
     <Resource Include="Shrift\PasswordPoints.otf" />

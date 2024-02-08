@@ -130,8 +130,9 @@
                             <ImageBrush ImageSource="{Binding UserRecepient.Avatar, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"></ImageBrush>
                         </Ellipse.Fill>
                     </Ellipse>
-                    <TextBlock Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
-                    <TextBlock Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
+                    <TextBlock FontSize="16" Foreground="SteelBlue" FontWeight="Bold" Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
+                    <Label FontSize="16">Phone:</Label>
+                    <TextBlock FontSize="16" Foreground="SteelBlue" FontWeight="Bold" Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
                 </StackPanel>
             </Border>
 
@@ -205,6 +206,21 @@
                         </Button>
                         <Button BorderThickness="0" Background="Beige" UseLayoutRounding="True" Name="Smile7" Width="35" Height="35"  Margin="3" Click="Smile_Wink_Click">
                             <Image Source="images/wink.png"  Width="30" Height="30"></Image>
+                        </Button>
+                        <Button BorderThickness="0" Background="Beige" UseLayoutRounding="True" Name="Smile8" Width="35" Height="35"  Margin="3" Click="Smile_crossFinger_Click">
+                            <Image Source="images/cross-finger.png"  Width="30" Height="30"></Image>
+                        </Button>
+                        <Button BorderThickness="0" Background="Beige" UseLayoutRounding="True" Name="Smile9" Width="35" Height="35"  Margin="3" Click="Smile_maloik_Click">
+                            <Image Source="images/maloik.png"  Width="30" Height="30"></Image>
+                        </Button>
+                        <Button BorderThickness="0" Background="Beige" UseLayoutRounding="True" Name="Smile10" Width="35" Height="35"  Margin="3" Click="Smile_pointingUp_Click">
+                            <Image Source="images/pointing-up.png"  Width="30" Height="30"></Image>
+                        </Button>
+                        <Button BorderThickness="0" Background="Beige" UseLayoutRounding="True" Name="Smile11" Width="35" Height="35"  Margin="3" Click="Smile_thumb_Click">
+                            <Image Source="images/thumb.png"  Width="30" Height="30"></Image>
+                        </Button>
+                        <Button BorderThickness="0" Background="Beige" UseLayoutRounding="True" Name="Smile12" Width="35" Height="35"  Margin="3" Click="Smile_thumbUp_Click">
+                            <Image Source="images/thumb-up.png"  Width="30" Height="30"></Image>
                         </Button>
                     </UniformGrid >
                 </Border>

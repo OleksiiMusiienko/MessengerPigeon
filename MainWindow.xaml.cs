@@ -100,5 +100,25 @@ namespace MessengerPigeon
         {
             TextBox_Message.Text = TextBox_Message.Text + "\U0001F609";
         }
+        private void Smile_crossFinger_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F91E";
+        }
+        private void Smile_maloik_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F91F";
+        }
+        private void Smile_pointingUp_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0000261D";
+        }
+        private void Smile_thumb_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F44E";
+        }
+        private void Smile_thumbUp_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Message.Text = TextBox_Message.Text + "\U0001F44D";
+        }
     }
 }
