@@ -320,7 +320,8 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                    
                     Date_Time = DateTime.Now;
-                    Message mes = new Message(Mes, Date_Time);
+                    string mesUs = MyUser.Nick + ":" + "   " + Mes;
+                    Message mes = new Message(mesUs, Date_Time);
                     mes.UserSenderId = myUser.Id;
                     mes.UserRecepientId = UserRecepient.Id;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
