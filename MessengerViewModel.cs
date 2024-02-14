@@ -81,6 +81,15 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Phone));
             }
         }
+        public bool Online
+        {
+            get { return User.Online; }
+            set
+            {
+                User.Online = value;
+                OnPropertyChanged(nameof(Online));
+            }
+        }
         // Свойства для привязки обьекта User к блокам регистрации и авторизации .(NickReg, PasswordReg, PasswordTwo)
         private string _nickReg = string.Empty;
         public string NickReg
@@ -301,7 +310,7 @@ namespace MessengerPigeon
             {
             try
             {
-                 string IP = "26.27.154.150";
+                 string IP = "26.238.242.38";
                  tcpClientMessage = new TcpClient(IP, 49153);
                  netstreamMessage = tcpClientMessage.GetStream();
             }
@@ -367,7 +376,7 @@ namespace MessengerPigeon
             {
                 try
                 {
-                    string IP = "26.27.154.150";
+                    string IP = "26.238.242.38";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
@@ -433,7 +442,7 @@ namespace MessengerPigeon
                 try
                 {
                     User = new User();
-                    string IP = "26.27.154.150";
+                    string IP = "26.238.242.38";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
