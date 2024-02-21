@@ -5,22 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerPigeon"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000" MinWidth="750" MinHeight="720">
+        Title="Pigeon" Height="750" Width="900" MinWidth="800" MinHeight="720">
     <Window.Resources>
-        <local:MessengerViewModel x:Key="ViewModel"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/GradientButton.xaml" ></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <local:MessengerViewModel x:Key="ViewModel"/>
+        </ResourceDictionary>
+
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
         <Grid.Background>
             <LinearGradientBrush>
                 <LinearGradientBrush.GradientStops>
-                    <GradientStop Offset="0.30"  Color="LightGoldenrodYellow" />
-                    <GradientStop Offset="0.90" Color="MediumSeaGreen" />
+                    <GradientStop Offset="0.25"  Color="LightGoldenrodYellow" />
+                    <GradientStop Offset="0.75" Color="MediumSeaGreen" />
                     <GradientStop Offset="1.00" Color="LightGoldenrodYellow" />
                 </LinearGradientBrush.GradientStops>
             </LinearGradientBrush>
         </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" ></RowDefinition>
+            <RowDefinition Height="0.85*" ></RowDefinition>
             <RowDefinition Height ="2*"></RowDefinition>
             <RowDefinition Height ="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
@@ -29,110 +35,121 @@
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0"  Margin="5">
-            <DockPanel Name="DockPanel_1">
+        <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0" Margin="5" Padding ="4" CornerRadius="5">
+            <DockPanel Name="DockPanel_1" Margin="15,2,2,2">
                 <Ellipse  DockPanel.Dock="Left"  Width="150" Height="150" Margin="3" Stroke="Blue"  >
                     <Ellipse.Fill>
                         <ImageBrush x:Name="Avatar" ImageSource="{Binding MyUser.Avatar}" Stretch="UniformToFill"></ImageBrush>
                     </Ellipse.Fill>
                 </Ellipse>
-                <TextBlock DockPanel.Dock="Top" Text="{Binding MyUser.Nick}"></TextBlock>
-                <Button DockPanel.Dock="Bottom" Command="{Binding ButtonEx}" IsEnabled="{Binding IsEnableOnline}" >Exit</Button>
-                <Button DockPanel.Dock="Bottom" Command="{Binding ButtonRemove}" IsEnabled="{Binding IsEnableOnline}" >Remove</Button>
-                <Expander HorizontalAlignment="Left"  Header="Redact" ExpandDirection="Down" IsEnabled="{Binding IsEnableOnline}">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="165">
+                    <TextBlock DockPanel.Dock="Top" FontWeight="Bold" Foreground="#3aa288" FontSize="18" Text="{Binding MyUser.Nick}"></TextBlock>
+                <Button HorizontalAlignment="Left" DockPanel.Dock="Bottom" Name ="Settings" Click="Settings_Click" Width="32" Height="32" Background="Transparent"  BorderThickness="0"  IsEnabled="{Binding IsEnableOnline}" >
+                        <Image Source="images/Settings.png" Width="30" Height="30"></Image>
+                    </Button>
+                    <Popup x:Name="PopUpSettings" AllowsTransparency="true" StaysOpen="False" PopupAnimation="Slide" PlacementTarget="{Binding ElementName=Settings}" Placement="Bottom" >
+                    <Border Background="Beige" Width="330" Height="210" BorderThickness="1"  BorderBrush="CadetBlue"  CornerRadius="1,20,20,20" >
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="250" Height="210" >
                         <DockPanel Margin="3">
-                            <Label Padding="5">Photo :</Label>
-                            <Button Margin="20 0 0 0" Padding="5" MinWidth="100" Click="Button_Click" >Download</Button>
+                            <Label Padding="5">Photo:</Label>
+                                <Button Margin="20 0 0 0" Padding="5" Height="25" Width="80" Click="Button_Click" Background="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold" >Download</Button>
                         </DockPanel>
                         <DockPanel Margin="3">
-                            <Label Padding="5" >NikName :</Label>
-                            <TextBox Name="NikName_Authorization" Padding="5" MinWidth="100" Text="{Binding Nick}"></TextBox>
+                            <Label Padding="5" >NikName:</Label>
+                                <TextBox Name="NikName_Authorization" Padding="5" MinWidth="100" Height ="25" Text="{Binding Nick}"></TextBox>
                         </DockPanel>
                         <DockPanel Margin="3">
-                            <Label Padding="5">Password :</Label>
-                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите действующий пароль" ></TextBox>
+                            <Label Padding="5">Password:</Label>
+                                <TextBox  Padding="5" MinWidth="100" Height ="25" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите действующий пароль" ></TextBox>
                         </DockPanel>
                         <DockPanel Margin="3">
-                            <Label Padding="5">NewPas... :</Label>
-                            <TextBox  Padding="5" MinWidth="100" Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите новый пароль"></TextBox>
+                            <Label Padding="5">NewPas...:</Label>
+                                <TextBox  Padding="5" MinWidth="100" Height ="25" Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите новый пароль"></TextBox>
                         </DockPanel>
-                        <Button Margin="3" Name="Redact" Height="20" Width="100" MinWidth="70" Command="{Binding ButtonRedact}" >Redact</Button>
+                            <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold" Name="Redact" Height="25" Width="80" MinWidth="70" Command="{Binding ButtonRedact}" Click="Button_Redaction">Redaction</Button>
+                            <Separator></Separator>
+                            <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold"  Height="25" Width="80" MinWidth="70" Command="{Binding ButtonEx}" Click="Button_Exit">Exit</Button>
+                            <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold" Height="25" Width="80" MinWidth="70" Command="{Binding ButtonRemove}" Click="Button_Remove">Remove</Button>
                     </StackPanel>
-                </Expander>
-            </DockPanel>
+                        </Border>
+                </Popup>
+         </DockPanel>
         </Border>
         <DockPanel Name="WrapPanel_1" Grid.Column="2" Margin="5" IsEnabled="{Binding IsEnable}">
-            <Expander HorizontalAlignment="Center"  Header="Authorization" ExpandDirection="Down" IsExpanded="{Binding IsEnabledAuthorization}">
+            <Expander HorizontalAlignment="Center"  Header="Log in" ExpandDirection="Down" IsExpanded="{Binding IsEnabledAuthorization}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <DockPanel Margin="5">
                         <Label Padding="5" >NikName :</Label>
-                        <TextBox Padding="5" MinWidth="100" Text="{Binding NickReg}" ></TextBox>
+                        <TextBox Padding="5" MinWidth="100" Height ="25" Text="{Binding NickReg}" ></TextBox>
                     </DockPanel>
                     <DockPanel Margin="5">
                         <Label Padding="5">Password :</Label>
-                        <TextBox Padding="5" MinWidth="100" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ></TextBox>
+                        <TextBox Padding="5" MinWidth="100" Height ="25" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ></TextBox>
                     </DockPanel>
-                    <Button Name="Enter" Padding="5" Command="{Binding  ButtonAut}" >Enter</Button>
+                    <Button Template="{StaticResource GradientButtonTemplate}"  Name="Enter" Padding="5" Command="{Binding  ButtonAut}" >Log in</Button>
                 </StackPanel>
             </Expander>
-            <Expander HorizontalAlignment="Center"  Header="Registration" ExpandDirection="Down" IsExpanded="{Binding IsEnabledRegistration}">
+            <Expander HorizontalAlignment="Center"  Header="Sign in" ExpandDirection="Down" IsExpanded="{Binding IsEnabledRegistration}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <DockPanel Margin="3">
                         <Label Padding="4 4 20 4" >Phone :</Label>
-                        <TextBox Padding="4" MinWidth="100" Text="{Binding PhoneReg}" ToolTip="Введите телефон в формате : 0991234567"></TextBox>
+                        <TextBox Padding="4" MinWidth="100" Height ="23" Text="{Binding PhoneReg}" ToolTip="Введите телефон в формате : 0991234567"></TextBox>
                     </DockPanel>
                     <DockPanel Margin="3">
                         <Label Padding="4">NikName :</Label>
-                        <TextBox Padding="4" MinWidth="100" Text="{Binding NickReg}"></TextBox>
+                        <TextBox Padding="4" MinWidth="100" Height ="23"  Text="{Binding NickReg}"></TextBox>
                     </DockPanel>
                     <DockPanel Margin="3">
                         <Label Padding="4">Password :</Label>
-                        <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите пороль от 6 символов с использованием цифр, спец. символов, латиницы, наличием строчных и прописных символов." ></TextBox>
+                        <TextBox Padding="4" MinWidth="100" Height ="23" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите пороль от 6 символов с использованием цифр, спец. символов, латиницы, наличием строчных и прописных символов." ></TextBox>
                     </DockPanel>
                     <DockPanel Margin="3">
                         <Label Padding="4">Password :</Label>
-                        <TextBox Padding="4" MinWidth="100" Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Повторите пороль" ></TextBox>
+                        <TextBox Padding="4" MinWidth="100" Height ="23"  Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Повторите пороль" ></TextBox>
                     </DockPanel>
-                    <Button Padding="4" Command="{Binding ButtonReg}">Registration</Button>
+                    <Button Template="{StaticResource GradientButtonTemplate}" FontWeight="Bold" Padding="4" Command="{Binding ButtonReg}">Sign in</Button>
                 </StackPanel>
             </Expander>
         </DockPanel>
         <DockPanel Name="DockPanel_2" Grid.RowSpan="2" LastChildFill="True">
-            <ListBox Name="ListBoxUsers" SelectedItem="{Binding UserRecepient}" HorizontalAlignment="Stretch" BorderBrush="SteelBlue" 
-                       Margin="5"  ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" Background="Transparent">
+            <ListBox Name="ListBoxUsers" SelectedItem="{Binding UserRecepient}" HorizontalAlignment="Stretch" BorderBrush="SteelBlue"
+                       Margin="4"  ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" Background="Transparent">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Ellipse Width="40" Height="40" Margin="3" Stroke="Blue"  >
+                            <Ellipse Name ="Elips" Width="40" Height="40" Margin="3" Stroke="Blue" StrokeThickness="1"  >
                                 <Ellipse.Fill>
                                     <ImageBrush ImageSource="{Binding Avatar}" Stretch="UniformToFill"></ImageBrush>
                                 </Ellipse.Fill>
                             </Ellipse>
                             <TextBlock Name="UserNick" Text="{Binding Nick}" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" Margin="10"></TextBlock>
                         </StackPanel>
-                        <DataTemplate.Triggers>
+                        <!--<DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding Online}" Value="true">
                                 <Setter TargetName="UserNick" Property="Foreground" Value="DeepSkyBlue" />
                                 <Setter TargetName="UserNick" Property="FontSize" Value="18" />
                             </DataTrigger>
-                        </DataTemplate.Triggers>
+                        </DataTemplate.Triggers>-->
+                       <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Online}" Value="true">
+                                <Setter TargetName="Elips" Property="Stroke" Value="LightGreen" />
+                                <Setter TargetName="Elips" Property="StrokeThickness" Value="3" />
+                        </DataTrigger>
+                       </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
 
         </DockPanel>
         <DockPanel Name="DockPanel_3" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="1">
-            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="2">
+            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="4,2,4,2" CornerRadius="5">
                 <StackPanel Orientation="Horizontal">
                     <Ellipse Width="40" Height="40" Margin="3" Stroke="Blue"  >
                         <Ellipse.Fill>
                             <ImageBrush ImageSource="{Binding UserRecepient.Avatar, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"></ImageBrush>
                         </Ellipse.Fill>
                     </Ellipse>
-                    <TextBlock FontSize="16" Foreground="SteelBlue" FontWeight="Bold" Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
-                    <Label FontSize="16">Phone:</Label>
-                    <TextBlock FontSize="16" Foreground="SteelBlue" FontWeight="Bold" Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
+                    <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
+                    <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
                 </StackPanel>
             </Border>
 
@@ -146,7 +163,6 @@
                         <StackPanel>
                         <Border HorizontalAlignment="Stretch" Background="LightGoldenrodYellow"  BorderBrush="SteelBlue" BorderThickness="1" Margin="2" Padding="6" CornerRadius="20,20,20,1" Width="auto" Height="auto" >
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-                            <!--<TextBlock Text="{Binding}" VerticalAlignment="Center" FontWeight="Bold" Margin="5"></TextBlock>-->
                                 <TextBlock FontFamily ="Segoe UI Emoji" FontSize="14" Name ="MesList" Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Medium"  Margin="3,3,6,3" TextWrapping="Wrap"></TextBlock>
                             </StackPanel>
                         </Border>
@@ -156,34 +172,35 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </DockPanel >
-        <DockPanel Name="DockPanel_4" Grid.Row="2" >
-            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Background="AliceBlue">
-                <TextBlock HorizontalAlignment="Center" Margin="5">Add a friend</TextBlock>
+        <DockPanel Name="DockPanel_4" Grid.Row="2" Margin="4" >
+            <Border DockPanel.Dock="Top" Background="Transparent">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5">Add a friend</TextBlock>
             </Border>
-            <StackPanel DockPanel.Dock="Bottom">                   
-                <Button Name="Scan" Content="Найти" Command="{Binding ButtonSearch}"></Button>                
-                <Button Name="Delete">Удалить</Button>
+            <StackPanel DockPanel.Dock="Bottom">
+                <Button Template="{StaticResource GradientButtonTemplate}" Name="Scan" Content="Search" Command="{Binding ButtonSearch}"  IsEnabled="{Binding IsEnableOnline}" ></Button>
+                <Button Template="{StaticResource GradientButtonTemplate}" Name="Delete"  IsEnabled="{Binding IsEnableOnline}" >Remove</Button>
             </StackPanel>
-            <TextBox Name="TextBox_AddFriend" DockPanel.Dock="Top" Background="Transparent" Text="{Binding _search}" ></TextBox>
-
+            <Border BorderBrush="SteelBlue" BorderThickness="1" CornerRadius="5">
+            <TextBox Name="TextBox_AddFriend"  DockPanel.Dock="Top" Background="Transparent" Text="{Binding _search}" Margin="0,2,0,2" BorderThickness="0" VerticalContentAlignment="Center"></TextBox>
+            </Border>
         </DockPanel>
         <DockPanel Name="DockPanel_5" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="2">
-            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1">
-                <DockPanel  Background="AliceBlue">
-                    <Button Name="File" DockPanel.Dock ="Right" Margin="3" Background="AliceBlue" BorderBrush="AliceBlue">
+            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="4,4,4,2" CornerRadius="5">
+                <DockPanel  Background="Transparent">
+                    <Button Name="File" DockPanel.Dock ="Right" Margin="3" Background="Transparent" BorderThickness="0">
                         <Image Source="images/filesend.png" Width="25"></Image>
                     </Button>
-                    <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" Background="AliceBlue" BorderBrush="AliceBlue">
+                    <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" Background="Transparent" BorderThickness="0">
                         <Image Source="images/Studio-mic-icon_30398.png" Width="25"></Image>
                     </Button>
-                    <Button UseLayoutRounding="True" Name="Smile" DockPanel.Dock="Left"  Margin="3" Background="AliceBlue" BorderBrush="AliceBlue" Click="Smile_Click">
-                        <Image Source="images/happy.png" Width="30" Height="30"></Image>
+                    <Button UseLayoutRounding="True" Name="Smile" DockPanel.Dock="Left"  Margin="3" Background="Transparent" BorderThickness="0"  Click="Smile_Click" >
+                        <Image Source="images/happy.png" Width="25" Height="25"></Image>
                     </Button>
                     <TextBlock DockPanel.Dock="Left"  Margin="4" ></TextBlock>    
                 </DockPanel>
             </Border>
-            
-            <Popup x:Name="MyPopUp" AllowsTransparency="True" PlacementTarget="{Binding ElementName=Smile}" Placement="Bottom" >
+
+            <Popup x:Name="MyPopUp" AllowsTransparency="True" StaysOpen="False" PopupAnimation="Slide" PlacementTarget="{Binding ElementName=Smile}" Placement="Bottom" >
                 <Border  Background="Beige" Width="300" Height="150" BorderThickness="1"  BorderBrush="CadetBlue" CornerRadius="40,40,40,1" Padding="3">
                     <UniformGrid  Grid.Column="0" Rows="3" Columns="4" Width="280" Height="130" >
                         <Button BorderThickness="0" UseLayoutRounding="True" Background="Beige" Name="Smile1" Width="35" Height="35" Margin="3" Click="Smile_Confused_Click">
@@ -226,8 +243,8 @@
                 </Border>
             </Popup>
             
-            <DockPanel Background="White">
-                <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" Background="LightGoldenrodYellow" BorderBrush="LightGreen" BorderThickness="5"  >
+            <DockPanel Background="Transparent" Margin="0,4,0,4">
+                <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" Background="LightGoldenrodYellow" BorderBrush="LightGreen" BorderThickness="5"  IsEnabled="{Binding IsEnableOnline}"  >
                     <Image Source="images/send.png" Width="30"></Image>
                 </Button>
                 <TextBox FontFamily ="Segoe UI Emoji" FontSize="18" Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"></TextBox>

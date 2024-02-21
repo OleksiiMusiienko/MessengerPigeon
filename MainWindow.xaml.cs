@@ -57,6 +57,7 @@ namespace MessengerPigeon
                     // байтовый массив присваиваем публичному свойству вьюмодели
                     ((MessengerViewModel)Resources["ViewModel"]).Avatar = stream.ToArray();
                     stream.Close();
+                    PopUpSettings.IsOpen = true;
                 }
             }
                 catch (Exception ex)
@@ -119,6 +120,27 @@ namespace MessengerPigeon
         private void Smile_thumbUp_Click(object sender, RoutedEventArgs e)
         {
             TextBox_Message.Text = TextBox_Message.Text + "\U0001F44D";
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            if (!PopUpSettings.IsOpen) { PopUpSettings.IsOpen = true; }
+            else { PopUpSettings.IsOpen = false; }
+        }
+
+        private void Button_Exit(object sender, RoutedEventArgs e)
+        {
+            PopUpSettings.IsOpen = false;
+        }
+
+        private void Button_Remove(object sender, RoutedEventArgs e)
+        {
+            PopUpSettings.IsOpen = false;
+        }
+
+        private void Button_Redaction(object sender, RoutedEventArgs e)
+        {
+            PopUpSettings.IsOpen = false;
         }
     }
 }
