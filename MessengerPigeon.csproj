@@ -17,6 +17,7 @@
     <None Remove="images\love.png" />
     <None Remove="images\maloik.png" />
     <None Remove="images\pointing-up.png" />
+    <None Remove="images\Settings.png" />
     <None Remove="images\smiley.png" />
     <None Remove="images\smiling.png" />
     <None Remove="images\thumb-up.png" />
@@ -55,6 +56,7 @@
     <Resource Include="images\maloik.png" />
     <Resource Include="images\pointing-up.png" />
     <Resource Include="images\send.png" />
+    <Resource Include="images\Settings.png" />
     <Resource Include="images\smiley.png" />
     <Resource Include="images\smiling.png" />
     <Resource Include="images\Studio-mic-icon_30398.png" />
