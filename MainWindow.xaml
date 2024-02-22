@@ -174,7 +174,8 @@
         </DockPanel >
         <DockPanel Name="DockPanel_4" Grid.Row="2" Margin="4" >
             <Border DockPanel.Dock="Top" Background="Transparent">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5">Add a friend</TextBlock>
+                <Button Template = "{StaticResource GradientButtonTemplate}" Name = "Add" Command = "{Binding ButtonAddFriend }"
+                        IsEnabled = "{Binding IsEnableOnline}" >Add a friend</Button>
             </Border>
             <StackPanel DockPanel.Dock="Bottom">
                 <Button Template="{StaticResource GradientButtonTemplate}" Name="Scan" Content="Search" Command="{Binding ButtonSearch}"  IsEnabled="{Binding IsEnableOnline}" ></Button>
