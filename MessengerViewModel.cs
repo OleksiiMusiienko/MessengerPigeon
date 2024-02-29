@@ -164,6 +164,16 @@ namespace MessengerPigeon
                     HistoryMessages();
             }
         }
+        private Message _selectedMessage;
+        public Message SelectedMessage
+        {
+            get { return _selectedMessage; }
+            set
+            {
+                _selectedMessage= value;
+                OnPropertyChanged(nameof(SelectedMessage));
+            }
+        }
         private bool _isButtonEnable = true;
         private bool _isButtonEnableOnline;
         private bool _isButtonAuthorization = true;
@@ -829,6 +839,47 @@ namespace MessengerPigeon
                 }
             });
         }
+        //реализация команды удаление сообщения начало
+        private CommandRemoveMessage CommandRemovMessage;
+        public ICommand ButtonRemoveMessage
+        {
+            get
+            {
+                if (CommandRemovMessage == null)
+                {
+                    CommandRemovMessage = new CommandRemoveMessage(RemoveMessage, CanRemoveMessage);
+                }
+                return CommandRemovMessage;
+            }
+        }
+        private async void RemoveMessage(object o)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    if(MessageBox.Show("Are you sure you want to delete this message?", "Delete confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        MemoryStream stream = new MemoryStream();
+                        Message mes = SelectedMessage;
+                        mes.Mes = "CommandRemoveMessage";
+                        var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
+                        jsonFormatter.WriteObject(stream, mes);
+                        byte[] msg = stream.ToArray();
+                        await netstreamMessage.WriteAsync(msg, 0, msg.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+        }
+        private bool CanRemoveMessage(object o)
+        {
+            return true;
+        }
+        //реализация команды удаления сообщения конец
 
     }
 }
