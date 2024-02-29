@@ -65,7 +65,7 @@
                             <Label Padding="5">NewPas...:</Label>
                                 <TextBox  Padding="5" MinWidth="100" Height ="25" Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите новый пароль"></TextBox>
                         </DockPanel>
-                            <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold" Name="Redact" Height="25" Width="80" MinWidth="70" Command="{Binding ButtonRedact}" Click="Button_Redaction">Redaction</Button>
+                            <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold" Name="Redact" Height="25" Width="80" MinWidth="70" Command="{Binding ButtonRedact}" Click="Button_Redaction">Edit profile</Button>
                             <Separator></Separator>
                             <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold"  Height="25" Width="80" MinWidth="70" Command="{Binding ButtonEx}" Click="Button_Exit">Exit</Button>
                             <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold" Height="25" Width="80" MinWidth="70" Command="{Binding ButtonRemove}" Click="Button_Remove">Remove</Button>
@@ -154,7 +154,15 @@
             </Border>
 
             <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" IsSynchronizedWithCurrentItem = "true" BorderBrush="SteelBlue"
-                     Margin="5" HorizontalContentAlignment="Left" >
+                     Margin="5" HorizontalContentAlignment="Left" SelectedItem="{Binding SelectedMessage}"  >
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                    <MenuItem Header="Edit message" ></MenuItem>
+                        <MenuItem Header="Delete message" Command="{Binding  ButtonRemoveMessage}" ></MenuItem>
+                        <MenuItem Header="Delete message history" Command="{Binding  ButtonRemoveAllMessages}" ></MenuItem>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+
                 <ListBox.Background>
                     <ImageBrush Opacity="0.8" ImageSource="images/wallpaper.jpg"></ImageBrush>
                 </ListBox.Background>
