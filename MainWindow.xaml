@@ -159,7 +159,7 @@
                     <ContextMenu>
                     <MenuItem Header="Edit message" ></MenuItem>
                         <MenuItem Header="Delete message" Command="{Binding  ButtonRemoveMessage}" ></MenuItem>
-                    <MenuItem Header="Delete message history"></MenuItem>
+                        <MenuItem Header="Delete message history" Command="{Binding  ButtonRemoveAllMessages}" ></MenuItem>
                     </ContextMenu>
                 </ListBox.ContextMenu>
 

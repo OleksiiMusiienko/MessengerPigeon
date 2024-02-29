@@ -881,5 +881,47 @@ namespace MessengerPigeon
         }
         //реализация команды удаления сообщения конец
 
+        //реализация команды удаление истории сообщений начало
+        private CommandRemoveAllMessages CommandRemoveAllMessages;
+        public ICommand ButtonRemoveAllMessages
+        {
+            get
+            {
+                if (CommandRemoveAllMessages == null)
+                {
+                    CommandRemoveAllMessages = new CommandRemoveAllMessages(RemoveAllMessages, CanRemoveAllMessages);
+                }
+                return CommandRemoveAllMessages;
+            }
+        }
+        private async void RemoveAllMessages(object o)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    if (MessageBox.Show("Are you sure you want to delete message history?", "Delete confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        MemoryStream stream = new MemoryStream();
+                        Message mes = SelectedMessage;
+                        mes.Mes = "CommandRemoveAllMessages";
+                        var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
+                        jsonFormatter.WriteObject(stream, mes);
+                        byte[] msg = stream.ToArray();
+                        await netstreamMessage.WriteAsync(msg, 0, msg.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+        }
+        private bool CanRemoveAllMessages(object o)
+        {
+            return true;
+        }
+        //реализация команды удаления истории сообщений конец
+
     }
 }
