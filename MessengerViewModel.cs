@@ -33,6 +33,7 @@ namespace MessengerPigeon
         public NetworkStream netstream;
         public TcpClient tcpClientMessage;
         public NetworkStream netstreamMessage;
+        public bool isEditMessage;
         public MessengerViewModel()
         {
             User = new User();
@@ -320,7 +321,7 @@ namespace MessengerPigeon
             {
             try
             {
-                 string IP = "26.238.242.38";
+                 string IP = "26.27.154.150";
                  tcpClientMessage = new TcpClient(IP, 49153);
                  netstreamMessage = tcpClientMessage.GetStream();
             }
@@ -336,13 +337,27 @@ namespace MessengerPigeon
             {
                 try
                 {
-                    MemoryStream stream = new MemoryStream();
-                   
-                    Date_Time = DateTime.Now;
-                    string mesUs = MyUser.Nick + ":" + "   " + Mes;
-                    Message mes = new Message(mesUs, Date_Time);
-                    mes.UserSenderId = myUser.Id;
-                    mes.UserRecepientId = UserRecepient.Id;
+                    Message mes = new Message();
+
+                    if (isEditMessage == true)
+                    { 
+                        mes.Id = SelectedMessage.Id;
+                        mes.UserSenderId = SelectedMessage.UserSenderId;
+                        mes.UserRecepientId = SelectedMessage.UserRecepientId;
+                        mes.Date_Time = SelectedMessage.Date_Time;
+                        mes.Mes = MyUser.Nick + ":" + "   " + Mes;
+                        isEditMessage = false;
+                    }
+                    else
+                    {
+                        Date_Time = DateTime.Now;
+                        string mesUs = MyUser.Nick + ":" + "   " + Mes;
+                        mes = new Message(mesUs, Date_Time);
+                        mes.UserSenderId = myUser.Id;
+                        mes.UserRecepientId = UserRecepient.Id;
+                    }
+                    MemoryStream stream = new MemoryStream();        
+                    
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter.WriteObject(stream, mes);
                     byte[] msg = stream.ToArray();
@@ -386,7 +401,7 @@ namespace MessengerPigeon
             {
                 try
                 {
-                    string IP = "26.238.242.38";
+                    string IP = "26.27.154.150";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
@@ -452,7 +467,7 @@ namespace MessengerPigeon
                 try
                 {
                     User = new User();
-                    string IP = "26.238.242.38";
+                    string IP = "26.27.154.150";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
@@ -849,16 +864,16 @@ namespace MessengerPigeon
             });
         }
         //реализация команды удаление сообщения начало
-        private CommandRemoveMessage CommandRemovMessage;
+        private CommandRemoveMessage CommandRemoveMessage;
         public ICommand ButtonRemoveMessage
         {
             get
             {
-                if (CommandRemovMessage == null)
+                if (CommandRemoveMessage == null)
                 {
-                    CommandRemovMessage = new CommandRemoveMessage(RemoveMessage, CanRemoveMessage);
+                    CommandRemoveMessage = new CommandRemoveMessage(RemoveMessage, CanRemoveMessage);
                 }
-                return CommandRemovMessage;
+                return CommandRemoveMessage;
             }
         }
         private async void RemoveMessage(object o)
@@ -932,5 +947,40 @@ namespace MessengerPigeon
         }
         //реализация команды удаления истории сообщений конец
 
+        //реализация команды редактирования сообщения начало
+        private CommandEditMessage CommandEditMessage;
+        public ICommand ButtonEditMessage
+        {
+            get
+            {
+                if (CommandEditMessage == null)
+                {
+                    CommandEditMessage = new CommandEditMessage(EditMessage, CanEditMessage);
+                }
+                return CommandEditMessage;
+            }
+        }
+        private async void EditMessage(object o)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    MemoryStream stream = new MemoryStream();
+                    Message mes = SelectedMessage;
+                    Mes = mes.Mes.Substring(mes.Mes.IndexOf(" ")).Trim();
+                    isEditMessage = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+        }
+        private bool CanEditMessage(object o)
+        {
+            return true;
+        }
+        //реализация команды редактирования сообщения конец
     }
 }

@@ -26,55 +26,56 @@
             </LinearGradientBrush>
         </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.85*" ></RowDefinition>
-            <RowDefinition Height ="2*"></RowDefinition>
-            <RowDefinition Height ="0.5*"></RowDefinition>
+            <RowDefinition Height="93*" ></RowDefinition>
+            <RowDefinition Height ="28*"></RowDefinition>
+            <RowDefinition Height="191*"/>
+            <RowDefinition Height ="55*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.8*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0" Margin="5" Padding ="4" CornerRadius="5">
+        <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" Padding ="4" CornerRadius="5">
             <DockPanel Name="DockPanel_1" Margin="15,2,2,2">
                 <Ellipse  DockPanel.Dock="Left"  Width="150" Height="150" Margin="3" Stroke="Blue"  >
                     <Ellipse.Fill>
                         <ImageBrush x:Name="Avatar" ImageSource="{Binding MyUser.Avatar}" Stretch="UniformToFill"></ImageBrush>
                     </Ellipse.Fill>
                 </Ellipse>
-                    <TextBlock DockPanel.Dock="Top" FontWeight="Bold" Foreground="#3aa288" FontSize="18" Text="{Binding MyUser.Nick}"></TextBlock>
+                <TextBlock DockPanel.Dock="Top" FontWeight="Bold" Foreground="#3aa288" FontSize="18" Text="{Binding MyUser.Nick}"></TextBlock>
                 <Button HorizontalAlignment="Left" DockPanel.Dock="Bottom" Name ="Settings" Click="Settings_Click" Width="32" Height="32" Background="Transparent"  BorderThickness="0"  IsEnabled="{Binding IsEnableOnline}" >
-                        <Image Source="images/Settings.png" Width="30" Height="30"></Image>
-                    </Button>
-                    <Popup x:Name="PopUpSettings" AllowsTransparency="true" StaysOpen="False" PopupAnimation="Slide" PlacementTarget="{Binding ElementName=Settings}" Placement="Bottom" >
+                    <Image Source="images/Settings.png" Width="30" Height="30"></Image>
+                </Button>
+                <Popup x:Name="PopUpSettings" AllowsTransparency="true" StaysOpen="False" PopupAnimation="Slide" PlacementTarget="{Binding ElementName=Settings}" Placement="Bottom" >
                     <Border Background="Beige" Width="330" Height="210" BorderThickness="1"  BorderBrush="CadetBlue"  CornerRadius="1,20,20,20" >
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="250" Height="210" >
-                        <DockPanel Margin="3">
-                            <Label Padding="5">Photo:</Label>
+                            <DockPanel Margin="3">
+                                <Label Padding="5">Photo:</Label>
                                 <Button Margin="20 0 0 0" Padding="5" Height="25" Width="80" Click="Button_Click" Background="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold" >Download</Button>
-                        </DockPanel>
-                        <DockPanel Margin="3">
-                            <Label Padding="5" >NikName:</Label>
+                            </DockPanel>
+                            <DockPanel Margin="3">
+                                <Label Padding="5" >NikName:</Label>
                                 <TextBox Name="NikName_Authorization" Padding="5" MinWidth="100" Height ="25" Text="{Binding Nick}"></TextBox>
-                        </DockPanel>
-                        <DockPanel Margin="3">
-                            <Label Padding="5">Password:</Label>
+                            </DockPanel>
+                            <DockPanel Margin="3">
+                                <Label Padding="5">Password:</Label>
                                 <TextBox  Padding="5" MinWidth="100" Height ="25" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите действующий пароль" ></TextBox>
-                        </DockPanel>
-                        <DockPanel Margin="3">
-                            <Label Padding="5">NewPas...:</Label>
+                            </DockPanel>
+                            <DockPanel Margin="3">
+                                <Label Padding="5">NewPas...:</Label>
                                 <TextBox  Padding="5" MinWidth="100" Height ="25" Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите новый пароль"></TextBox>
-                        </DockPanel>
+                            </DockPanel>
                             <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold" Name="Redact" Height="25" Width="80" MinWidth="70" Command="{Binding ButtonRedact}" Click="Button_Redaction">Edit profile</Button>
                             <Separator></Separator>
                             <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold"  Height="25" Width="80" MinWidth="70" Command="{Binding ButtonEx}" Click="Button_Exit">Exit</Button>
                             <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold" Height="25" Width="80" MinWidth="70" Command="{Binding ButtonRemove}" Click="Button_Remove">Remove</Button>
-                    </StackPanel>
-                        </Border>
+                        </StackPanel>
+                    </Border>
                 </Popup>
-         </DockPanel>
+            </DockPanel>
         </Border>
-        <DockPanel Name="WrapPanel_1" Grid.Column="2" Margin="5" IsEnabled="{Binding IsEnable}">
+        <DockPanel Name="WrapPanel_1" Grid.Column="2" Margin="5,5,5,5" IsEnabled="{Binding IsEnable}">
             <Expander HorizontalAlignment="Center"  Header="Log in" ExpandDirection="Down" IsExpanded="{Binding IsEnabledAuthorization}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <DockPanel Margin="5">
@@ -110,13 +111,13 @@
                 </StackPanel>
             </Expander>
         </DockPanel>
-        <DockPanel Name="DockPanel_2" Grid.RowSpan="2" LastChildFill="True">
+        <DockPanel Name="DockPanel_2" Grid.RowSpan="3" LastChildFill="True">
             <ListBox Name="ListBoxUsers" SelectedItem="{Binding UserRecepient}" HorizontalAlignment="Stretch" BorderBrush="SteelBlue"
                        Margin="4"  ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" Background="Transparent">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Ellipse Name ="Elips" Width="40" Height="40" Margin="3" Stroke="Blue" StrokeThickness="1"  >
+                            <Ellipse Name ="Elips" Width="40" Height="40" Margin="3" Stroke="Blue" StrokeThickness="0.1"  >
                                 <Ellipse.Fill>
                                     <ImageBrush ImageSource="{Binding Avatar}" Stretch="UniformToFill"></ImageBrush>
                                 </Ellipse.Fill>
@@ -129,18 +130,18 @@
                                 <Setter TargetName="UserNick" Property="FontSize" Value="18" />
                             </DataTrigger>
                         </DataTemplate.Triggers>-->
-                       <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Online}" Value="true">
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Online}" Value="true">
                                 <Setter TargetName="Elips" Property="Stroke" Value="LightGreen" />
                                 <Setter TargetName="Elips" Property="StrokeThickness" Value="3" />
-                        </DataTrigger>
-                       </DataTemplate.Triggers>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
 
         </DockPanel>
-        <DockPanel Name="DockPanel_3" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="1">
+        <DockPanel Name="DockPanel_3"  Grid.ColumnSpan="3" Margin="257,186,0,0" Grid.RowSpan="3">
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="4,2,4,2" CornerRadius="5">
                 <StackPanel Orientation="Horizontal">
                     <Ellipse Width="40" Height="40" Margin="3" Stroke="Blue"  >
@@ -157,9 +158,9 @@
                      Margin="5" HorizontalContentAlignment="Left" SelectedItem="{Binding SelectedMessage}"  >
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                    <MenuItem Header="Edit message" ></MenuItem>
-                        <MenuItem Header="Delete message" Command="{Binding  ButtonRemoveMessage}" ></MenuItem>
-                        <MenuItem Header="Delete message history" Command="{Binding  ButtonRemoveAllMessages}" ></MenuItem>
+                        <MenuItem Foreground="SteelBlue" Header="Edit message" Command="{Binding  ButtonEditMessage}"></MenuItem>
+                        <MenuItem Foreground="SteelBlue" Header="Delete message" Command="{Binding  ButtonRemoveMessage}" ></MenuItem>
+                        <MenuItem Foreground="SteelBlue" Header="Delete message history" Command="{Binding  ButtonRemoveAllMessages}" ></MenuItem>
                     </ContextMenu>
                 </ListBox.ContextMenu>
 
@@ -169,18 +170,18 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                        <Border HorizontalAlignment="Stretch" Background="LightGoldenrodYellow"  BorderBrush="SteelBlue" BorderThickness="1" Margin="2" Padding="6" CornerRadius="20,20,20,1" Width="auto" Height="auto" >
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-                                <TextBlock FontFamily ="Segoe UI Emoji" FontSize="14" Name ="MesList" Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Medium"  Margin="3,3,6,3" TextWrapping="Wrap"></TextBlock>
-                            </StackPanel>
-                        </Border>
+                            <Border HorizontalAlignment="Stretch" Background="LightGoldenrodYellow"  BorderBrush="SteelBlue" BorderThickness="1" Margin="2" Padding="6" CornerRadius="20,20,20,1" Width="auto" Height="auto" >
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                                    <TextBlock FontFamily ="Segoe UI Emoji" FontSize="14" Name ="MesList" Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Medium"  Margin="3,3,6,3" TextWrapping="Wrap"></TextBlock>
+                                </StackPanel>
+                            </Border>
                             <TextBlock  Text= "{Binding Date_Time}" Foreground="WhiteSmoke" FontSize="8" VerticalAlignment="Center" Margin="3" HorizontalAlignment="Right"></TextBlock>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </DockPanel >
-        <DockPanel Name="DockPanel_4" Grid.Row="2" Margin="4" >
+        <DockPanel Name="DockPanel_4" Grid.Row="3" Margin="4,4,4,4" >
             <Border DockPanel.Dock="Top" Background="Transparent">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5">Add a friend</TextBlock>
             </Border>
@@ -189,10 +190,10 @@
                 <Button Template="{StaticResource GradientButtonTemplate}" Name="Delete"  IsEnabled="{Binding IsEnableOnline}" >Remove</Button>
             </StackPanel>
             <Border BorderBrush="SteelBlue" BorderThickness="1" CornerRadius="5">
-            <TextBox Name="TextBox_AddFriend"  DockPanel.Dock="Top" Background="Transparent" Text="{Binding _search}" Margin="0,2,0,2" BorderThickness="0" VerticalContentAlignment="Center"></TextBox>
+                <TextBox Name="TextBox_AddFriend"  DockPanel.Dock="Top" Background="Transparent" Text="{Binding _search}" Margin="0,2,0,2" BorderThickness="0" VerticalContentAlignment="Center"></TextBox>
             </Border>
         </DockPanel>
-        <DockPanel Name="DockPanel_5" Grid.Column="1"  Grid.ColumnSpan="2"  Grid.Row="2">
+        <DockPanel Name="DockPanel_5"  Grid.ColumnSpan="3"  Grid.Row="2" Margin="257,382,0,0" Grid.RowSpan="2">
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="4,4,4,2" CornerRadius="5">
                 <DockPanel  Background="Transparent">
                     <Button Name="File" DockPanel.Dock ="Right" Margin="3" Background="Transparent" BorderThickness="0">
@@ -204,7 +205,7 @@
                     <Button UseLayoutRounding="True" Name="Smile" DockPanel.Dock="Left"  Margin="3" Background="Transparent" BorderThickness="0"  Click="Smile_Click" >
                         <Image Source="images/happy.png" Width="25" Height="25"></Image>
                     </Button>
-                    <TextBlock DockPanel.Dock="Left"  Margin="4" ></TextBlock>    
+                    <TextBlock DockPanel.Dock="Left"  Margin="4" ></TextBlock>
                 </DockPanel>
             </Border>
 
@@ -250,12 +251,12 @@
                     </UniformGrid >
                 </Border>
             </Popup>
-            
+
             <DockPanel Background="Transparent" Margin="0,4,0,4">
                 <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" Background="LightGoldenrodYellow" BorderBrush="LightGreen" BorderThickness="5"  IsEnabled="{Binding IsEnableOnline}"  >
                     <Image Source="images/send.png" Width="30"></Image>
                 </Button>
-                <TextBox FontFamily ="Segoe UI Emoji" FontSize="18" Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Mes}" Background="LightGoldenrodYellow"></TextBox>
+                <TextBox FontFamily ="Segoe UI Emoji" FontSize="18" Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Path=Mes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="LightGoldenrodYellow"></TextBox>
             </DockPanel>
         </DockPanel>
     </Grid>
