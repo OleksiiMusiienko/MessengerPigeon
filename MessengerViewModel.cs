@@ -2,6 +2,7 @@
 using CommandDLL;
 using MessengerModel;
 using MessengerPigeon.Command;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -33,10 +34,10 @@ namespace MessengerPigeon
         public NetworkStream netstream;
         public TcpClient tcpClientMessage;
         public NetworkStream netstreamMessage;
-        public MessengerViewModel()
+            public MessengerViewModel()
         {
             User = new User();
-            Message = new Message();           
+            Message = new Message();
         }
         private User User;
         private User myUser;
@@ -339,7 +340,7 @@ namespace MessengerPigeon
                     byte[] msg = stream.ToArray();
                     await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
                     Mes = "";
-                    ReceiveMessage(tcpClientMessage);
+                    ReceiveMessage(tcpClientMessage);                    
                 }
                 catch (Exception ex)
                 {
@@ -436,7 +437,7 @@ namespace MessengerPigeon
                 return CommandAut;
             }
         }
-        private async void Aut(object o)
+                private async void Aut(object o)
         {
             await Task.Run(async () =>
             {
@@ -459,7 +460,7 @@ namespace MessengerPigeon
                     myUser = new User();
 
                     Receive(tcpClient);
-                    ConnectionForMessage();// отдельное подключение для сообщений
+                    ConnectionForMessage();// отдельное подключение для сообщений                    
                 }
                 catch (Exception ex)
                 {
@@ -709,6 +710,7 @@ namespace MessengerPigeon
                             List<User> list = new List<User>();
                             list = res.list;
                             IPAddress address = Dns.GetHostAddresses(Dns.GetHostName()).First<IPAddress>(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+                            //System.Net.EndPoint address1 = tcpClient.Client.LocalEndPoint;
                             foreach (var user in list)
                             {
                                 if (user.IPadress == address.ToString())
@@ -720,7 +722,7 @@ namespace MessengerPigeon
                                     break;
                                 }
                             }
-                            Users = new ObservableCollection<User>(list);                            
+                            Users = new ObservableCollection<User>(list);
                             Nick = NickReg;
                             Password = PasswordReg;
                             Avatar = myUser.Avatar;
@@ -791,6 +793,13 @@ namespace MessengerPigeon
                         List<Message> res = jsonFormatter.ReadObject(stream) as List<Message>;
                         if (res != null)
                         {
+                           if (res[res.Count-1].UserSenderId == myUser.Id)
+                                {
+                                    new ToastContentBuilder().AddText(res[res.Count-1].Mes)
+                                    .SetToastDuration(ToastDuration.Short)
+                                    .SetToastScenario(ToastScenario.Default)
+                                    .Show();
+                                }                            
                             Messages = new ObservableCollection<Message>(res);
                         }
                         else
