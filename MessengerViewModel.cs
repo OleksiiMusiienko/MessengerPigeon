@@ -23,6 +23,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace MessengerPigeon
 {
@@ -483,7 +484,7 @@ namespace MessengerPigeon
                     myUser = new User();
 
                     Receive(tcpClient);
-                    ConnectionForMessage();// отдельное подключение для сообщений
+                    ConnectionForMessage();// отдельное подключение для сообщений                    
                 }
                 catch (Exception ex)
                 {
@@ -630,8 +631,8 @@ namespace MessengerPigeon
                     jsonFormatter1.WriteObject(stream1, mes1);
                     byte[] msg1 = stream1.ToArray();
                     await netstreamMessage.WriteAsync(msg1, 0, msg1.Length); // записываем данные в NetworkStream.
-                    
 
+                    IsEnabledAuthorization = true;
                 }
                 catch (Exception ex)
                 {
@@ -815,6 +816,14 @@ namespace MessengerPigeon
                         List<Message> res = jsonFormatter.ReadObject(stream) as List<Message>;
                         if (res != null)
                         {
+                            if (res[res.Count-1].UserSenderId != myUser.Id)
+                            {
+                                new ToastContentBuilder().AddText(res[res.Count-1].Mes)
+                                .AddText(res[res.Count-1].Date_Time.ToString())
+                                .SetToastDuration(ToastDuration.Short)
+                                .SetToastScenario(ToastScenario.Default)
+                                .Show();
+                            }
                             Messages = new ObservableCollection<Message>(res);
                         }
                         else
