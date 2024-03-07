@@ -1,5 +1,6 @@
 ﻿using CommandDLL;
 using Microsoft.Win32;
+using NAudio.Wave;
 using System;
 using System.Drawing;
 using System.IO;
@@ -15,6 +16,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NAudio;
+using NAudio.Wave;
+using NAudio.CoreAudioApi;
+using NAudio.FileFormats;
+using Windows.Media.Playback;
+using System.Media;
+using Windows.Security.Cryptography.Certificates;
 
 namespace MessengerPigeon
 {
@@ -28,9 +36,8 @@ namespace MessengerPigeon
         public MainWindow()
         {
             InitializeComponent();
-            //uiContext = SynchronizationContext.Current;
+            //uiContext = SynchronizationContext.Current;            
         }
-        
         private /*async*/ void Button_Click(object sender, RoutedEventArgs e)
         {
             //await Task.Run(async () =>
@@ -142,5 +149,53 @@ namespace MessengerPigeon
         {
             PopUpSettings.IsOpen = false;
         }
+
+        WaveIn waveIn;
+        WaveFileWriter writer;
+        string outputFilename;
+        private void waveIn_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            if (writer == null)
+                return;
+            writer.WriteData(e.Buffer, 0, e.BytesRecorded);  
+            writer.Flush();
+        }
+                
+        bool flag;
+        private void Voice_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (flag == false)
+                {
+                    MessageBox.Show("Start recording");
+                    flag = true;
+                    waveIn = new WaveIn();
+                    waveIn.DeviceNumber=0;
+                    outputFilename = /*"../../../"*/ /*+*/ DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss").Trim() + "Audio.wav";
+                    waveIn.DataAvailable+= new EventHandler<WaveInEventArgs>(waveIn_DataAvailable);
+                    waveIn.WaveFormat = new WaveFormat(44100,WaveIn.GetCapabilities(waveIn.DeviceNumber).Channels);
+                    writer = new WaveFileWriter(outputFilename, waveIn.WaveFormat);
+                    waveIn.StartRecording();
+                    
+                }
+                else if(flag == true)
+                {
+                    MessageBox.Show("Stop recording");
+                    flag = false;
+                    waveIn.StopRecording();
+                    ((MessengerViewModel)Resources["ViewModel"]).MesAudio = outputFilename;
+                    waveIn.Dispose();
+                    waveIn = null;
+                    writer.Close();
+                    writer = null;                    
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Клиент: " + ex.Message);
+            }
+        }
+
     }
 }

@@ -24,6 +24,10 @@ using System.Windows.Input;
 using System.Xml.Serialization;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.Toolkit.Uwp.Notifications;
+using NAudio;
+using NAudio.Wave;
+using NAudio.CoreAudioApi;
+using NAudio.FileFormats;
 
 namespace MessengerPigeon
 {
@@ -163,6 +167,15 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Mes));
             }
         }
+        public string MesAudio
+        {
+            get { return Message.MesAudio; }
+            set
+            {
+                Message.MesAudio = value;
+                OnPropertyChanged(nameof(MesAudio));
+            }
+        }
         private User _userRecepient;
         public User UserRecepient
         {
@@ -185,6 +198,9 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(SelectedMessage));
             }
         }
+        
+        //public Visibility IsAudioVisible =>  MesAudio == null?  Visibility.Collapsed : Visibility.Visible; 
+
         private bool _isButtonEnable = true;
         private bool _isButtonEnableOnline;
         private bool _isButtonAuthorization = true;
@@ -351,9 +367,18 @@ namespace MessengerPigeon
                     }
                     else
                     {
-                        Date_Time = DateTime.Now;
-                        string mesUs = MyUser.Nick + ":" + "   " + Mes;
-                        mes = new Message(mesUs, Date_Time);
+                        if (MesAudio != null)
+                        {
+                            mes.Mes = MyUser.Nick + ":" + "   " + Mes + "(vocal message):";
+                            mes.MesAudio = MesAudio;
+                        }
+
+                        else
+                        {
+                            mes.Mes = MyUser.Nick + ":" + "   " + Mes;
+                        }
+                                              
+                        mes.Date_Time = DateTime.Now;
                         mes.UserSenderId = myUser.Id;
                         mes.UserRecepientId = UserRecepient.Id;
                     }
@@ -364,6 +389,7 @@ namespace MessengerPigeon
                     byte[] msg = stream.ToArray();
                     await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
                     Mes = "";
+                    MesAudio = null;
                     ReceiveMessage(tcpClientMessage);
                 }
                 catch (Exception ex)
@@ -374,8 +400,8 @@ namespace MessengerPigeon
         }
         private bool CanSend(object o)
         {
-            if (Mes == "")
-                return false;
+            //if (Mes == "")
+            //    return false;
             return true;
         }
         //реализация команды отправки конец
@@ -991,5 +1017,8 @@ namespace MessengerPigeon
             return true;
         }
         //реализация команды редактирования сообщения конец
+
+       
+        
+            }
     }
-}
