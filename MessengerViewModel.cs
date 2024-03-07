@@ -657,8 +657,7 @@ namespace MessengerPigeon
                     jsonFormatter1.WriteObject(stream1, mes1);
                     byte[] msg1 = stream1.ToArray();
                     await netstreamMessage.WriteAsync(msg1, 0, msg1.Length); // записываем данные в NetworkStream.
-
-                    IsEnabledAuthorization = true;
+                                        
                 }
                 catch (Exception ex)
                 {
@@ -785,6 +784,7 @@ namespace MessengerPigeon
                             MyUser.Avatar = null;
                             MyUser = null;
                             Users = null;
+                            IsEnableOnline = false;
                             return;
                         }
                         else if (res.command == "Пользователь успешно удален!")
@@ -840,9 +840,9 @@ namespace MessengerPigeon
                         MemoryStream stream = new MemoryStream(copy);
                         var jsonFormatter = new DataContractJsonSerializer(typeof(List<Message>));
                         List<Message> res = jsonFormatter.ReadObject(stream) as List<Message>;
-                        if (res != null)
+                        if (res.Count != 0)
                         {
-                            if (res[res.Count-1].UserSenderId != myUser.Id)
+                            if (res[res.Count-1].UserSenderId != myUser.Id && res.Count>Messages.Count)
                             {
                                 new ToastContentBuilder().AddText(res[res.Count-1].Mes)
                                 .AddText(res[res.Count-1].Date_Time.ToString())
@@ -855,8 +855,8 @@ namespace MessengerPigeon
                         else
                         {
                             Messages = null;
-                            UserRecepient = null;
-                            IsEnableOnline = false;
+                            //UserRecepient = null;
+                            //IsEnableOnline = false;
                             IsEnable = true;
                             return;
                         }
@@ -1018,7 +1018,6 @@ namespace MessengerPigeon
         }
         //реализация команды редактирования сообщения конец
 
-       
-        
-            }
+              
+        }
     }
