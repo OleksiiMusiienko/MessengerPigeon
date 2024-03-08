@@ -167,7 +167,7 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Mes));
             }
         }
-        public string MesAudio
+        public string? MesAudio
         {
             get { return Message.MesAudio; }
             set
@@ -510,7 +510,7 @@ namespace MessengerPigeon
                     myUser = new User();
 
                     Receive(tcpClient);
-                    ConnectionForMessage();// отдельное подключение для сообщений                    
+                    ConnectionForMessage();// отдельное подключение для сообщений
                 }
                 catch (Exception ex)
                 {
@@ -784,6 +784,7 @@ namespace MessengerPigeon
                             MyUser.Avatar = null;
                             MyUser = null;
                             Users = null;
+                            Messages =null;
                             IsEnableOnline = false;
                             return;
                         }
@@ -842,7 +843,7 @@ namespace MessengerPigeon
                         List<Message> res = jsonFormatter.ReadObject(stream) as List<Message>;
                         if (res.Count != 0)
                         {
-                            if (res[res.Count-1].UserSenderId != myUser.Id && res.Count>Messages.Count)
+                            if (res[res.Count-1].UserSenderId != myUser.Id)
                             {
                                 new ToastContentBuilder().AddText(res[res.Count-1].Mes)
                                 .AddText(res[res.Count-1].Date_Time.ToString())
