@@ -198,23 +198,15 @@
                                                     </EventTrigger.Actions>
                                                 </EventTrigger>
                                             </StackPanel.Triggers>
-                                        <Button Name="cmd_play" Visibility="{Binding Converter={StaticResource Converter}}" >Play</Button>
-                                        <Button Name="cmd_stop" Visibility="{Binding Converter={StaticResource Converter}}" >Stop</Button>
-                                        <Button Name="cmd_pause" Visibility="{Binding Converter={StaticResource Converter}}" >Pause</Button>
-                                        <Button Name="cmd_resume" Visibility="{Binding Converter={StaticResource Converter}}" >Resume</Button>
+                                        <Button Name="cmd_play" Visibility="{Binding Path=MesAudio, Converter={StaticResource Converter}}" >Play</Button>
+                                        <Button Name="cmd_stop" Visibility="{Binding Path=MesAudio,Converter={StaticResource Converter}}" >Stop</Button>
+                                        <Button Name="cmd_pause" Visibility="{Binding Path=MesAudio, Converter={StaticResource Converter}}" >Pause</Button>
+                                        <Button Name="cmd_resume" Visibility="{Binding Path=MesAudio,Converter={StaticResource Converter}}" >Resume</Button>
                                         </StackPanel>                                    
                                 </StackPanel>
                             </Border>
                             <TextBlock  Text= "{Binding Date_Time}" Foreground="WhiteSmoke" FontSize="8" VerticalAlignment="Center" Margin="3" HorizontalAlignment="Right"></TextBlock>
-                        </StackPanel>
-                        <!--<DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding MesAudio}" Value="NULL">
-                                <Setter TargetName="cmd_play" Property="Visibility" Value="hidden" />
-                                <Setter TargetName="cmd_stop" Property="Visibility" Value="hidden" />
-                                <Setter TargetName="cmd_pause" Property="Visibility" Value="hidden" />
-                                <Setter TargetName="cmd_resume" Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </DataTemplate.Triggers>-->
+                        </StackPanel>                        
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
