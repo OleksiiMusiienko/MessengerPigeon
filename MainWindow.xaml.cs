@@ -23,6 +23,8 @@ using NAudio.FileFormats;
 using Windows.Media.Playback;
 using System.Media;
 using Windows.Security.Cryptography.Certificates;
+using System.Runtime.Serialization.Json;
+using MessengerModel;
 
 namespace MessengerPigeon
 {
@@ -195,6 +197,37 @@ namespace MessengerPigeon
             {
                 MessageBox.Show("Клиент: " + ex.Message);
             }
+        }
+        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    MemoryStream stream = new MemoryStream();
+                    Wrapper wrapper = new Wrapper();
+                    wrapper.commands = Wrapper.Commands.Exit;
+                    ((MessengerViewModel)Resources["ViewModel"]).MyUser.Online = false;
+                    wrapper.user = ((MessengerViewModel)Resources["ViewModel"]).MyUser;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
+                    jsonFormatter.WriteObject(stream, wrapper);
+                    byte[] msg = stream.ToArray();
+                    await ((MessengerViewModel)Resources["ViewModel"]).netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream. MemoryStream stream1 = new MemoryStream();
+
+                    MemoryStream stream1 = new MemoryStream();
+                    Message mes1 = new Message();
+                    var jsonFormatter1 = new DataContractJsonSerializer(typeof(Message));
+                    jsonFormatter1.WriteObject(stream1, mes1);
+                    byte[] msg1 = stream1.ToArray();
+                    await ((MessengerViewModel)Resources["ViewModel"]).netstreamMessage.WriteAsync(msg1, 0, msg1.Length); // записываем данные в NetworkStream.
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
+            });
+            this.Close();
         }
 
     }
