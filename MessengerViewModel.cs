@@ -28,6 +28,7 @@ using NAudio;
 using NAudio.Wave;
 using NAudio.CoreAudioApi;
 using NAudio.FileFormats;
+using System.Text.RegularExpressions;
 
 namespace MessengerPigeon
 {
@@ -103,6 +104,10 @@ namespace MessengerPigeon
             get { return _nickReg; }
             set
             {
+                if(value == "")
+                    MessageBox.Show("Вы не ввели логин!");
+                if(_phoneReg == "")
+                    MessageBox.Show("Введите телефон для регистрации!");
                 _nickReg = value;
                 OnPropertyChanged(nameof(NickReg));
             }
@@ -113,6 +118,12 @@ namespace MessengerPigeon
             get { return _passwordReg; }
             set
             {
+                string PASSWORD_PATTERN = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])\S{6,16}$";
+                if (!Regex.IsMatch(value, PASSWORD_PATTERN, RegexOptions.IgnoreCase))
+                {
+                    MessageBox.Show("Пароль не соотвестствует требований!");
+                    value = "";
+                }
                 _passwordReg = value;
                 OnPropertyChanged(nameof(PasswordReg));
             }
@@ -123,6 +134,13 @@ namespace MessengerPigeon
             get { return _passwordTwo; }
             set
             {
+                if(value != _passwordReg)
+                {
+                    MessageBox.Show("Пароли не совпадают!");
+                    value = "";
+                }
+                if (_nickReg == "")
+                    MessageBox.Show("Введите логин для регистрации!");
                 _passwordTwo = value;
                 OnPropertyChanged(nameof(PasswordTwo));
             }
@@ -133,7 +151,13 @@ namespace MessengerPigeon
             get { return _phoneReg; }
             set
             {
+                string pattern = @"^((\+)?\b(8|38)?(0[\d]{2}))([\d-]{5,8})([\d]{2})";
 
+                if (!Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase))
+                {
+                    MessageBox.Show("Вы ввели не корректный номер телефона ! \n Формат номера 0123456789");
+                    value = "";
+                }
                 _phoneReg = value;
                 OnPropertyChanged(nameof(PhoneReg));
             }
@@ -452,22 +476,16 @@ namespace MessengerPigeon
 
         private bool CanReg(object o)
         {
-            //string PASSWORD_PATTERN ="((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})";
-            //if (NickReg == null)
-            //{
-            //    MessageBox.Show("Вы не ввели имя для регистрации! ");
-            //    return false;
-            //}
-            //else if (PasswordReg!=PASSWORD_PATTERN && PasswordReg == null)
-            //{
-            //    MessageBox.Show("Пароль не соответствует требованиям! ");
-            //    return false;
-            //}
-            //else if(PasswordReg != PasswordTwo)
-            //{
-            //    MessageBox.Show("Пароли не совпадают! ");
-            //    return false;
-            //}
+            if (NickReg == null)
+            {
+                MessageBox.Show("Вы не ввели имя для регистрации! ");
+                return false;
+            }
+            else if (PasswordReg != PasswordTwo)
+            {
+                MessageBox.Show("Пароли не совпадают! ");
+                return false;
+            }
             return true;
         }
         //реализация команды регистрации конец
