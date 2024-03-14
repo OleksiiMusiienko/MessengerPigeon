@@ -118,7 +118,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Ellipse Name ="Elips" Width="40" Height="40" Margin="3" Stroke="Blue" StrokeThickness="0.1"  >
+                            <Ellipse Name ="Elips" Width="40" Height="40" Margin="3" Stroke="Blue" StrokeThickness="0.7"  >
                                 <Ellipse.Fill>
                                     <ImageBrush ImageSource="{Binding Avatar}" Stretch="UniformToFill"></ImageBrush>
                                 </Ellipse.Fill>
@@ -198,10 +198,18 @@
                                                     </EventTrigger.Actions>
                                                 </EventTrigger>
                                             </StackPanel.Triggers>
-                                        <Button Name="cmd_play" Visibility="{Binding Path=MesAudio, Converter={StaticResource Converter}}" >Play</Button>
-                                        <Button Name="cmd_stop" Visibility="{Binding Path=MesAudio,Converter={StaticResource Converter}}" >Stop</Button>
-                                        <Button Name="cmd_pause" Visibility="{Binding Path=MesAudio, Converter={StaticResource Converter}}" >Pause</Button>
-                                        <Button Name="cmd_resume" Visibility="{Binding Path=MesAudio,Converter={StaticResource Converter}}" >Resume</Button>
+                                        <Button Name="cmd_play" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio, Converter={StaticResource Converter}}" >
+                                            <Image Source="images/play.png" Width="21" Height="21" Opacity="0.7"></Image>
+                                        </Button>
+                                        <Button Name="cmd_stop" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio,Converter={StaticResource Converter}}" >
+                                            <Image Source="images/stop.png" Width="21" Height="21" Opacity="0.7"></Image>
+                                        </Button>
+                                        <Button Name="cmd_pause" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio, Converter={StaticResource Converter}}" >
+                                            <Image Source="images/pause.png" Width="21" Height="21" Opacity="0.7"></Image>
+                                        </Button>
+                                        <Button Name="cmd_resume" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio,Converter={StaticResource Converter}}" >
+                                            <Image Source="images/resume.png" Width="21" Height="21" Opacity="0.7"></Image>
+                                        </Button>
                                         </StackPanel>                                    
                                 </StackPanel>
                             </Border>
@@ -283,10 +291,10 @@
             </Popup>
 
             <DockPanel Background="Transparent" Margin="0,4,0,4">
-                <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="5" Command="{Binding ButtonSend}" Background="LightGoldenrodYellow" BorderBrush="LightGreen" BorderThickness="5"  IsEnabled="{Binding IsEnableOnline}"  >
-                    <Image Source="images/send.png" Width="30"></Image>
-                </Button>
-                <TextBox FontFamily ="Segoe UI Emoji" FontSize="18" Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Path=Mes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="LightGoldenrodYellow"></TextBox>
+                <Button Name="Send" DockPanel.Dock="Right" Margin="4" Padding="3" Command="{Binding ButtonSend}" Background="Transparent"  BorderThickness="0"  IsEnabled="{Binding IsEnableOnline}"  >
+                    <Image Source="images/send.png" Width="28"></Image>
+                    </Button>
+                    <TextBox FontFamily ="Segoe UI Emoji" FontSize="18" Name="TextBox_Message" DockPanel.Dock="Left" Margin="3" Text="{Binding Path=Mes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="LightGoldenrodYellow"></TextBox>
             </DockPanel>
         </DockPanel>
     </Grid>
