@@ -153,11 +153,13 @@ namespace MessengerPigeon
         WaveIn waveIn;
         WaveFileWriter writer;
         string outputFilename;
+        byte [] buf ;
         private void waveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
             if (writer == null)
                 return;
-            writer.WriteData(e.Buffer, 0, e.BytesRecorded);  
+            writer.WriteData(e.Buffer, 0, e.BytesRecorded);
+            buf = e.Buffer;
             writer.Flush();
         }
                 
@@ -172,7 +174,7 @@ namespace MessengerPigeon
                     flag = true;
                     waveIn = new WaveIn();
                     waveIn.DeviceNumber=0;
-                    outputFilename = /*"../../../"*/ /*+*/ DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss").Trim() + "Audio.wav";
+                    outputFilename = DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss").Trim() + "Audio.wav";
                     waveIn.DataAvailable+= new EventHandler<WaveInEventArgs>(waveIn_DataAvailable);
                     waveIn.WaveFormat = new WaveFormat(44100,WaveIn.GetCapabilities(waveIn.DeviceNumber).Channels);
                     writer = new WaveFileWriter(outputFilename, waveIn.WaveFormat);
@@ -184,7 +186,7 @@ namespace MessengerPigeon
                     MessageBox.Show("Stop recording");
                     flag = false;
                     waveIn.StopRecording();
-                    ((MessengerViewModel)Resources["ViewModel"]).MesAudio = outputFilename;
+                    ((MessengerViewModel)Resources["ViewModel"]).MesAudio = buf;
                     waveIn.Dispose();
                     waveIn = null;
                     writer.Close();
@@ -196,6 +198,5 @@ namespace MessengerPigeon
                 MessageBox.Show("Клиент: " + ex.Message);
             }
         }
-
     }
 }

@@ -167,7 +167,7 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Mes));
             }
         }
-        public string? MesAudio
+        public byte[]? MesAudio
         {
             get { return Message.MesAudio; }
             set
@@ -199,8 +199,6 @@ namespace MessengerPigeon
             }
         }
         
-        //public Visibility IsAudioVisible =>  MesAudio == null?  Visibility.Collapsed : Visibility.Visible; 
-
         private bool _isButtonEnable = true;
         private bool _isButtonEnableOnline;
         private bool _isButtonAuthorization = true;
@@ -369,7 +367,7 @@ namespace MessengerPigeon
                     {
                         if (MesAudio != null)
                         {
-                            mes.Mes = MyUser.Nick + ":" + "   " + Mes + "(vocal message):";
+                            mes.Mes = MyUser.Nick + ":" + "   " + Mes;
                             mes.MesAudio = MesAudio;
                         }
 
