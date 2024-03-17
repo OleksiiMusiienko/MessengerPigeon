@@ -170,7 +170,7 @@
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
                                     <TextBlock FontFamily ="Segoe UI Emoji" FontSize="14" Name ="MesList" Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Medium"  Margin="3,3,6,3" TextWrapping="Wrap"></TextBlock>
 
-                                    <MediaElement MaxWidth= "200" MaxHeight="200"  UnloadedBehavior="Close"  LoadedBehavior="Manual" x:Name ="MyMediaPlayer" ></MediaElement>
+                                    <MediaElement UnloadedBehavior="Close"  LoadedBehavior="Manual" x:Name ="MyMediaPlayer" MediaFailed="MyMediaPlayer_MediaFailed"></MediaElement>
                                         <StackPanel Orientation="Horizontal" >
                                             <StackPanel.Triggers>
                                                 <EventTrigger RoutedEvent="Button.Click" SourceName="cmd_play">
@@ -178,7 +178,7 @@
                                                         <BeginStoryboard Name="MediaStoryboard">
                                                             <Storyboard>
                                                             <MediaTimeline Storyboard.TargetName="MyMediaPlayer" 
-                                       Source="{Binding MesAudio}"></MediaTimeline>
+                                       Source="{Binding MesAudioUri}"></MediaTimeline>
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </EventTrigger.Actions>

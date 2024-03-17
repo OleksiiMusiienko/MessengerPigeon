@@ -200,6 +200,15 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(MesAudio));
             }
         }
+        public string? MesAudioUri
+        {
+            get { return Message.MesAudioUri; }
+            set
+            {
+                Message.MesAudioUri = value;
+                OnPropertyChanged(nameof(MesAudioUri));
+            }
+        }
         private User _userRecepient;
         public User UserRecepient
         {
@@ -393,6 +402,7 @@ namespace MessengerPigeon
                         {
                             mes.Mes = MyUser.Nick + ":" + "   " + Mes;
                             mes.MesAudio = MesAudio;
+                            mes.MesAudioUri = MesAudioUri;
                         }
 
                         else
@@ -412,6 +422,7 @@ namespace MessengerPigeon
                     await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
                     Mes = "";
                     MesAudio = null;
+                    MesAudioUri = null;
                     ReceiveMessage(tcpClientMessage);
                 }
                 catch (Exception ex)
@@ -841,10 +852,10 @@ namespace MessengerPigeon
                 {
                     // Получим объект NetworkStream, используемый для приема и передачи данных.
                     netstreamMessage = tcpClientMessage.GetStream();
-                    byte[] arr = new byte[tcpClientMessage.ReceiveBufferSize];
+                    byte[] arr = new byte[100000000];
                     while (true)
                     {
-                        int len = await netstreamMessage.ReadAsync(arr, 0, tcpClient.ReceiveBufferSize);
+                        int len = await netstreamMessage.ReadAsync(arr, 0, arr.Length);
                         if (len == 0)
                         {
                             netstreamMessage.Close();
@@ -867,6 +878,14 @@ namespace MessengerPigeon
                                 .SetToastScenario(ToastScenario.Default)
                                 .Show();
                             }
+                            foreach (Message mes in res)
+                            {
+                                if (mes.MesAudio != null && mes.MesAudioUri != null)
+                                {
+                                    File.WriteAllBytesAsync(mes.MesAudioUri, mes.MesAudio);
+                                }
+                            }
+
                             Messages = new ObservableCollection<Message>(res);
                         }
                         else
