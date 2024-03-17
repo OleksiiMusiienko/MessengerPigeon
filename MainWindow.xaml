@@ -238,7 +238,7 @@
                     <Button Name="File" DockPanel.Dock ="Right" Margin="3" Background="Transparent" BorderThickness="0">
                         <Image Source="images/filesend.png" Width="25"></Image>
                     </Button>
-                    <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" Click="Voice_Click " Background="Transparent" BorderThickness="0">
+                    <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" PreviewMouseDown="Voice_MouseDown" PreviewMouseUp="Voice_MouseUp" Background="Transparent" BorderThickness="0">
                         <Image Source="images/Studio-mic-icon_30398.png" Width="25"></Image>
                     </Button>
                     <Button UseLayoutRounding="True" Name="Smile" DockPanel.Dock="Left"  Margin="3" Background="Transparent" BorderThickness="0"  Click="Smile_Click" >
