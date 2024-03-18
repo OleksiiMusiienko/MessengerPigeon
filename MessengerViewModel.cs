@@ -104,10 +104,8 @@ namespace MessengerPigeon
             get { return _nickReg; }
             set
             {
-                if(value == "")
+                if(value == "" && !IsEnableOnline)
                     MessageBox.Show("Вы не ввели логин!");
-                if(_phoneReg == "")
-                    MessageBox.Show("Введите телефон для регистрации!");
                 _nickReg = value;
                 OnPropertyChanged(nameof(NickReg));
             }
@@ -119,7 +117,7 @@ namespace MessengerPigeon
             set
             {
                 string PASSWORD_PATTERN = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])\S{6,16}$";
-                if (!Regex.IsMatch(value, PASSWORD_PATTERN, RegexOptions.IgnoreCase))
+                if (!Regex.IsMatch(value, PASSWORD_PATTERN, RegexOptions.IgnoreCase) && !IsEnableOnline)
                 {
                     MessageBox.Show("Пароль не соотвестствует требований!");
                     value = "";
@@ -134,13 +132,15 @@ namespace MessengerPigeon
             get { return _passwordTwo; }
             set
             {
-                if(value != _passwordReg)
+                if(value != _passwordReg && !IsEnableOnline)
                 {
                     MessageBox.Show("Пароли не совпадают!");
                     value = "";
                 }
-                if (_nickReg == "")
+                if (_nickReg == "" && !IsEnableOnline)
                     MessageBox.Show("Введите логин для регистрации!");
+                if (_phoneReg == "" && !IsEnableOnline)
+                    MessageBox.Show("Введите телефон для регистрации!");
                 _passwordTwo = value;
                 OnPropertyChanged(nameof(PasswordTwo));
             }
@@ -153,7 +153,7 @@ namespace MessengerPigeon
             {
                 string pattern = @"^((\+)?\b(8|38)?(0[\d]{2}))([\d-]{5,8})([\d]{2})";
 
-                if (!Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase))
+                if (!Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase) && !IsEnableOnline)
                 {
                     MessageBox.Show("Вы ввели не корректный номер телефона ! \n Формат номера 0123456789");
                     value = "";
