@@ -785,10 +785,9 @@ namespace MessengerPigeon
                         {
                             List<User> list = new List<User>();
                             list = res.list;
-                            IPAddress address = Dns.GetHostAddresses(Dns.GetHostName()).First<IPAddress>(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
                             foreach (var user in list)
                             {
-                                if (user.IPadress == address.ToString())
+                                if(user.Nick == NickReg && user.Password == PasswordReg)
                                 {
                                     MyUser = user;
                                     IsEnableOnline = true;
