@@ -28,17 +28,24 @@
             </LinearGradientBrush>
         </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="93*" ></RowDefinition>
-            <RowDefinition Height ="28*"></RowDefinition>
-            <RowDefinition Height="191*"/>
-            <RowDefinition Height ="55*"></RowDefinition>
+            <RowDefinition Height="1*" ></RowDefinition>
+            <RowDefinition Height ="0.2*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.8*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="0.4*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Border BorderBrush="SteelBlue" BorderThickness="1" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5" Padding ="4" CornerRadius="5">
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.5*" ></RowDefinition>
+                <RowDefinition Height ="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.8*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" BorderBrush="SteelBlue" BorderThickness="1" Margin="5,5,5,5" Padding ="4" CornerRadius="5">
             <DockPanel Name="DockPanel_1" Margin="15,2,2,2">
                 <Ellipse  DockPanel.Dock="Left"  Width="150" Height="150" Margin="3" Stroke="Blue"  >
                     <Ellipse.Fill>
@@ -77,7 +84,7 @@
                 </Popup>
             </DockPanel>
         </Border>
-        <DockPanel Name="WrapPanel_1" Grid.Column="2" Margin="5,5,5,5" IsEnabled="{Binding IsEnable}">
+                <DockPanel Grid.Column="1" Name="WrapPanel_1" Margin="5,5,5,5" IsEnabled="{Binding IsEnable}">
             <Expander HorizontalAlignment="Center"  Header="Log in" ExpandDirection="Down" IsExpanded="{Binding IsEnabledAuthorization}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <DockPanel Margin="5">
@@ -113,7 +120,92 @@
                 </StackPanel>
             </Expander>
         </DockPanel>
-        <DockPanel Name="DockPanel_2" Grid.RowSpan="3" LastChildFill="True">
+        </Grid>
+            <DockPanel Name="DockPanel_3"  Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Row="1" Grid.Column="1">
+    <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="4,2,4,2" CornerRadius="5">
+        <StackPanel Orientation="Horizontal">
+            <Ellipse Width="40" Height="40" Margin="3" Stroke="Blue"  >
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="{Binding UserRecepient.Avatar, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"></ImageBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
+            <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
+        </StackPanel>
+    </Border>
+
+    <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" IsSynchronizedWithCurrentItem = "true" BorderBrush="SteelBlue"
+             Margin="5" HorizontalContentAlignment="Left" SelectedItem="{Binding SelectedMessage}"  >
+        <ListBox.ContextMenu>
+            <ContextMenu>
+                <MenuItem Foreground="SteelBlue" Header="Edit message" Command="{Binding  ButtonEditMessage}"></MenuItem>
+                <MenuItem Foreground="SteelBlue" Header="Delete message" Command="{Binding  ButtonRemoveMessage}" ></MenuItem>
+                <MenuItem Foreground="SteelBlue" Header="Delete message history" Command="{Binding  ButtonRemoveAllMessages}" ></MenuItem>
+            </ContextMenu>
+        </ListBox.ContextMenu>
+
+        <ListBox.Background>
+            <ImageBrush Opacity="0.8" ImageSource="images/wallpaper.jpg"></ImageBrush>
+        </ListBox.Background>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <StackPanel>
+                    <Border HorizontalAlignment="Stretch" Background="LightGoldenrodYellow"  BorderBrush="SteelBlue" BorderThickness="1" Margin="2" Padding="8" CornerRadius="20,20,20,1" Width="auto" Height="auto" >
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                            <TextBlock FontFamily ="Segoe UI Emoji" FontSize="14" Name ="MesList" Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Medium"  Margin="3,3,6,3" TextWrapping="Wrap"></TextBlock>
+
+                            <MediaElement UnloadedBehavior="Close"  LoadedBehavior="Manual" x:Name ="MyMediaPlayer" MediaFailed="MyMediaPlayer_MediaFailed"></MediaElement>
+                                <StackPanel Orientation="Horizontal" >
+                                    <StackPanel.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click" SourceName="cmd_play">
+                                            <EventTrigger.Actions>
+                                                <BeginStoryboard Name="MediaStoryboard">
+                                                    <Storyboard>
+                                                    <MediaTimeline Storyboard.TargetName="MyMediaPlayer" 
+                               Source="{Binding MesAudioUri}"></MediaTimeline>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="Button.Click" SourceName="cmd_stop">
+                                            <EventTrigger.Actions>
+                                                <StopStoryboard BeginStoryboardName="MediaStoryboard"></StopStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="Button.Click" SourceName="cmd_pause">
+                                            <EventTrigger.Actions>
+                                                <PauseStoryboard BeginStoryboardName="MediaStoryboard"></PauseStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="Button.Click" SourceName="cmd_resume">
+                                            <EventTrigger.Actions>
+                                                <ResumeStoryboard BeginStoryboardName="MediaStoryboard"></ResumeStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                    </StackPanel.Triggers>
+                                <Button Name="cmd_play" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio, Converter={StaticResource Converter}}" >
+                                    <Image Source="images/play.png" Width="21" Height="21" Opacity="0.7"></Image>
+                                </Button>
+                                <Button Name="cmd_stop" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio,Converter={StaticResource Converter}}" >
+                                    <Image Source="images/stop.png" Width="21" Height="21" Opacity="0.7"></Image>
+                                </Button>
+                                <Button Name="cmd_pause" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio, Converter={StaticResource Converter}}" >
+                                    <Image Source="images/pause.png" Width="21" Height="21" Opacity="0.7"></Image>
+                                </Button>
+                                <Button Name="cmd_resume" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio,Converter={StaticResource Converter}}" >
+                                    <Image Source="images/resume.png" Width="21" Height="21" Opacity="0.7"></Image>
+                                </Button>
+                                </StackPanel>                                    
+                        </StackPanel>
+                    </Border>
+                    <TextBlock  Text= "{Binding Date_Time}" Foreground="WhiteSmoke" FontSize="8" VerticalAlignment="Center" Margin="3" HorizontalAlignment="Right"></TextBlock>
+                </StackPanel>                        
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</DockPanel >
+        </Grid>
+        <DockPanel Name="DockPanel_2"  LastChildFill="True">
             <ListBox Name="ListBoxUsers" SelectedItem="{Binding UserRecepient}" HorizontalAlignment="Stretch" BorderBrush="SteelBlue"
                        Margin="4"  ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" Background="Transparent">
                 <ListBox.ItemTemplate>
@@ -137,102 +229,16 @@
             </ListBox>
 
         </DockPanel>
-        <DockPanel Name="DockPanel_3"  Grid.ColumnSpan="3" Margin="257,186,0,0" Grid.RowSpan="3">
-            <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="4,2,4,2" CornerRadius="5">
-                <StackPanel Orientation="Horizontal">
-                    <Ellipse Width="40" Height="40" Margin="3" Stroke="Blue"  >
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding UserRecepient.Avatar, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"></ImageBrush>
-                        </Ellipse.Fill>
-                    </Ellipse>
-                    <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
-                    <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
-                </StackPanel>
-            </Border>
 
-            <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" IsSynchronizedWithCurrentItem = "true" BorderBrush="SteelBlue"
-                     Margin="5" HorizontalContentAlignment="Left" SelectedItem="{Binding SelectedMessage}"  >
-                <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Foreground="SteelBlue" Header="Edit message" Command="{Binding  ButtonEditMessage}"></MenuItem>
-                        <MenuItem Foreground="SteelBlue" Header="Delete message" Command="{Binding  ButtonRemoveMessage}" ></MenuItem>
-                        <MenuItem Foreground="SteelBlue" Header="Delete message history" Command="{Binding  ButtonRemoveAllMessages}" ></MenuItem>
-                    </ContextMenu>
-                </ListBox.ContextMenu>
-
-                <ListBox.Background>
-                    <ImageBrush Opacity="0.8" ImageSource="images/wallpaper.jpg"></ImageBrush>
-                </ListBox.Background>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <Border HorizontalAlignment="Stretch" Background="LightGoldenrodYellow"  BorderBrush="SteelBlue" BorderThickness="1" Margin="2" Padding="8" CornerRadius="20,20,20,1" Width="auto" Height="auto" >
-                                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-                                    <TextBlock FontFamily ="Segoe UI Emoji" FontSize="14" Name ="MesList" Text="{Binding Mes}" VerticalAlignment="Center" FontWeight="Medium"  Margin="3,3,6,3" TextWrapping="Wrap"></TextBlock>
-
-                                    <MediaElement UnloadedBehavior="Close"  LoadedBehavior="Manual" x:Name ="MyMediaPlayer" MediaFailed="MyMediaPlayer_MediaFailed"></MediaElement>
-                                        <StackPanel Orientation="Horizontal" >
-                                            <StackPanel.Triggers>
-                                                <EventTrigger RoutedEvent="Button.Click" SourceName="cmd_play">
-                                                    <EventTrigger.Actions>
-                                                        <BeginStoryboard Name="MediaStoryboard">
-                                                            <Storyboard>
-                                                            <MediaTimeline Storyboard.TargetName="MyMediaPlayer" 
-                                       Source="{Binding MesAudioUri}"></MediaTimeline>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </EventTrigger.Actions>
-                                                </EventTrigger>
-                                                <EventTrigger RoutedEvent="Button.Click" SourceName="cmd_stop">
-                                                    <EventTrigger.Actions>
-                                                        <StopStoryboard BeginStoryboardName="MediaStoryboard"></StopStoryboard>
-                                                    </EventTrigger.Actions>
-                                                </EventTrigger>
-                                                <EventTrigger RoutedEvent="Button.Click" SourceName="cmd_pause">
-                                                    <EventTrigger.Actions>
-                                                        <PauseStoryboard BeginStoryboardName="MediaStoryboard"></PauseStoryboard>
-                                                    </EventTrigger.Actions>
-                                                </EventTrigger>
-                                                <EventTrigger RoutedEvent="Button.Click" SourceName="cmd_resume">
-                                                    <EventTrigger.Actions>
-                                                        <ResumeStoryboard BeginStoryboardName="MediaStoryboard"></ResumeStoryboard>
-                                                    </EventTrigger.Actions>
-                                                </EventTrigger>
-                                            </StackPanel.Triggers>
-                                        <Button Name="cmd_play" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio, Converter={StaticResource Converter}}" >
-                                            <Image Source="images/play.png" Width="21" Height="21" Opacity="0.7"></Image>
-                                        </Button>
-                                        <Button Name="cmd_stop" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio,Converter={StaticResource Converter}}" >
-                                            <Image Source="images/stop.png" Width="21" Height="21" Opacity="0.7"></Image>
-                                        </Button>
-                                        <Button Name="cmd_pause" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio, Converter={StaticResource Converter}}" >
-                                            <Image Source="images/pause.png" Width="21" Height="21" Opacity="0.7"></Image>
-                                        </Button>
-                                        <Button Name="cmd_resume" Margin="2" Background="Transparent" BorderThickness="0" Visibility="{Binding Path=MesAudio,Converter={StaticResource Converter}}" >
-                                            <Image Source="images/resume.png" Width="21" Height="21" Opacity="0.7"></Image>
-                                        </Button>
-                                        </StackPanel>                                    
-                                </StackPanel>
-                            </Border>
-                            <TextBlock  Text= "{Binding Date_Time}" Foreground="WhiteSmoke" FontSize="8" VerticalAlignment="Center" Margin="3" HorizontalAlignment="Right"></TextBlock>
-                        </StackPanel>                        
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </DockPanel >
-        <DockPanel Name="DockPanel_4" Grid.Row="3" Margin="4,4,4,4" >
-            <Border DockPanel.Dock="Top" Background="Transparent">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5">Add a friend</TextBlock>
-            </Border>
+        <DockPanel Name="DockPanel_4" Grid.Row="1" Margin="4,4,4,4" >
             <StackPanel DockPanel.Dock="Bottom">
                 <Button Template="{StaticResource GradientButtonTemplate}" Name="Scan" Content="Search" Command="{Binding ButtonSearch}"  IsEnabled="{Binding IsEnableOnline}" ></Button>
-                <Button Template="{StaticResource GradientButtonTemplate}" Name="Delete"  IsEnabled="{Binding IsEnableOnline}" >Remove</Button>
             </StackPanel>
             <Border BorderBrush="SteelBlue" BorderThickness="1" CornerRadius="5">
                 <TextBox Name="TextBox_AddFriend"  DockPanel.Dock="Top" Background="Transparent" Text="{Binding _search}" Margin="0,2,0,2" BorderThickness="0" VerticalContentAlignment="Center"></TextBox>
             </Border>
         </DockPanel>
-        <DockPanel Name="DockPanel_5"  Grid.ColumnSpan="3"  Grid.Row="2" Margin="257,382,0,0" Grid.RowSpan="2">
+        <DockPanel Name="DockPanel_5"  Grid.Column="1"  Grid.Row="1" >
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="4,4,4,2" CornerRadius="5">
                 <DockPanel  Background="Transparent">
                     <Button Name="File" DockPanel.Dock ="Right" Margin="3" Background="Transparent" BorderThickness="0">
