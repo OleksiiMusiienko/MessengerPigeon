@@ -14,9 +14,19 @@
             </ResourceDictionary.MergedDictionaries>
             <local:MessengerViewModel x:Key="ViewModel"/>
             <local:Converter x:Key="Converter"/>
+            <Style TargetType="ToolTip">
+                <Setter Property = "HorizontalOffset" Value="10"/>
+                <Setter Property = "VerticalOffset" Value="10"/>
+                <Setter Property = "Background" Value="LightGoldenrodYellow"/>
+                <Setter Property = "Foreground" Value="#3aa288"/>
+                <Setter Property = "FontSize" Value="13"/>
+                <Setter Property = "FontWeight" Value="DemiBold"/>
+                
+            </Style>
         </ResourceDictionary>
 
     </Window.Resources>
+    
     <Grid DataContext="{StaticResource ViewModel}">
         <Grid.Background>
             <LinearGradientBrush>
@@ -84,7 +94,7 @@
                 </Popup>
             </DockPanel>
         </Border>
-                <DockPanel Grid.Column="1" Name="WrapPanel_1" Margin="5,5,5,5" IsEnabled="{Binding IsEnable}">
+                <DockPanel Grid.Column="1" Name="WrapPanel_1" Margin="10,5,5,5" IsEnabled="{Binding IsEnable}">
             <Expander HorizontalAlignment="Center"  Header="Log in" ExpandDirection="Down" IsExpanded="{Binding IsEnabledAuthorization}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <DockPanel Margin="5">
@@ -101,20 +111,21 @@
             <Expander HorizontalAlignment="Center"  Header="Sign in" ExpandDirection="Down" IsExpanded="{Binding IsEnabledRegistration}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <DockPanel Margin="3">
-                        <Label Padding="4 4 20 4" >Phone :</Label>
-                        <TextBox Padding="4" MinWidth="100" Height ="23" Text="{Binding PhoneReg}" ToolTip="Введите телефон в формате : 0991234567"></TextBox>
+                                <Label Padding="4 4 20 4" ToolTip="Введите телефон в формате : 0991234567">Phone :</Label>
+                                <TextBox Padding="4" MinWidth="100" Height ="23" Text="{Binding PhoneReg}" ToolTip="Введите телефон в формате : 0991234567" > </TextBox>
                     </DockPanel>
                     <DockPanel Margin="3">
                         <Label Padding="4">NikName :</Label>
                         <TextBox Padding="4" MinWidth="100" Height ="23"  Text="{Binding NickReg}"></TextBox>
                     </DockPanel>
                     <DockPanel Margin="3">
-                        <Label Padding="4">Password :</Label>
-                        <TextBox Padding="4" MinWidth="100" Height ="23" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите пороль от 6 символов с использованием цифр, спец. символов, латиницы, наличием строчных и прописных символов." ></TextBox>
+                                <Label Padding="4" ToolTip="Введите пороль от 6 символов (цифра, спец. символов, наличием строчных и прописных символов.)">Password :</Label>
+                                <TextBox Padding="4" MinWidth="100" Height ="23" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}"
+                                         ToolTip="Введите пороль от 6 символов (цифра, спец. символов, наличием строчных и прописных символов.)" ></TextBox>
                     </DockPanel>
                     <DockPanel Margin="3">
-                        <Label Padding="4">Password :</Label>
-                        <TextBox Padding="4" MinWidth="100" Height ="23"  Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Повторите пороль" ></TextBox>
+                                <Label Padding="4"  ToolTip="Повторите пороль">Password :</Label>
+                                <TextBox Padding="4" MinWidth="100" Height ="23"  Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Повторите пороль" ></TextBox>
                     </DockPanel>
                     <Button Template="{StaticResource GradientButtonTemplate}" FontWeight="Bold" Padding="4" Command="{Binding ButtonReg}">Sign in</Button>
                 </StackPanel>
