@@ -62,6 +62,9 @@
     <Resource Include="images\cross-finger.png" />
     <Resource Include="images\filesend.png" />
     <Resource Include="images\happy.png" />
+    <Resource Include="images\icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="images\love.png" />
     <Resource Include="images\maloik.png" />
     <Resource Include="images\pause.png" />
