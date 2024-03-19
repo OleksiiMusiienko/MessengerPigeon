@@ -29,6 +29,7 @@ using NAudio.Wave;
 using NAudio.CoreAudioApi;
 using NAudio.FileFormats;
 using System.Text.RegularExpressions;
+using NAudio.Utils;
 
 namespace MessengerPigeon
 {
@@ -796,7 +797,7 @@ namespace MessengerPigeon
                                     break;
                                 }
                             }
-                            Users = new ObservableCollection<User>(list);                            
+                            Users = new ObservableCollection<User>(list);
                             Nick = NickReg;
                             Password = PasswordReg;
                             Avatar = myUser.Avatar;
@@ -881,11 +882,11 @@ namespace MessengerPigeon
                             {
                                 if (mes.MesAudio != null && mes.MesAudioUri != null)
                                 {
-                                    File.WriteAllBytesAsync(mes.MesAudioUri, mes.MesAudio);
+                                    await File.WriteAllBytesAsync(mes.MesAudioUri, mes.MesAudio);
                                 }
                             }
 
-                            Messages = new ObservableCollection<Message>(res);
+                            Messages = new ObservableCollection<Message>(res);                           
                         }
                         else
                         {
@@ -899,12 +900,16 @@ namespace MessengerPigeon
                         stream.Close();
                     }
                 }
+                catch (SerializationException e)
+                {
+                    HistoryMessages();
+                }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Клиент: " + ex.Message);
                     netstreamMessage?.Close();
                     tcpClientMessage?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
-                }
+                }                
             });
         }
 
