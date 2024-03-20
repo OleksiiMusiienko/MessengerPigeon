@@ -670,7 +670,7 @@ namespace MessengerPigeon
                 {
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
-                    wrapper.commands = Wrapper.Commands.Exit;
+                    wrapper.commands = Wrapper.Commands.ExitOnline;
                     MyUser.Online = false;
                     wrapper.user = MyUser;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
@@ -684,8 +684,7 @@ namespace MessengerPigeon
                     var jsonFormatter1 = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter1.WriteObject(stream1, mes1);
                     byte[] msg1 = stream1.ToArray();
-                    await netstreamMessage.WriteAsync(msg1, 0, msg1.Length); // записываем данные в NetworkStream.
-                                        
+                    await netstreamMessage.WriteAsync(msg1, 0, msg1.Length); // записываем данные в NetworkStream.         
                 }
                 catch (Exception ex)
                 {
@@ -806,7 +805,7 @@ namespace MessengerPigeon
                             PasswordTwo = "";
                             PhoneReg = "";
                         }
-                        else if (res.command == "Exit")
+                        else if (res.command == "ExitOnline")
                         {
                             MyUser.Avatar = null;
                             MyUser = null;
@@ -841,6 +840,11 @@ namespace MessengerPigeon
                     MessageBox.Show("Клиент: " + ex.Message);
                     netstream?.Close();
                     tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
+                }
+                finally
+                {
+                    netstream?.Close();
+                    tcpClient?.Close();
                 }
             });
         }
@@ -891,10 +895,6 @@ namespace MessengerPigeon
                         else
                         {
                             Messages = null;
-                            //UserRecepient = null;
-                            //IsEnableOnline = false;
-                            IsEnable = true;
-                            return;
                         }
 
                         stream.Close();
