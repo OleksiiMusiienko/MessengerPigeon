@@ -173,7 +173,7 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Avatar));
             }
         }
-        public DateTime Date_Time
+        public string Date_Time
         {
             get { return Message.Date_Time; }
             set
@@ -411,7 +411,7 @@ namespace MessengerPigeon
                             mes.Mes = MyUser.Nick + ":" + "   " + Mes;
                         }
                                               
-                        mes.Date_Time = DateTime.Now;
+                        mes.Date_Time = DateTime.Now.ToString();
                         mes.UserSenderId = myUser.Id;
                         mes.UserRecepientId = UserRecepient.Id;
                     }
@@ -680,7 +680,7 @@ namespace MessengerPigeon
 
                     MemoryStream stream1 = new MemoryStream();
                     Message mes1 = new Message();
-                    mes1.Date_Time = DateTime.Now;
+                    mes1.Date_Time = DateTime.Now.ToString();
                     var jsonFormatter1 = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter1.WriteObject(stream1, mes1);
                     byte[] msg1 = stream1.ToArray();
@@ -921,7 +921,7 @@ namespace MessengerPigeon
                 try
                 {
                     MemoryStream stream = new MemoryStream();
-                    Date_Time = DateTime.Now;
+                    Date_Time = DateTime.Now.ToString();
                     Message mes = new Message("", Date_Time);
                     mes.UserSenderId = myUser.Id;
                     mes.UserRecepientId = UserRecepient.Id;
