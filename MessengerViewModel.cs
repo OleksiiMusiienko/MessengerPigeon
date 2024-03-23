@@ -936,7 +936,7 @@ namespace MessengerPigeon
                 try
                 {
                     MemoryStream stream = new MemoryStream();
-                    Date_Time = DateTime.Now.ToString();
+                    Date_Time = DateTime.Now;
                     Message mes = new Message("Repeat", Date_Time);
                     mes.UserSenderId = myUser.Id;
                     mes.UserRecepientId = UserRecepient.Id;
