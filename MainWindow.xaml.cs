@@ -20,6 +20,9 @@ using NAudio;
 using System.Runtime.Serialization.Json;
 using MessengerModel;
 using NAudio.Utils;
+using System.Drawing.Printing;
+using System.Printing;
+//using System.Windows.Forms;
 
 namespace MessengerPigeon
 {
@@ -239,6 +242,30 @@ namespace MessengerPigeon
                 hr = e.ErrorException.Message.Substring(tokenPos +token.Length, hrLength);
             }
             return hr;
-        }       
+        }
+
+        private void Print_Click(object sender, RoutedEventArgs e)
+        {
+            List<Message> messages = ((MessengerViewModel)Resources["ViewModel"]).Messages.ToList();
+            PrintDialog printDialog = new PrintDialog();
+            printDialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
+            TextBox text_box = new TextBox();
+            Message m = new Message();
+            Message m2 = new Message();
+            Message m3 = new Message();
+            m.Mes = "Привет";
+            m2.Mes = "Это печать";
+            m3.Mes = "Ура получилось!";
+            messages.Add(m); messages.Add(m2); messages.Add(m3);
+            if (printDialog.ShowDialog() == true)
+            {                
+                foreach(Message message in messages) 
+                {
+                    text_box.Text += message.Mes + "\n\n"; 
+                }                
+                printDialog.PrintVisual(text_box, "Печать");
+            }
+        }
+       
     }
 }

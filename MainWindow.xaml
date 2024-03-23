@@ -142,7 +142,10 @@
             </Ellipse>
             <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
             <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
-        </StackPanel>
+                        <Button Name="Print" DockPanel.Dock ="Right" Margin="3" Background="Transparent" BorderThickness="0" Click="Print_Click">
+                            <Image Source="images/print.png" Width="25"/>
+                        </Button>
+                    </StackPanel>
     </Border>
 
     <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" IsSynchronizedWithCurrentItem = "true" BorderBrush="SteelBlue"
