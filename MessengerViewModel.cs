@@ -1,34 +1,16 @@
-﻿using Azure.Core;
-using CommandDLL;
+﻿using CommandDLL;
 using MessengerModel;
 using MessengerPigeon.Command;
-using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
-using System.Runtime.Intrinsics.X86;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Xml.Serialization;
-using static System.Net.Mime.MediaTypeNames;
-using Microsoft.Toolkit.Uwp.Notifications;
-using NAudio;
-using NAudio.Wave;
-using NAudio.CoreAudioApi;
-using NAudio.FileFormats;
 using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Input;
 
 namespace MessengerPigeon
 {
@@ -43,7 +25,8 @@ namespace MessengerPigeon
         public MessengerViewModel()
         {
             User = new User();
-            Message = new Message();           
+            Message = new Message();
+            cipher = new CaesarCipher();
         }
         private User User;
         private User myUser;
@@ -231,7 +214,8 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(SelectedMessage));
             }
         }
-        
+        CaesarCipher cipher;
+
         private bool _isButtonEnable = true;
         private bool _isButtonEnableOnline;
         private bool _isButtonAuthorization = true;
@@ -393,7 +377,7 @@ namespace MessengerPigeon
                         mes.UserSenderId = SelectedMessage.UserSenderId;
                         mes.UserRecepientId = SelectedMessage.UserRecepientId;
                         mes.Date_Time = SelectedMessage.Date_Time;
-                        mes.Mes = MyUser.Nick + ":" + "   " + Mes;
+                        mes.Mes = cipher.Encrypt(MyUser.Nick + ":" + "   " + Mes);
                         isEditMessage = false;
                     }
                     else
@@ -414,7 +398,7 @@ namespace MessengerPigeon
                         mes.UserSenderId = myUser.Id;
                         mes.UserRecepientId = UserRecepient.Id;
                     }
-                    MemoryStream stream = new MemoryStream();        
+                    MemoryStream stream = new MemoryStream();       
                     
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter.WriteObject(stream, mes);
@@ -467,6 +451,7 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Registratioin;
+                    //PasswordReg = cipher.Encrypt(PasswordReg);
                     User us = new User(NickReg, PasswordReg,null,null, PhoneReg);
                     us.Online = true;
                     wrapper.user = us;
@@ -527,7 +512,7 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Authorization;
-                    User us = new User(NickReg, PasswordReg, null, null, PhoneReg);
+                    User us = new User(NickReg, cipher.Encrypt(PasswordReg), null, null, PhoneReg);
                     us.Online = true;
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
@@ -883,7 +868,8 @@ namespace MessengerPigeon
                                 {
                                     File.WriteAllBytesAsync(mes.MesAudioUri, mes.MesAudio);
                                 }
-                            }
+                                mes.Mes = cipher.Decrypt(mes.Mes);
+                            }                 
 
                             Messages = new ObservableCollection<Message>(res);
                         }
