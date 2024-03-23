@@ -257,6 +257,10 @@ namespace MessengerPigeon
             }
             set
             {
+                if(value == true)
+                {
+                    ConnectionForMessage();
+                }
                 _isButtonEnableOnline = value;
                 OnPropertyChanged(nameof(IsEnableOnline));
             }
@@ -477,7 +481,6 @@ namespace MessengerPigeon
                     await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
                     myUser = new User();
                     Receive(tcpClient);
-                    ConnectionForMessage();// отдельное подключение для сообщений
                 }
                 catch (Exception ex)
                 {
@@ -538,7 +541,6 @@ namespace MessengerPigeon
                     myUser = new User();
 
                     Receive(tcpClient);
-                    ConnectionForMessage();// отдельное подключение для сообщений
                 }
                 catch (Exception ex)
                 {
@@ -787,7 +789,8 @@ namespace MessengerPigeon
                             list = res.list;
                             foreach (var user in list)
                             {
-                                if(user.Nick == NickReg && user.Password == PasswordReg)
+                                if(user.Nick == NickReg && user.Password == PasswordReg ||
+                                user.Nick == MyUser.Nick && user.Password == MyUser.Password)
                                 {
                                     MyUser = user;
                                     IsEnableOnline = true;
@@ -828,9 +831,6 @@ namespace MessengerPigeon
                         else
                         {
                             MessageBox.Show(res.command);
-                            NickReg = "";
-                            PasswordReg = "";
-                            PasswordTwo = "";
                         }
                         stream.Close();
                     }
@@ -841,11 +841,11 @@ namespace MessengerPigeon
                     netstream?.Close();
                     tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
                 }
-                finally
-                {
-                    netstream?.Close();
-                    tcpClient?.Close();
-                }
+                //finally
+                //{
+                //    netstream?.Close();
+                //    tcpClient?.Close();
+                //}
             });
         }
         private async void ReceiveMessage(TcpClient tcpClientMessage)
@@ -857,6 +857,10 @@ namespace MessengerPigeon
                     // Получим объект NetworkStream, используемый для приема и передачи данных.
                     netstreamMessage = tcpClientMessage.GetStream();
                     byte[] arr = new byte[100000000];
+                    byte[] arrbuf = null;
+                    int length = 0;
+                    int buf_len = 0;
+                    List<Message> res = null;
                     while (true)
                     {
                         int len = await netstreamMessage.ReadAsync(arr, 0, arr.Length);
@@ -870,39 +874,52 @@ namespace MessengerPigeon
                         byte[] copy = new byte[len];
                         Array.Copy(arr, 0, copy, 0, len);
                         MemoryStream stream = new MemoryStream(copy);
-                        var jsonFormatter = new DataContractJsonSerializer(typeof(List<Message>));
-                        List<Message> res = jsonFormatter.ReadObject(stream) as List<Message>;
-                        if (res.Count != 0)
+                        if (copy.Length == 7)
                         {
-                            if (res[res.Count-1].UserSenderId != myUser.Id)
+                            var jsonFormatter1 = new DataContractJsonSerializer(typeof(object));
+                            length = (int)jsonFormatter1.ReadObject(stream);
+                            RepeatHistoryMessages();
+                            arrbuf = new byte[length];
+                        }
+                        else if (len <= length)
+                        {
+                            Array.Copy(copy, 0, arrbuf, buf_len, copy.Length);
+                            length -= len;
+                            buf_len += len;
+                            if (length == 0)
                             {
-                                new ToastContentBuilder().AddText(res[res.Count-1].Mes)
-                                .AddText(res[res.Count-1].Date_Time.ToString())
-                                .SetToastDuration(ToastDuration.Short)
-                                .SetToastScenario(ToastScenario.Default)
-                                .Show();
-                            }
-                            foreach (Message mes in res)
-                            {
-                                if (mes.MesAudio != null && mes.MesAudioUri != null)
+                                MemoryStream streambuf = new MemoryStream(arrbuf);
+                                var jsonFormatter = new DataContractJsonSerializer(typeof(List<Message>));
+                                res = jsonFormatter.ReadObject(streambuf) as List<Message>;
+                                if (res.Count != 0)
                                 {
-                                    await File.WriteAllBytesAsync(mes.MesAudioUri, mes.MesAudio);
+                                    if (res[res.Count - 1].UserSenderId != myUser.Id)
+                                    {
+                                        new ToastContentBuilder().AddText(res[res.Count - 1].Mes)
+                                        .AddText(res[res.Count - 1].Date_Time.ToString())
+                                        .SetToastDuration(ToastDuration.Short)
+                                        .SetToastScenario(ToastScenario.Default)
+                                        .Show();
+                                    }
+                                    foreach (Message mes in res)
+                                    {
+                                        if (mes.MesAudio != null && mes.MesAudioUri != null)
+                                        {
+                                            await File.WriteAllBytesAsync(mes.MesAudioUri, mes.MesAudio);
+                                        }
+                                    }
+
+                                    Messages = new ObservableCollection<Message>(res);
                                 }
+                                else
+                                {
+                                    Messages = null;
+                                }
+                                streambuf.Close();
                             }
-
-                            Messages = new ObservableCollection<Message>(res);                           
+                            stream.Close();
                         }
-                        else
-                        {
-                            Messages = null;
-                        }
-
-                        stream.Close();
                     }
-                }
-                catch (SerializationException e)
-                {
-                    HistoryMessages();
                 }
                 catch (Exception ex)
                 {
@@ -910,6 +927,30 @@ namespace MessengerPigeon
                     netstreamMessage?.Close();
                     tcpClientMessage?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
                 }                
+            });
+        }
+        private async void RepeatHistoryMessages()
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    MemoryStream stream = new MemoryStream();
+                    Date_Time = DateTime.Now.ToString();
+                    Message mes = new Message("Repeat", Date_Time);
+                    mes.UserSenderId = myUser.Id;
+                    mes.UserRecepientId = UserRecepient.Id;
+                    var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
+                    jsonFormatter.WriteObject(stream, mes);
+                    byte[] msg = stream.ToArray();
+                    await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
+                    stream.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Клиент: " + ex.Message);
+                }
             });
         }
 
@@ -931,6 +972,7 @@ namespace MessengerPigeon
                     await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
 
                     ReceiveMessage(tcpClientMessage);
+                    stream.Close();
                 }
                 catch (Exception ex)
                 {
