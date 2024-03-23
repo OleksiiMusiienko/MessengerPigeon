@@ -249,14 +249,7 @@ namespace MessengerPigeon
             List<Message> messages = ((MessengerViewModel)Resources["ViewModel"]).Messages.ToList();
             PrintDialog printDialog = new PrintDialog();
             printDialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
-            TextBox text_box = new TextBox();
-            Message m = new Message();
-            Message m2 = new Message();
-            Message m3 = new Message();
-            m.Mes = "Привет";
-            m2.Mes = "Это печать";
-            m3.Mes = "Ура получилось!";
-            messages.Add(m); messages.Add(m2); messages.Add(m3);
+            TextBox text_box = new TextBox(); 
             if (printDialog.ShowDialog() == true)
             {                
                 foreach(Message message in messages) 
