@@ -906,6 +906,7 @@ namespace MessengerPigeon
                                         {
                                             await File.WriteAllBytesAsync(mes.MesAudioUri, mes.MesAudio);
                                         }
+                                        mes.Mes = cipher.Decrypt(mes.Mes);
                                     }
 
                                     Messages = new ObservableCollection<Message>(res);
