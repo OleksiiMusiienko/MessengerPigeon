@@ -41,10 +41,12 @@ namespace MessengerPigeon
         public TcpClient tcpClientMessage;
         public NetworkStream netstreamMessage;
         public bool isEditMessage;
+        public CaesarCipher cipher;
         public MessengerViewModel()
         {
             User = new User();
-            Message = new Message();           
+            Message = new Message();
+            cipher = new CaesarCipher();
         }
         private User User;
         private User myUser;
@@ -173,7 +175,7 @@ namespace MessengerPigeon
                 OnPropertyChanged(nameof(Avatar));
             }
         }
-        public string Date_Time
+        public DateTime Date_Time
         {
             get { return Message.Date_Time; }
             set
@@ -384,7 +386,7 @@ namespace MessengerPigeon
             }
             });
         }
-    private async void Send(object o)
+        private async void Send(object o)
         {
             await Task.Run(async () =>
             {
@@ -398,29 +400,26 @@ namespace MessengerPigeon
                         mes.UserSenderId = SelectedMessage.UserSenderId;
                         mes.UserRecepientId = SelectedMessage.UserRecepientId;
                         mes.Date_Time = SelectedMessage.Date_Time;
-                        mes.Mes = MyUser.Nick + ":" + "   " + Mes;
+                        mes.Mes = cipher.Encrypt(MyUser.Nick + ":" + "   " + Mes); // шифровка сообщения
                         isEditMessage = false;
                     }
                     else
                     {
                         if (MesAudio != null)
                         {
-                            mes.Mes = MyUser.Nick + ":" + "   " + Mes;
+                            mes.Mes = cipher.Encrypt(MyUser.Nick + ":" + "   " + Mes);// шифровка сообщения
                             mes.MesAudio = MesAudio;
                             mes.MesAudioUri = MesAudioUri;
                         }
-
                         else
                         {
-                            mes.Mes = MyUser.Nick + ":" + "   " + Mes;
-                        }
-                                              
-                        mes.Date_Time = DateTime.Now.ToString();
+                            mes.Mes = cipher.Encrypt(MyUser.Nick + ":" + "   " + Mes); // шифровка сообщения
+                        }                                              
+                        mes.Date_Time = DateTime.Now;
                         mes.UserSenderId = myUser.Id;
                         mes.UserRecepientId = UserRecepient.Id;
                     }
-                    MemoryStream stream = new MemoryStream();        
-                    
+                    MemoryStream stream = new MemoryStream();                        
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter.WriteObject(stream, mes);
                     byte[] msg = stream.ToArray();
@@ -682,7 +681,7 @@ namespace MessengerPigeon
 
                     MemoryStream stream1 = new MemoryStream();
                     Message mes1 = new Message();
-                    mes1.Date_Time = DateTime.Now.ToString();
+                    mes1.Date_Time = DateTime.Now;
                     var jsonFormatter1 = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter1.WriteObject(stream1, mes1);
                     byte[] msg1 = stream1.ToArray();
@@ -962,7 +961,7 @@ namespace MessengerPigeon
                 try
                 {
                     MemoryStream stream = new MemoryStream();
-                    Date_Time = DateTime.Now.ToString();
+                    Date_Time = DateTime.Now;
                     Message mes = new Message("", Date_Time);
                     mes.UserSenderId = myUser.Id;
                     mes.UserRecepientId = UserRecepient.Id;

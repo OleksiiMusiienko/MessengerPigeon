@@ -14,12 +14,14 @@
     <None Remove="images\confused.png" />
     <None Remove="images\cool.png" />
     <None Remove="images\cross-finger.png" />
+    <None Remove="images\free-icon-paper-14946225.png" />
     <None Remove="images\happy.png" />
     <None Remove="images\love.png" />
     <None Remove="images\maloik.png" />
     <None Remove="images\pause.png" />
     <None Remove="images\play.png" />
     <None Remove="images\pointing-up.png" />
+    <None Remove="images\print.png" />
     <None Remove="images\resume.png" />
     <None Remove="images\Settings.png" />
     <None Remove="images\smiley.png" />
@@ -70,6 +72,7 @@
     <Resource Include="images\pause.png" />
     <Resource Include="images\play.png" />
     <Resource Include="images\pointing-up.png" />
+    <Resource Include="images\print.png" />
     <Resource Include="images\resume.png" />
     <Resource Include="images\send.png" />
     <Resource Include="images\Settings.png" />
