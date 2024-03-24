@@ -108,7 +108,7 @@ namespace MessengerPigeon
             set
             {
                 if(value == "" && !IsEnableOnline)
-                    MessageBox.Show("Вы не ввели логин!");
+                    MessageBox.Show("You didn't enter your login!");
                 _nickReg = value;
                 OnPropertyChanged(nameof(NickReg));
             }
@@ -122,7 +122,7 @@ namespace MessengerPigeon
                 string PASSWORD_PATTERN = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])\S{6,16}$";
                 if (!Regex.IsMatch(value, PASSWORD_PATTERN, RegexOptions.IgnoreCase) && !IsEnableOnline)
                 {
-                    MessageBox.Show("Пароль не соотвестствует требований!");
+                    MessageBox.Show("Password doesn't meet requirements!");
                     value = "";
                 }
                 _passwordReg = value;
@@ -137,13 +137,13 @@ namespace MessengerPigeon
             {
                 if(value != _passwordReg && !IsEnableOnline)
                 {
-                    MessageBox.Show("Пароли не совпадают!");
+                    MessageBox.Show("Password and Confirm password do not match!");
                     value = "";
                 }
                 if (_nickReg == "" && !IsEnableOnline)
-                    MessageBox.Show("Введите логин для регистрации!");
+                    MessageBox.Show("Enter your login to sign in!");
                 if (_phoneReg == "" && !IsEnableOnline)
-                    MessageBox.Show("Введите телефон для регистрации!");
+                    MessageBox.Show("Enter your phone number to sign in!");
                 _passwordTwo = value;
                 OnPropertyChanged(nameof(PasswordTwo));
             }
@@ -158,7 +158,7 @@ namespace MessengerPigeon
 
                 if (!Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase) && !IsEnableOnline)
                 {
-                    MessageBox.Show("Вы ввели не корректный номер телефона ! \n Формат номера 0123456789");
+                    MessageBox.Show("Incorrect phone number! \n Phone number format: 0123456789");
                     value = "";
                 }
                 _phoneReg = value;
@@ -400,7 +400,7 @@ namespace MessengerPigeon
                         mes.UserSenderId = SelectedMessage.UserSenderId;
                         mes.UserRecepientId = SelectedMessage.UserRecepientId;
                         mes.Date_Time = SelectedMessage.Date_Time;
-                        mes.Mes = cipher.Encrypt(MyUser.Nick + ":" + "   " + Mes); // шифровка сообщения
+                        mes.Mes = cipher.Encrypt(MyUser.Nick + ":" + "   " + Mes + " (edited message)"); // шифровка сообщения
                         isEditMessage = false;
                     }
                     else
@@ -427,7 +427,8 @@ namespace MessengerPigeon
                     Mes = "";
                     MesAudio = null;
                     MesAudioUri = null;
-                    ReceiveMessage(tcpClientMessage);
+                    HistoryMessages();
+                    //ReceiveMessage(tcpClientMessage);
                 }
                 catch (Exception ex)
                 {
@@ -873,7 +874,7 @@ namespace MessengerPigeon
                         byte[] copy = new byte[len];
                         Array.Copy(arr, 0, copy, 0, len);
                         MemoryStream stream = new MemoryStream(copy);
-                        if (copy.Length == 7)
+                        if (copy.Length < 10)
                         {
                             var jsonFormatter1 = new DataContractJsonSerializer(typeof(object));
                             length = (int)jsonFormatter1.ReadObject(stream);
@@ -1083,7 +1084,6 @@ namespace MessengerPigeon
             {
                 try
                 {
-                    MemoryStream stream = new MemoryStream();
                     Message mes = SelectedMessage;
                     Mes = mes.Mes.Substring(mes.Mes.IndexOf(" ")).Trim();
                     isEditMessage = true;
