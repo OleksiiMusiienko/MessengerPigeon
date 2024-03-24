@@ -79,11 +79,11 @@
                             </DockPanel>
                             <DockPanel Margin="3">
                                 <Label Padding="5">Password:</Label>
-                                <TextBox  Padding="5" MinWidth="100" Height ="25" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите действующий пароль" ></TextBox>
+                                <TextBox  Padding="5" MinWidth="100" Height ="25" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Enter a valid password" ></TextBox>
                             </DockPanel>
                             <DockPanel Margin="3">
                                 <Label Padding="5">NewPas...:</Label>
-                                <TextBox  Padding="5" MinWidth="100" Height ="25" Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Введите новый пароль"></TextBox>
+                                        <TextBox  Padding="5" MinWidth="100" Height ="25" Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Enter a new password"></TextBox>
                             </DockPanel>
                             <Button Background ="Transparent" BorderThickness="0" Foreground="#3aa288" FontWeight="Bold" Name="Redact" Height="25" Width="80" MinWidth="70" Command="{Binding ButtonRedact}" Click="Button_Redaction">Edit profile</Button>
                             <Separator></Separator>
@@ -111,21 +111,21 @@
             <Expander HorizontalAlignment="Center"  Header="Sign in" ExpandDirection="Down" IsExpanded="{Binding IsEnabledRegistration}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <DockPanel Margin="3">
-                                <Label Padding="4 4 20 4" ToolTip="Введите телефон в формате : 0991234567" ToolTipService.InitialShowDelay="0">Phone :</Label>
-                                <TextBox Padding="4" MinWidth="100" Height ="23" Text="{Binding PhoneReg}" ToolTip="Введите телефон в формате : 0991234567" ToolTipService.InitialShowDelay="0" > </TextBox>
+                                <Label Padding="4 4 20 4" ToolTip="Enter the phone number in the format: 0991234567" ToolTipService.InitialShowDelay="0">Phone :</Label>
+                                <TextBox Padding="4" MinWidth="100" Height ="23" Text="{Binding PhoneReg}" ToolTip="Enter the phone number in the format: 0991234567" ToolTipService.InitialShowDelay="0" > </TextBox>
                     </DockPanel>
                     <DockPanel Margin="3">
                         <Label Padding="4">NikName :</Label>
                         <TextBox Padding="4" MinWidth="100" Height ="23"  Text="{Binding NickReg}"></TextBox>
                     </DockPanel>
                     <DockPanel Margin="3">
-                                <Label Padding="4" ToolTip="Введите пороль от 6 символов (цифра, спец. символов, наличием строчных и прописных символов.)" ToolTipService.InitialShowDelay="0">Password :</Label>
+                                <Label Padding="4" ToolTip="Enter a password of at least 6 characters (containing a number, special character, small and capital letters)" ToolTipService.InitialShowDelay="0">Password :</Label>
                                 <TextBox Padding="4" MinWidth="100" Height ="23" Text="{Binding PasswordReg}" Style="{StaticResource FoglihtenBPS01}" ToolTipService.InitialShowDelay="0"
-                                         ToolTip="Введите пороль от 6 символов (цифра, спец. символов, наличием строчных и прописных символов.)" ></TextBox>
+                                         ToolTip="Enter a password of at least 6 characters (containing a number, special character, small and capital letters)" ></TextBox>
                     </DockPanel>
                     <DockPanel Margin="3">
-                                <Label Padding="4"  ToolTip="Повторите пороль" ToolTipService.InitialShowDelay="0">Password :</Label>
-                                <TextBox Padding="4" MinWidth="100" Height ="23"  Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Повторите пороль" ToolTipService.InitialShowDelay="0" ></TextBox>
+                                <Label Padding="4"  ToolTip="Confirm the password" ToolTipService.InitialShowDelay="0">Password :</Label>
+                                <TextBox Padding="4" MinWidth="100" Height ="23"  Text="{Binding PasswordTwo}" Style="{StaticResource FoglihtenBPS01}" ToolTip="Confirm the password" ToolTipService.InitialShowDelay="0" ></TextBox>
                     </DockPanel>
                     <Button Template="{StaticResource GradientButtonTemplate}" FontWeight="Bold" Padding="4" Command="{Binding ButtonReg}">Sign in</Button>
                 </StackPanel>
@@ -258,7 +258,8 @@
                     <Button Name="File" DockPanel.Dock ="Right" Margin="3" Background="Transparent" BorderThickness="0">
                         <Image Source="images/filesend.png" Width="25"></Image>
                     </Button>
-                    <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" PreviewMouseDown="Voice_MouseDown" PreviewMouseUp="Voice_MouseUp" Background="Transparent" BorderThickness="0">
+                    <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" PreviewMouseDown="Voice_MouseDown" PreviewMouseUp="Voice_MouseUp" Background="Transparent" BorderThickness="0" 
+                            ToolTip="Hold the micro to record an audio message, then press the send button" ToolTipService.InitialShowDelay="0" >
                         <Image Source="images/Studio-mic-icon_30398.png" Width="25"></Image>
                     </Button>
                     <Button UseLayoutRounding="True" Name="Smile" DockPanel.Dock="Left"  Margin="3" Background="Transparent" BorderThickness="0"  Click="Smile_Click" >
