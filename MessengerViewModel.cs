@@ -218,10 +218,10 @@ namespace MessengerPigeon
             get { return _userRecepient; }
             set
             {
-                _userRecepient= value;
-                OnPropertyChanged(nameof(UserRecepient));
-                if(UserRecepient != null)
+                if (value != null)
                     HistoryMessages();
+                _userRecepient = value;
+                OnPropertyChanged(nameof(UserRecepient));
             }
         }
         private Message _selectedMessage;
@@ -379,6 +379,7 @@ namespace MessengerPigeon
                  string IP = "26.27.154.150";
                  tcpClientMessage = new TcpClient(IP, 49153);
                  netstreamMessage = tcpClientMessage.GetStream();
+                 ReceiveMessage(tcpClientMessage);
             }
             catch (Exception ex)
             {
@@ -428,7 +429,6 @@ namespace MessengerPigeon
                     MesAudio = null;
                     MesAudioUri = null;
                     HistoryMessages();
-                    //ReceiveMessage(tcpClientMessage);
                 }
                 catch (Exception ex)
                 {
@@ -539,7 +539,6 @@ namespace MessengerPigeon
                     byte[] msg = stream.ToArray();
                     await netstream.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
                     myUser = new User();
-
                     Receive(tcpClient);
                 }
                 catch (Exception ex)
@@ -682,6 +681,7 @@ namespace MessengerPigeon
 
                     MemoryStream stream1 = new MemoryStream();
                     Message mes1 = new Message();
+                    mes1.Mes = "ExitOnline";
                     mes1.Date_Time = DateTime.Now;
                     var jsonFormatter1 = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter1.WriteObject(stream1, mes1);
@@ -874,12 +874,27 @@ namespace MessengerPigeon
                         byte[] copy = new byte[len];
                         Array.Copy(arr, 0, copy, 0, len);
                         MemoryStream stream = new MemoryStream(copy);
-                        if (copy.Length < 10)
+                        if (len < 3)
+                        {
+                            Messages = null;
+                        }
+                        if (copy.Length > 2 && copy.Length < 100)
                         {
                             var jsonFormatter1 = new DataContractJsonSerializer(typeof(object));
-                            length = (int)jsonFormatter1.ReadObject(stream);
-                            RepeatHistoryMessages();
-                            arrbuf = new byte[length];
+                            var obj = jsonFormatter1.ReadObject(stream) as Object;
+                            if (obj == null)
+                            {
+                                netstreamMessage?.Close();
+                                return;
+                            }
+                            else
+                            {
+                                length = (int)obj;
+                                RepeatHistoryMessages();
+                                arrbuf = new byte[length];
+                                buf_len = 0;
+                            }
+                            
                         }
                         else if (len <= length)
                         {
@@ -971,8 +986,6 @@ namespace MessengerPigeon
                     jsonFormatter.WriteObject(stream, mes);
                     byte[] msg = stream.ToArray();
                     await netstreamMessage.WriteAsync(msg, 0, msg.Length); // записываем данные в NetworkStream.
-
-                    ReceiveMessage(tcpClientMessage);
                     stream.Close();
                 }
                 catch (Exception ex)
