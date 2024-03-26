@@ -213,6 +213,8 @@ namespace MessengerPigeon
 
                     MemoryStream stream1 = new MemoryStream();
                     Message mes1 = new Message();
+                    mes1.Mes = "ExitOnline";
+                    mes1.Date_Time = DateTime.Now;
                     var jsonFormatter1 = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter1.WriteObject(stream1, mes1);
                     byte[] msg1 = stream1.ToArray();
