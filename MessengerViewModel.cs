@@ -773,6 +773,12 @@ namespace MessengerPigeon
                         int len = await netstream.ReadAsync(arr, 0, arr.Length);
                         if (len == 0)
                         {
+                            MyUser.Avatar = null;
+                            MyUser = null;
+                            Users = null;
+                            Messages = null;
+                            IsEnableOnline = false;
+                            IsEnable = true;
                             netstream.Close();
                             tcpClient.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
                             return;
@@ -807,15 +813,6 @@ namespace MessengerPigeon
                             PasswordReg = "";
                             PasswordTwo = "";
                             PhoneReg = "";
-                        }
-                        else if (res.command == "ExitOnline")
-                        {
-                            MyUser.Avatar = null;
-                            MyUser = null;
-                            Users = null;
-                            Messages =null;
-                            IsEnableOnline = false;
-                            return;
                         }
                         else if (res.command == "Пользователь успешно удален!")
                         {
@@ -878,7 +875,7 @@ namespace MessengerPigeon
                         {
                             Messages = null;
                         }
-                        if (copy.Length > 2 && copy.Length < 100)
+                        else if (copy.Length > 2 && copy.Length < 100)
                         {
                             var jsonFormatter1 = new DataContractJsonSerializer(typeof(object));
                             var obj = jsonFormatter1.ReadObject(stream) as Object;
