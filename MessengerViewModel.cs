@@ -905,14 +905,7 @@ namespace MessengerPigeon
                                 res = jsonFormatter.ReadObject(streambuf) as List<Message>;
                                 if (res.Count != 0)
                                 {
-                                    if (res[res.Count - 1].UserSenderId != myUser.Id)
-                                    {
-                                        new ToastContentBuilder().AddText(res[res.Count - 1].Mes)
-                                        .AddText(res[res.Count - 1].Date_Time.ToString())
-                                        .SetToastDuration(ToastDuration.Short)
-                                        .SetToastScenario(ToastScenario.Default)
-                                        .Show();
-                                    }
+                                    
                                     foreach (Message mes in res)
                                     {
                                         if (mes.MesAudio != null && mes.MesAudioUri != null)
@@ -921,7 +914,14 @@ namespace MessengerPigeon
                                         }
                                         mes.Mes = cipher.Decrypt(mes.Mes);
                                     }
-
+                                    if (res[res.Count - 1].UserSenderId != myUser.Id)
+                                    {
+                                        new ToastContentBuilder().AddText(res[res.Count - 1].Mes)
+                                        .AddText(res[res.Count - 1].Date_Time.ToString())
+                                        .SetToastDuration(ToastDuration.Short)
+                                        .SetToastScenario(ToastScenario.Default)
+                                        .Show();
+                                    }
                                     Messages = new ObservableCollection<Message>(res);
                                 }
                                 else
