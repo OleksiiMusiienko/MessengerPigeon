@@ -383,7 +383,7 @@ namespace MessengerPigeon
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Клиент: " + ex.Message);
+                MessageBox.Show("Client: " + ex.Message);
             }
             });
         }
@@ -432,7 +432,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -484,7 +484,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -493,12 +493,12 @@ namespace MessengerPigeon
         {
             if (NickReg == null)
             {
-                MessageBox.Show("Вы не ввели имя для регистрации! ");
+                MessageBox.Show("You didn't enter a name for registration! ");
                 return false;
             }
             else if (PasswordReg != PasswordTwo)
             {
-                MessageBox.Show("Пароли не совпадают! ");
+                MessageBox.Show("Password and Confirm password do not match! ");
                 return false;
             }
             return true;
@@ -543,7 +543,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -574,7 +574,7 @@ namespace MessengerPigeon
         {
             if (PasswordReg != MyUser.Password )
             {
-                MessageBox.Show("Не верный пароль пользователя!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Incorrect user password!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             await Task.Run(async () =>
             {
@@ -599,7 +599,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -640,7 +640,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -690,7 +690,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -724,7 +724,7 @@ namespace MessengerPigeon
                         return;
                     }                    
                 }
-                MessageBox.Show("Пользователь не найден!", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("User is not found!", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
                 _search = "";
             }
             else if (searchFlag)
@@ -814,7 +814,7 @@ namespace MessengerPigeon
                             PasswordTwo = "";
                             PhoneReg = "";
                         }
-                        else if (res.command == "Пользователь успешно удален!")
+                        else if (res.command == "User successfully deleted!")
                         {
                             MessageBox.Show(res.command);
                             MyUser.Avatar = null;
@@ -834,7 +834,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                     netstream?.Close();
                     tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
                 }
@@ -936,7 +936,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                     netstreamMessage?.Close();
                     tcpClientMessage?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
                 }                
@@ -962,7 +962,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -987,7 +987,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -1023,7 +1023,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -1065,7 +1065,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -1100,7 +1100,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
