@@ -142,9 +142,15 @@
             </Ellipse>
             <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
             <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
-                        <Button Name="Print" DockPanel.Dock ="Right" Margin="3" Background="Transparent" BorderThickness="0" Click="Print_Click">
-                            <Image Source="images/print.png" Width="25"/>
-                        </Button>
+
+                        <DockPanel Width="555">
+                            <Button Name="Save" DockPanel.Dock="Right" Margin="3" Background="Transparent" BorderThickness="0" Click="Save_Click">
+                                <Image Source="images/save.png" Width="25"/>
+                            </Button>
+                            <Button Name="Print" DockPanel.Dock="Right" Margin="3" Background="Transparent" BorderThickness="0" Click="Print_Click" Width="28">
+                                <Image Source="images/print.png" Width="25"/>
+                            </Button>
+                        </DockPanel>
                     </StackPanel>
     </Border>
 

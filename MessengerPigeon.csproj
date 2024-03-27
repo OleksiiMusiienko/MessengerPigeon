@@ -23,6 +23,7 @@
     <None Remove="images\pointing-up.png" />
     <None Remove="images\print.png" />
     <None Remove="images\resume.png" />
+    <None Remove="images\save.png" />
     <None Remove="images\Settings.png" />
     <None Remove="images\smiley.png" />
     <None Remove="images\smiling.png" />
@@ -74,6 +75,7 @@
     <Resource Include="images\pointing-up.png" />
     <Resource Include="images\print.png" />
     <Resource Include="images\resume.png" />
+    <Resource Include="images\save.png" />
     <Resource Include="images\send.png" />
     <Resource Include="images\Settings.png" />
     <Resource Include="images\smiley.png" />

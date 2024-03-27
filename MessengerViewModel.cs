@@ -416,7 +416,7 @@ namespace MessengerPigeon
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Клиент: " + ex.Message);
+                MessageBox.Show("Client: " + ex.Message);
             }
             });
         }
@@ -465,7 +465,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -505,6 +505,7 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Registratioin;
+                    PasswordReg = cipher.Encrypt(PasswordReg);
                     User us = new User(NickReg, PasswordReg,null,null, PhoneReg);
                     us.Online = true;
                     wrapper.user = us;
@@ -517,7 +518,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -526,12 +527,12 @@ namespace MessengerPigeon
         {
             if (NickReg == null)
             {
-                MessageBox.Show("Вы не ввели имя для регистрации! ");
+                MessageBox.Show("You didn't enter a name for registration! ");
                 return false;
             }
             else if (PasswordReg != PasswordTwo)
             {
-                MessageBox.Show("Пароли не совпадают! ");
+                MessageBox.Show("Password and Confirm password do not match! ");
                 return false;
             }
             return true;
@@ -564,6 +565,7 @@ namespace MessengerPigeon
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Authorization;
+                    PasswordReg = cipher.Encrypt(PasswordReg);
                     User us = new User(NickReg, PasswordReg, null, null, PhoneReg);
                     us.Online = true;
                     wrapper.user = us;
@@ -576,7 +578,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -605,9 +607,10 @@ namespace MessengerPigeon
         }
         private async void Redact(object o)
         {
-            if (PasswordReg != MyUser.Password )
+           
+            if ((PasswordReg = cipher.Encrypt(PasswordReg)) != MyUser.Password )
             {
-                MessageBox.Show("Не верный пароль пользователя!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Incorrect user password!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             await Task.Run(async () =>
             {
@@ -622,6 +625,7 @@ namespace MessengerPigeon
                         PasswordTwo = MyUser.Password;
                     User us = new User(Nick, PasswordReg, null, Avatar, MyUser.Phone);
                     us.Online = true;
+                    PasswordTwo = cipher.Encrypt(PasswordTwo);
                     wrapper.NewPassword = PasswordTwo; 
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
@@ -632,7 +636,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -673,7 +677,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -723,7 +727,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -757,7 +761,7 @@ namespace MessengerPigeon
                         return;
                     }                    
                 }
-                MessageBox.Show("Пользователь не найден!", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("User is not found!", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
                 _search = "";
             }
             else if (searchFlag)
@@ -847,7 +851,7 @@ namespace MessengerPigeon
                             PasswordTwo = "";
                             PhoneReg = "";
                         }
-                        else if (res.command == "Пользователь успешно удален!")
+                        else if (res.command == "User successfully deleted!")
                         {
                             MessageBox.Show(res.command);
                             MyUser.Avatar = null;
@@ -867,7 +871,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                     netstream?.Close();
                     tcpClient?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
                 }
@@ -938,14 +942,7 @@ namespace MessengerPigeon
                                 res = jsonFormatter.ReadObject(streambuf) as List<Message>;
                                 if (res.Count != 0)
                                 {
-                                    if (res[res.Count - 1].UserSenderId != myUser.Id)
-                                    {
-                                        new ToastContentBuilder().AddText(res[res.Count - 1].Mes)
-                                        .AddText(res[res.Count - 1].Date_Time.ToString())
-                                        .SetToastDuration(ToastDuration.Short)
-                                        .SetToastScenario(ToastScenario.Default)
-                                        .Show();
-                                    }
+                                    
                                     foreach (Message mes in res)
                                     {
                                         if (mes.MesAudio != null && mes.MesAudioUri != null)
@@ -954,7 +951,14 @@ namespace MessengerPigeon
                                         }
                                         mes.Mes = cipher.Decrypt(mes.Mes);
                                     }
-
+                                    if (res[res.Count - 1].UserSenderId != myUser.Id)
+                                    {
+                                        new ToastContentBuilder().AddText(res[res.Count - 1].Mes)
+                                        .AddText(res[res.Count - 1].Date_Time.ToString())
+                                        .SetToastDuration(ToastDuration.Short)
+                                        .SetToastScenario(ToastScenario.Default)
+                                        .Show();
+                                    }
                                     Messages = new ObservableCollection<Message>(res);
                                 }
                                 else
@@ -969,7 +973,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                     netstreamMessage?.Close();
                     tcpClientMessage?.Close(); // закрываем TCP-подключение и освобождаем все ресурсы, связанные с объектом TcpClient.
                 }                
@@ -995,7 +999,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -1020,7 +1024,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -1056,7 +1060,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -1098,7 +1102,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
@@ -1133,7 +1137,7 @@ namespace MessengerPigeon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Клиент: " + ex.Message);
+                    MessageBox.Show("Client: " + ex.Message);
                 }
             });
         }
