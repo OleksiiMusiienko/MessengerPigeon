@@ -318,7 +318,10 @@ namespace MessengerPigeon
             }
             set
             {
-                _indexUsers = Users.IndexOf(UserRecepient);
+                if(Users != null)
+                {
+                    _indexUsers = Users.IndexOf(UserRecepient);
+                }
                 if(value != null)
                 {
                     for (int i=0; i< value.Count; i++)
@@ -409,7 +412,7 @@ namespace MessengerPigeon
             {
             try
             {
-                 string IP = "26.27.154.150";
+                 string IP = "26.244.69.84";
                  tcpClientMessage = new TcpClient(IP, 49153);
                  netstreamMessage = tcpClientMessage.GetStream();
                  ReceiveMessage(tcpClientMessage);
@@ -499,7 +502,7 @@ namespace MessengerPigeon
             {
                 try
                 {
-                    string IP = "26.27.154.150";
+                    string IP = "26.244.69.84";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
@@ -559,7 +562,7 @@ namespace MessengerPigeon
                 try
                 {
                     User = new User();
-                    string IP = "26.27.154.150";
+                    string IP = "26.244.69.84";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
@@ -828,6 +831,7 @@ namespace MessengerPigeon
                         ServerResponse res = jsonFormatter.ReadObject(stream) as ServerResponse;
                         if (res.list != null)
                         {
+                            IsEnableOnline = true;
                             List<User> list = new List<User>();
                             list = res.list;
                             foreach (var user in list)
@@ -836,7 +840,6 @@ namespace MessengerPigeon
                                 user.Nick == MyUser.Nick && user.Password == MyUser.Password)
                                 {
                                     MyUser = user;
-                                    IsEnableOnline = true;
                                     IsEnable = false;
                                     list.Remove(user);
                                     break;
@@ -920,6 +923,27 @@ namespace MessengerPigeon
                             {
                                 netstreamMessage?.Close();
                                 return;
+                            }
+                            else if (obj is string)
+                            {
+                                var iP = obj.ToString();
+                                if (UserRecepient.IPadress == iP)
+                                    HistoryMessages();
+                                else
+                                {
+                                    User user = new User();
+                                    foreach(var u in Users)
+                                    {
+                                        if (u.IPadress == iP)
+                                            user = u;
+                                    }
+                                        new ToastContentBuilder().AddText(user.Nick)
+                                        .AddText(" New Messege "+ Date_Time.ToString())
+                                        .SetToastDuration(ToastDuration.Short)
+                                        .SetToastScenario(ToastScenario.Default)
+                                        .Show();
+                                }
+
                             }
                             else
                             {
