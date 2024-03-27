@@ -296,5 +296,12 @@ namespace MessengerPigeon
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
+
+        private void ChatingHistory_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if(e.OriginalSource is ScrollViewer scrollViewer && 
+                Math.Abs(e.ExtentHeightChange) > 0.0)
+            { scrollViewer.ScrollToEnd(); }
+        }
     }
 }
