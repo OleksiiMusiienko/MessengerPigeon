@@ -148,8 +148,8 @@
                     </StackPanel>
     </Border>
 
-    <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" IsSynchronizedWithCurrentItem = "true" BorderBrush="SteelBlue"
-             Margin="5" HorizontalContentAlignment="Left" SelectedItem="{Binding SelectedMessage}"  >
+                <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" SelectedIndex="{Binding IndexMessage }"  IsSynchronizedWithCurrentItem = "true" BorderBrush="SteelBlue"
+             Margin="5" HorizontalContentAlignment="Left" SelectedItem="{Binding SelectedMessage}">
         <ListBox.ContextMenu>
             <ContextMenu>
                 <MenuItem Foreground="SteelBlue" Header="Edit message" Command="{Binding  ButtonEditMessage}"></MenuItem>
@@ -220,7 +220,7 @@
 </DockPanel >
         </Grid>
         <DockPanel Name="DockPanel_2"  LastChildFill="True">
-            <ListBox Name="ListBoxUsers" SelectedItem="{Binding UserRecepient}" HorizontalAlignment="Stretch" BorderBrush="SteelBlue"
+            <ListBox Name="ListBoxUsers" SelectedItem="{Binding UserRecepient}" SelectedIndex="{Binding IndexUsers}"  HorizontalAlignment="Stretch" BorderBrush="SteelBlue"
                        Margin="4"  ItemsSource = "{Binding Users }" IsSynchronizedWithCurrentItem = "true" Background="Transparent">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

@@ -318,8 +318,27 @@ namespace MessengerPigeon
             }
             set
             {
+                _indexUsers = Users.IndexOf(UserRecepient);
+                if(value != null)
+                {
+                    for (int i=0; i< value.Count; i++)
+                    {
+                        if(i == IndexUsers)
+                            UserRecepient = value[i];
+                    }
+                }
                 _users = value;
                 OnPropertyChanged(nameof(Users));
+            }
+        }
+        private int _indexUsers;
+        public int IndexUsers
+        {
+            get { return _indexUsers; }
+            set
+            {
+                _indexUsers = value;
+                OnPropertyChanged(nameof(IndexUsers));
             }
         }
         //------------
@@ -345,8 +364,22 @@ namespace MessengerPigeon
             }
             set
             {
+                if (value != null)
+                {
+                    IndexMessage = value.Count - 1;
+                }
                 _messages = value;
                 OnPropertyChanged(nameof(Messages));
+            }
+        }
+        private int _indexMessage;
+        public int IndexMessage
+        {
+            get { return _indexMessage; }
+            set
+            {
+                _indexMessage = value;
+                OnPropertyChanged(nameof(IndexMessage));
             }
         }
 
@@ -428,7 +461,7 @@ namespace MessengerPigeon
                     Mes = "";
                     MesAudio = null;
                     MesAudioUri = null;
-                    HistoryMessages();
+                    //HistoryMessages();
                 }
                 catch (Exception ex)
                 {
