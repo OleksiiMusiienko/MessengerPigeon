@@ -22,6 +22,7 @@ using MessengerModel;
 using NAudio.Utils;
 using System.Drawing.Printing;
 using System.Printing;
+using static System.Net.Mime.MediaTypeNames;
 //using System.Windows.Forms;
 
 namespace MessengerPigeon
@@ -230,7 +231,6 @@ namespace MessengerPigeon
             });
             this.Close();
         }
-
         private void MyMediaPlayer_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
             string hr = GetHresultFromErrorMessage(e);
@@ -247,22 +247,54 @@ namespace MessengerPigeon
             }
             return hr;
         }
-
         private void Print_Click(object sender, RoutedEventArgs e)
         {
             List<Message> messages = ((MessengerViewModel)Resources["ViewModel"]).Messages.ToList();
-            PrintDialog printDialog = new PrintDialog();
-            printDialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
-            TextBox text_box = new TextBox(); 
-            if (printDialog.ShowDialog() == true)
-            {                
-                foreach(Message message in messages) 
+            if (messages.Count == 0)
+                return;
+            try
+            {
+                PrintDialog printDialog = new PrintDialog();
+                printDialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
+                TextBlock textBlock = new TextBlock();// создаем визуальный элемент
+                textBlock.Margin = new Thickness(30, 10, 10, 10); // устанавливаем поля
+                textBlock.TextWrapping = TextWrapping.Wrap; //перенос текста
+                textBlock.LayoutTransform = new ScaleTransform(2, 2); //увеличение текста
+                if (printDialog.ShowDialog() == true)
                 {
-                    text_box.Text += message.Mes + "\n\n"; 
-                }                
-                printDialog.PrintVisual(text_box, "Печать");
+                    for (int i = 0; i < messages.Count; i++)
+                    {
+                        Run run = new Run(messages[i].Mes);//создаем строку
+                        textBlock.Inlines.Add(run + "\n\n");
+                    }
+                    printDialog.PrintVisual(textBlock, "Печать");
+                }
             }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
-       
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            string user = ((MessengerViewModel)Resources["ViewModel"]).Nick;
+            try
+            {
+                SaveFileDialog sf = new SaveFileDialog();
+                sf.FileName = user + DateTime.Now;
+                sf.Filter = "(.txt)|*.txt";
+                List<Message> messages = ((MessengerViewModel)Resources["ViewModel"]).Messages.ToList();
+                TextBlock textBlock = new TextBlock();
+                if (sf.ShowDialog() == true)
+                {
+                    for (int i = 0; i < messages.Count; i++)
+                    {
+                        Run run = new Run(messages[i].Mes);//создаем строку
+                        textBlock.Inlines.Add(run + "\n\n");
+                    }
+                    StreamWriter sw = new StreamWriter(sf.FileName, false, Encoding.Default);                    
+                    sw.WriteLine(textBlock.Text);
+                    sw.Close();
+                }
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
     }
 }
