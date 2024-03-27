@@ -39,7 +39,7 @@
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" ></RowDefinition>
-            <RowDefinition Height ="0.2*"></RowDefinition>
+            <RowDefinition Height ="0.15*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.4*"></ColumnDefinition>
@@ -134,24 +134,24 @@
         </Grid>
             <DockPanel Name="DockPanel_3"  Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Row="1" Grid.Column="1">
     <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="4,2,4,2" CornerRadius="5">
-        <StackPanel Orientation="Horizontal">
-            <Ellipse Width="40" Height="40" Margin="3" Stroke="Blue"  >
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="{Binding UserRecepient.Avatar, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"></ImageBrush>
-                </Ellipse.Fill>
-            </Ellipse>
-            <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
-            <TextBlock FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
-
-                        <DockPanel Width="555">
+        <DockPanel >
+            <DockPanel DockPanel.Dock="Right">
                             <Button Name="Save" DockPanel.Dock="Right" Margin="3" Background="Transparent" BorderThickness="0" Click="Save_Click">
                                 <Image Source="images/save.png" Width="25"/>
                             </Button>
                             <Button Name="Print" DockPanel.Dock="Right" Margin="3" Background="Transparent" BorderThickness="0" Click="Print_Click" Width="28">
                                 <Image Source="images/print.png" Width="25"/>
                             </Button>
-                        </DockPanel>
-                    </StackPanel>
+            </DockPanel>
+            <Ellipse DockPanel.Dock="Left" Width="40" Height="40" Margin="3" Stroke="Blue"  >
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="{Binding UserRecepient.Avatar, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"></ImageBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <TextBlock DockPanel.Dock="Left"  FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient, UpdateSourceTrigger=PropertyChanged}" Name="User" Margin="4" ></TextBlock>
+            <TextBlock DockPanel.Dock="Left" FontSize="16" Foreground="#3aa288" FontWeight="Bold" Text="{Binding UserRecepient.Phone, UpdateSourceTrigger=PropertyChanged}" Margin="4" ></TextBlock>
+            
+        </DockPanel>
     </Border>
 
     <ListBox Name="ChatingHistory" ItemsSource = "{Binding Messages }" SelectedIndex="{Binding IndexMessage}" IsSynchronizedWithCurrentItem = "true" BorderBrush="SteelBlue"
@@ -250,9 +250,9 @@
 
         </DockPanel>
 
-        <DockPanel Name="DockPanel_4" Grid.Row="1" Margin="4,4,4,4" >
+        <DockPanel Name="DockPanel_4" Grid.Row="1" Margin="4,5,4,15" >
             <StackPanel DockPanel.Dock="Bottom">
-                <Button Template="{StaticResource GradientButtonTemplate}" Name="Scan" Content="Search" Command="{Binding ButtonSearch}"  IsEnabled="{Binding IsEnableOnline}" ></Button>
+                <Button Margin="0,10,0,5"  Height="25" Template="{StaticResource GradientButtonTemplate}" Name="Scan" Content="Search" Command="{Binding ButtonSearch}"  IsEnabled="{Binding IsEnableOnline}" ></Button>
             </StackPanel>
             <Border BorderBrush="SteelBlue" BorderThickness="1" CornerRadius="5">
                 <TextBox Name="TextBox_AddFriend"  DockPanel.Dock="Top" Background="Transparent" Text="{Binding _search}" Margin="0,2,0,2" BorderThickness="0" VerticalContentAlignment="Center"></TextBox>
@@ -261,9 +261,6 @@
         <DockPanel Name="DockPanel_5"  Grid.Column="1"  Grid.Row="1" >
             <Border DockPanel.Dock="Top" BorderBrush="SteelBlue" BorderThickness="1" Margin="4,4,4,2" CornerRadius="5">
                 <DockPanel  Background="Transparent">
-                    <Button Name="File" DockPanel.Dock ="Right" Margin="3" Background="Transparent" BorderThickness="0">
-                        <Image Source="images/filesend.png" Width="25"></Image>
-                    </Button>
                     <Button Name="Voice" DockPanel.Dock="Right"  Margin="3" PreviewMouseDown="Voice_MouseDown" PreviewMouseUp="Voice_MouseUp" Background="Transparent" BorderThickness="0" 
                             ToolTip="Hold the micro to record an audio message, then press the send button" ToolTipService.InitialShowDelay="0" >
                         <Image Source="images/Studio-mic-icon_30398.png" Width="25"></Image>
