@@ -409,7 +409,7 @@ namespace MessengerPigeon
             {
             try
             {
-                 string IP = "26.27.154.150";
+                 string IP = "26.244.69.84";
                  tcpClientMessage = new TcpClient(IP, 49153);
                  netstreamMessage = tcpClientMessage.GetStream();
                  ReceiveMessage(tcpClientMessage);
@@ -499,13 +499,13 @@ namespace MessengerPigeon
             {
                 try
                 {
-                    string IP = "26.27.154.150";
+                    string IP = "26.244.69.84";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Registratioin;
-                    PasswordReg = cipher.Encrypt(PasswordReg);
+                    PasswordReg = cipher.PasswordCode(PasswordReg);
                     User us = new User(NickReg, PasswordReg,null,null, PhoneReg);
                     us.Online = true;
                     wrapper.user = us;
@@ -559,13 +559,13 @@ namespace MessengerPigeon
                 try
                 {
                     User = new User();
-                    string IP = "26.27.154.150";
+                    string IP = "26.244.69.84";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
                     Wrapper wrapper = new Wrapper();
                     wrapper.commands = Wrapper.Commands.Authorization;
-                    PasswordReg = cipher.Encrypt(PasswordReg);
+                    PasswordReg = cipher.PasswordCode(PasswordReg);
                     User us = new User(NickReg, PasswordReg, null, null, PhoneReg);
                     us.Online = true;
                     wrapper.user = us;
@@ -608,7 +608,7 @@ namespace MessengerPigeon
         private async void Redact(object o)
         {
            
-            if ((PasswordReg = cipher.Encrypt(PasswordReg)) != MyUser.Password )
+            if ((PasswordReg = cipher.PasswordCode(PasswordReg)) != MyUser.Password )
             {
                 MessageBox.Show("Incorrect user password!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -625,7 +625,7 @@ namespace MessengerPigeon
                         PasswordTwo = MyUser.Password;
                     User us = new User(Nick, PasswordReg, null, Avatar, MyUser.Phone);
                     us.Online = true;
-                    PasswordTwo = cipher.Encrypt(PasswordTwo);
+                    PasswordTwo = cipher.PasswordCode(PasswordTwo);
                     wrapper.NewPassword = PasswordTwo; 
                     wrapper.user = us;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Wrapper));
