@@ -833,8 +833,7 @@ namespace MessengerPigeon
                             list = res.list;
                             foreach (var user in list)
                             {
-                                if(user.Nick == NickReg && user.Password == PasswordReg ||
-                                user.Nick == MyUser.Nick && user.Password == MyUser.Password)
+                                if(user.Nick == NickReg && user.Password == PasswordReg || user.Phone == MyUser.Phone)
                                 {
                                     MyUser = user;
                                     IsEnable = false;
@@ -926,16 +925,10 @@ namespace MessengerPigeon
                         {
                             Message mes = obj.Mes;
                             string mesege = cipher.Decrypt(mes.Mes);
-                            if (UserRecepient.Id == mes?.UserRecepientId)
+                            if (UserRecepient.Id == mes?.UserSenderId)
                                 HistoryMessages();
                             else
                             {
-                                User user = new User();
-                                foreach (var u in Users)
-                                {
-                                    if (u.Id == mes?.UserRecepientId)
-                                        user = u;
-                                }
                                 new ToastContentBuilder().AddText(mesege)
                                 .AddText(" " + mes?.Date_Time)
                                 .SetToastDuration(ToastDuration.Short)
