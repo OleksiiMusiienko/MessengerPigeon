@@ -265,8 +265,7 @@ namespace MessengerPigeon
                 {
                     for (int i = 0; i < messages.Count; i++)
                     {
-                        Run run = new Run(messages[i].Mes);//создаем строку
-                        textBlock.Inlines.Add(run + "\n\n");
+                        textBlock.Text +=messages[i].Mes + "\n\n";
                     }
                     printDialog.PrintVisual(textBlock, "Печать");
                 }
@@ -279,7 +278,6 @@ namespace MessengerPigeon
             try
             {
                 SaveFileDialog sf = new SaveFileDialog();
-                sf.FileName = user + DateTime.Now;
                 sf.Filter = "(.txt)|*.txt";
                 List<Message> messages = ((MessengerViewModel)Resources["ViewModel"]).Messages.ToList();
                 TextBlock textBlock = new TextBlock();
@@ -287,8 +285,7 @@ namespace MessengerPigeon
                 {
                     for (int i = 0; i < messages.Count; i++)
                     {
-                        Run run = new Run(messages[i].Mes);//создаем строку
-                        textBlock.Inlines.Add(run + "\n\n");
+                        textBlock.Text += messages[i].Mes + "\n\n";
                     }
                     StreamWriter sw = new StreamWriter(sf.FileName, false, Encoding.Default);                    
                     sw.WriteLine(textBlock.Text);
