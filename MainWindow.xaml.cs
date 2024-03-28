@@ -66,6 +66,7 @@ namespace MessengerPigeon
                     ((MessengerViewModel)Resources["ViewModel"]).Avatar = stream.ToArray();
                     stream.Close();
                     PopUpSettings.IsOpen = true;
+                    Avatar.ImageSource = null;
                 }
             }
                 catch (Exception ex)
