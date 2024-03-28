@@ -924,19 +924,20 @@ namespace MessengerPigeon
                         }
                         else if (obj.len == -1)
                         {
-                            var mes = obj as mMessage;
-                            if (UserRecepient.Id == mes?.Mes.UserRecepientId)
+                            Message mes = obj.Mes;
+                            string mesege = cipher.Decrypt(mes.Mes);
+                            if (UserRecepient.Id == mes?.UserRecepientId)
                                 HistoryMessages();
                             else
                             {
                                 User user = new User();
                                 foreach (var u in Users)
                                 {
-                                    if (u.Id == mes?.Mes.UserRecepientId)
+                                    if (u.Id == mes?.UserRecepientId)
                                         user = u;
                                 }
-                                new ToastContentBuilder().AddText(user.Nick)
-                                .AddText(" " + mes?.Mes.Mes + " " + mes?.Mes.Date_Time)
+                                new ToastContentBuilder().AddText(mesege)
+                                .AddText(" " + mes?.Date_Time)
                                 .SetToastDuration(ToastDuration.Short)
                                 .SetToastScenario(ToastScenario.Default)
                                 .Show();
