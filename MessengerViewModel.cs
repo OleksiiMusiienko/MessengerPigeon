@@ -218,9 +218,9 @@ namespace MessengerPigeon
             get { return _userRecepient; }
             set
             {
-                if (value != null)
-                    HistoryMessages();
                 _userRecepient = value;
+                if (_userRecepient != null)
+                    HistoryMessages();
                 OnPropertyChanged(nameof(UserRecepient));
             }
         }
@@ -259,10 +259,6 @@ namespace MessengerPigeon
             }
             set
             {
-                if(value == true)
-                {
-                    ConnectionForMessage();
-                }
                 _isButtonEnableOnline = value;
                 OnPropertyChanged(nameof(IsEnableOnline));
             }
@@ -412,7 +408,7 @@ namespace MessengerPigeon
             {
             try
             {
-                 string IP = "26.244.69.84";
+                 string IP = "26.238.242.38";
                  tcpClientMessage = new TcpClient(IP, 49153);
                  netstreamMessage = tcpClientMessage.GetStream();
                  ReceiveMessage(tcpClientMessage);
@@ -502,7 +498,7 @@ namespace MessengerPigeon
             {
                 try
                 {
-                    string IP = "26.244.69.84";
+                    string IP = "26.238.242.38";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
@@ -562,7 +558,7 @@ namespace MessengerPigeon
                 try
                 {
                     User = new User();
-                    string IP = "26.244.69.84";
+                    string IP = "26.238.242.38";
                     tcpClient = new TcpClient(IP, 49152);
                     netstream = tcpClient.GetStream();
                     MemoryStream stream = new MemoryStream();
@@ -805,6 +801,7 @@ namespace MessengerPigeon
             {
                 try
                 {
+                    ConnectionForMessage();
                     // Получим объект NetworkStream, используемый для приема и передачи данных.
                     netstream = tcpClient.GetStream();
                     byte[] arr = new byte[100000000];
@@ -911,48 +908,39 @@ namespace MessengerPigeon
                         byte[] copy = new byte[len];
                         Array.Copy(arr, 0, copy, 0, len);
                         MemoryStream stream = new MemoryStream(copy);
-                        if (len < 3)
+                        var jsonFormatter1 = new DataContractJsonSerializer(typeof(MesWrapper));
+                        var obj = jsonFormatter1.ReadObject(stream) as MesWrapper;
+                        if (obj == null)
                         {
-                            Messages = null;
+                            netstreamMessage?.Close();
+                            return;
                         }
-                        else if (copy.Length > 2 && copy.Length < 100)
+                        if (obj.len > 0)
                         {
-                            var jsonFormatter1 = new DataContractJsonSerializer(typeof(object));
-                            var obj = jsonFormatter1.ReadObject(stream) as Object;
-                            if (obj == null)
-                            {
-                                netstreamMessage?.Close();
-                                return;
-                            }
-                            else if (obj is string)
-                            {
-                                var iP = obj.ToString();
-                                if (UserRecepient.IPadress == iP)
-                                    HistoryMessages();
-                                else
-                                {
-                                    User user = new User();
-                                    foreach(var u in Users)
-                                    {
-                                        if (u.IPadress == iP)
-                                            user = u;
-                                    }
-                                        new ToastContentBuilder().AddText(user.Nick)
-                                        .AddText(" New Messege "+ Date_Time.ToString())
-                                        .SetToastDuration(ToastDuration.Short)
-                                        .SetToastScenario(ToastScenario.Default)
-                                        .Show();
-                                }
-
-                            }
+                            length = obj.len;
+                            RepeatHistoryMessages();
+                            arrbuf = new byte[length];
+                            buf_len = 0;
+                        }
+                        else if (obj.len == -1)
+                        {
+                            var mes = obj as mMessage;
+                            if (UserRecepient.Id == mes?.Mes.UserRecepientId)
+                                HistoryMessages();
                             else
                             {
-                                length = (int)obj;
-                                RepeatHistoryMessages();
-                                arrbuf = new byte[length];
-                                buf_len = 0;
+                                User user = new User();
+                                foreach (var u in Users)
+                                {
+                                    if (u.Id == mes?.Mes.UserRecepientId)
+                                        user = u;
+                                }
+                                new ToastContentBuilder().AddText(user.Nick)
+                                .AddText(" " + mes?.Mes.Mes + " " + mes?.Mes.Date_Time)
+                                .SetToastDuration(ToastDuration.Short)
+                                .SetToastScenario(ToastScenario.Default)
+                                .Show();
                             }
-                            
                         }
                         else if (len <= length)
                         {
@@ -962,11 +950,12 @@ namespace MessengerPigeon
                             if (length == 0)
                             {
                                 MemoryStream streambuf = new MemoryStream(arrbuf);
-                                var jsonFormatter = new DataContractJsonSerializer(typeof(List<Message>));
-                                res = jsonFormatter.ReadObject(streambuf) as List<Message>;
+                                var jsonFormatter = new DataContractJsonSerializer(typeof(ListMessage));
+                                var list = jsonFormatter.ReadObject(streambuf) as ListMessage;
+                                res = list.listMessages;
                                 if (res.Count != 0)
                                 {
-                                    
+
                                     foreach (Message mes in res)
                                     {
                                         if (mes.MesAudio != null && mes.MesAudioUri != null)
@@ -975,14 +964,14 @@ namespace MessengerPigeon
                                         }
                                         mes.Mes = cipher.Decrypt(mes.Mes);
                                     }
-                                    if (res[res.Count - 1].UserSenderId != myUser.Id)
-                                    {
-                                        new ToastContentBuilder().AddText(res[res.Count - 1].Mes)
-                                        .AddText(res[res.Count - 1].Date_Time.ToString())
-                                        .SetToastDuration(ToastDuration.Short)
-                                        .SetToastScenario(ToastScenario.Default)
-                                        .Show();
-                                    }
+                                    //if (res[res.Count - 1].UserSenderId != myUser.Id)
+                                    //{
+                                    //    new ToastContentBuilder().AddText(res[res.Count - 1].Mes)
+                                    //    .AddText(res[res.Count - 1].Date_Time.ToString())
+                                    //    .SetToastDuration(ToastDuration.Short)
+                                    //    .SetToastScenario(ToastScenario.Default)
+                                    //    .Show();
+                                    //}
                                     Messages = new ObservableCollection<Message>(res);
                                 }
                                 else
@@ -1039,7 +1028,9 @@ namespace MessengerPigeon
                     Date_Time = DateTime.Now;
                     Message mes = new Message("", Date_Time);
                     mes.UserSenderId = myUser.Id;
-                    mes.UserRecepientId = UserRecepient.Id;
+                    User user = new User();
+                    user = UserRecepient;
+                    mes.UserRecepientId = user.Id;
                     var jsonFormatter = new DataContractJsonSerializer(typeof(Message));
                     jsonFormatter.WriteObject(stream, mes);
                     byte[] msg = stream.ToArray();
