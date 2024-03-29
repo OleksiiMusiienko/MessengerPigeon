@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <StartupObject></StartupObject>
+    <ApplicationIcon>photo_2024-03-29_11-58-51.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +37,10 @@
     <None Remove="send.png" />
     <None Remove="Shrift\PasswordPoints.otf" />
     <None Remove="Studio-mic-icon_30398.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="photo_2024-03-29_11-58-51.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -66,7 +66,7 @@ namespace MessengerPigeon
                     ((MessengerViewModel)Resources["ViewModel"]).Avatar = stream.ToArray();
                     stream.Close();
                     PopUpSettings.IsOpen = true;
-                    Avatar.ImageSource = null;
+                    //Avatar.ImageSource = null;
                 }
             }
                 catch (Exception ex)
@@ -140,11 +140,13 @@ namespace MessengerPigeon
         private void Button_Exit(object sender, RoutedEventArgs e)
         {
             PopUpSettings.IsOpen = false;
+            Avatar.ImageSource = null;
         }
 
         private void Button_Remove(object sender, RoutedEventArgs e)
         {
             PopUpSettings.IsOpen = false;
+            Avatar.ImageSource = null;
         }
 
         private void Button_Redaction(object sender, RoutedEventArgs e)

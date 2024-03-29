@@ -810,7 +810,7 @@ namespace MessengerPigeon
                         int len = await netstream.ReadAsync(arr, 0, arr.Length);
                         if (len == 0)
                         {
-                            MyUser.Avatar = null;
+                            Avatar = null;
                             MyUser = null;
                             Users = null;
                             Messages = null;
@@ -845,6 +845,7 @@ namespace MessengerPigeon
                             Nick = NickReg;
                             Password = PasswordReg;
                             Avatar = myUser.Avatar;
+                            OnPropertyChanged(nameof(Avatar));
                             NickReg = "";
                             PasswordReg = "";
                             PasswordTwo = "";
@@ -853,7 +854,7 @@ namespace MessengerPigeon
                         else if (res.command == "User successfully deleted!")
                         {
                             MessageBox.Show(res.command);
-                            MyUser.Avatar = null;
+                            Avatar = null;
                             MyUser = null;
                             Users = null;
                             UserRecepient = null;
